@@ -1,19 +1,21 @@
 import { NextResponse } from 'next/server';
+import type { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { listProperties, generateUniquePropertySlug } from '@/lib/properties';
 import { uploadFileToS3 } from '@/lib/storage';
+import { requireAdminAuth } from '@/lib/auth/api-middleware';
 
-export async function GET(){
+export async function GET(request: NextRequest){
+  const authError = await requireAdminAuth(request);
+  if (authError) return authError;
+
   const properties = await listProperties();
   return NextResponse.json({ properties });
 }
 
-export async function POST(request: Request){
-  const contentType = request.headers.get('content-type') || '';
-  if (!contentType.includes('multipart/form-data')){
-    const raw = await request.text();
-    return NextResponse.json({ message: 'Expected multipart/form-data payload.', body: raw.slice(0, 100) }, { status: 400 });
-  }
+export async function POST(request: NextRequest){
+  const authError = await requireAdminAuth(request);
+  if (authError) return authError;
 
   const formData = await request.formData();
   const rawPayload = formData.get('payload');
