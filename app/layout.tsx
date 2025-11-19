@@ -1,4 +1,5 @@
 import './globals.css';
+import 'leaflet/dist/leaflet.css';
 import Footer from '@/components/Footer';
 import NavBar from '@/components/NavBar';
 

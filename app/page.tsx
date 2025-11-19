@@ -3,6 +3,7 @@ import HeroSlider from '@/components/HeroSlider';
 import { styles } from '@/lib/constants';
 import { Building2, MapPin, Wrench } from 'lucide-react';
 import { listProperties } from '@/lib/properties';
+import MaineMap from '@/components/MaineMap';
 
 export const dynamic = 'force-dynamic';
 
@@ -50,6 +51,12 @@ export default async function HomePage(){
             properties.map(p => (<PropertyCard key={p.id} p={p} />))
           )}
         </div>
+      </section>
+
+      <section className={`${styles.container} mt-8`}> 
+        <h2 className="font-montserrat text-xl font-semibold">Our Locations in Maine</h2>
+        <p className="text-sm text-gray-600 mt-1 mb-4">Interactive map — click pins to open the property listing.</p>
+        <MaineMap />
       </section>
     </div>
   );
