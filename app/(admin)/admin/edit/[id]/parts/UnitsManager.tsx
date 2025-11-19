@@ -128,43 +128,84 @@ export default function UnitsManager({ propertyId, units }: Props){
 
   async function uploadCover(id: string, file: File | null, options?: { skipRefresh?: boolean }){
     if (!file) return true;
+    
     const formData = new FormData();
     formData.append('file', file);
-    const response = await fetch(`/api/admin/properties/${propertyId}/units/${id}/cover`, {
-      method: 'POST',
-      body: formData,
-    });
-    if (!response.ok){
-      const data = await response.json().catch(()=> null);
-      alert(data?.message || 'Failed to upload cover image.');
+    
+    try {
+      const response = await fetch(`/api/admin/properties/${propertyId}/units/${id}/cover`, {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok){
+        let errorMessage = 'Failed to upload cover image.';
+        if (response.status === 413) {
+          errorMessage = `File too large (${(file.size / 1024 / 1024).toFixed(1)}MB). Try compressing the image.`;
+        } else {
+          try {
+            const data = await response.json();
+            errorMessage = data?.message || `Upload failed with status ${response.status}`;
+          } catch {
+            errorMessage = `Upload failed with status ${response.status}`;
+          }
+        }
+        console.error('Cover upload error:', { status: response.status, fileSize: file.size, message: errorMessage });
+        alert(errorMessage);
+        return false;
+      }
+      
+      if (!options?.skipRefresh){
+        startTransition(()=> router.refresh());
+      }
+      return true;
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Cover upload exception:', errorMsg, { fileSize: file.size });
+      alert(`Upload failed: ${errorMsg}`);
       return false;
     }
-    if (!options?.skipRefresh){
-      startTransition(()=> router.refresh());
-    }
-    return true;
   }
 
   async function uploadGallery(id: string, files: File[], options?: { skipRefresh?: boolean }){
     const queue = files.filter((file)=> file instanceof File && file.size > 0);
     if (!queue.length) return true;
-    for (const file of queue){
-      const formData = new FormData();
+    
+    // Send all files in a single batch request instead of one-by-one
+    const formData = new FormData();
+    for (const file of queue) {
       formData.append('files', file);
+    }
+    
+    try {
       const response = await fetch(`/api/admin/properties/${propertyId}/units/${id}/gallery`, {
         method: 'POST',
         body: formData,
       });
+      
       if (!response.ok){
-        const data = await response.json().catch(()=> null);
-        alert(data?.message || `Failed to upload ${file.name}.`);
+        let errorMessage = `Failed to upload ${queue.length} image(s).`;
+        try {
+          const data = await response.json();
+          errorMessage = data?.message || `Upload failed with status ${response.status}`;
+        } catch {
+          errorMessage = `Upload failed with status ${response.status}. Check file sizes (max ~100MB per file or batch).`;
+        }
+        console.error('Gallery upload error:', { status: response.status, message: errorMessage, files: queue.map(f => ({ name: f.name, size: f.size })) });
+        alert(errorMessage);
         return false;
       }
+      
+      if (!options?.skipRefresh){
+        startTransition(()=> router.refresh());
+      }
+      return true;
+    } catch (error) {
+      const errorMsg = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error('Gallery upload exception:', errorMsg, { files: queue.map(f => ({ name: f.name, size: f.size })) });
+      alert(`Upload failed: ${errorMsg}`);
+      return false;
     }
-    if (!options?.skipRefresh){
-      startTransition(()=> router.refresh());
-    }
-    return true;
   }
 
   async function deleteGalleryImage(id: string, imageId: string){
