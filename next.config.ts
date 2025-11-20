@@ -23,6 +23,10 @@ const nextConfig: NextConfig = {
       bodySizeLimit: '500mb',
     },
   },
+  env: {
+    DATABASE_URL: process.env.DATABASE_URL || '',
+    DATABASE_URL_UNPOOLED: process.env.DATABASE_URL_UNPOOLED || '',
+  },
 };
 
 export default nextConfig;
