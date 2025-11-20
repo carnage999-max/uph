@@ -1,6 +1,6 @@
 [
   {
-    "id": "6 Main St",
+    "id": "6-main-st",
     "name": "6 Main St",
     "address": "6 Main St, Howland, ME 04448",
     "city": "Howland",
@@ -168,7 +168,7 @@
     }
   },
   {
-    "id": "49 Mill St",
+    "id": "49-mill-st",
     "name": "49 Mill St",
     "address": "49 Mill St, Dexter, ME 04930",
     "city": "Dexter",
@@ -249,7 +249,7 @@
     }
   },
   {
-    "id": "115 Somerset Ave",
+    "id": "115-somerset-ave",
     "name": "115 Somerset Ave",
     "address": "115 Somerset Ave, Pittsfield, ME 04967",
     "city": "Pittsfield",
