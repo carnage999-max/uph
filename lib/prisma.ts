@@ -5,17 +5,17 @@ declare global {
   var prisma: PrismaClient | undefined;
 }
 
-// Ensure DATABASE_URL is available - check both process.env and fallback
-const databaseUrl = process.env.DATABASE_URL || process.env.NEXT_PUBLIC_DATABASE_URL;
+const prismaClientSingleton = () => {
+  return new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+    errorFormat: 'pretty',
+  });
+};
 
-if (!databaseUrl && process.env.NODE_ENV === 'production') {
-  console.error('WARNING: DATABASE_URL environment variable is not set');
-}
+type PrismaClientSingleton = ReturnType<typeof prismaClientSingleton>;
 
-export const prisma = global.prisma ?? new PrismaClient({
-  log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
-});
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClientSingleton };
 
-if (process.env.NODE_ENV !== 'production'){
-  global.prisma = prisma;
-}
+export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
+
+if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma;
