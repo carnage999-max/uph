@@ -1,3 +1,4 @@
+import './env-loader';
 import { PrismaClient } from '../generated/prisma';
 
 declare global {
