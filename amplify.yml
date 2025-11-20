@@ -20,3 +20,8 @@ frontend:
     paths:
       - node_modules/**
       - .pnpm-store/**
+  envScript: |
+    #!/bin/bash
+    export DATABASE_URL=$DATABASE_URL
+    export DATABASE_URL_UNPOOLED=$DATABASE_URL_UNPOOLED
+
