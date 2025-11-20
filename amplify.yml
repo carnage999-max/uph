@@ -8,6 +8,7 @@ frontend:
         - corepack enable
         - corepack prepare pnpm@latest --activate
         - pnpm install --frozen-lockfile
+        - npx prisma generate
     build:
       commands:
         - pnpm run build
