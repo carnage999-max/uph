@@ -61,15 +61,7 @@ export default function Footer() {
           {/* Social Media Links */}
           <div className="flex items-center gap-4 pt-2">
             <Link
-              href="https://www.linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              <Linkedin size={18} className="text-white" />
-            </Link>
-            <Link
-              href="https://www.facebook.com"
+              href="https://www.facebook.com/ultimatepropertyholdings/"
               target="_blank"
               rel="noopener noreferrer"
               className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"

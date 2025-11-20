@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     if(!name || !email || !message) return new Response(JSON.stringify({error:'Missing fields'}), { status: 400 });
     const resend = new Resend(process.env.RESEND_API_KEY);
     const fromAddress = process.env.CONTACT_FROM || 'UPH Website <onboarding@resend.dev>';
-    const internalRecipient = process.env.CONTACT_TO || 'nathan@membershipauto.com';
+    const internalRecipient = process.env.CONTACT_TO || 'info@ultimatepropertyholdings.com';
     const siteOrigin = process.env.APP_ORIGIN || 'https://ultimatepropertyholdings.com';
     const logoUrl = new URL('/logo/uph.jpeg', siteOrigin).toString();
     const escapedMessage = escapeHtml(message).replace(/\n/g, '<br />');
