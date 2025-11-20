@@ -10,6 +10,8 @@ frontend:
         - pnpm install --frozen-lockfile
     build:
       commands:
+        - echo "DATABASE_URL=$DATABASE_URL" >> .env.production.local
+        - echo "DATABASE_URL_UNPOOLED=$DATABASE_URL_UNPOOLED" >> .env.production.local
         - pnpm run build
   artifacts:
     # Next.js output
@@ -20,8 +22,4 @@ frontend:
     paths:
       - node_modules/**
       - .pnpm-store/**
-  envScript: |
-    #!/bin/bash
-    export DATABASE_URL=$DATABASE_URL
-    export DATABASE_URL_UNPOOLED=$DATABASE_URL_UNPOOLED
 
