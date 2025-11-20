@@ -8,13 +8,9 @@ frontend:
         - corepack enable
         - corepack prepare pnpm@latest --activate
         - pnpm install --frozen-lockfile
-        - DATABASE_URL="postgresql://user:pass@localhost/db" npx prisma generate
     build:
       commands:
         - pnpm run build
-  env:
-    DATABASE_URL: $DATABASE_URL
-    DATABASE_URL_UNPOOLED: $DATABASE_URL_UNPOOLED
   artifacts:
     # Next.js output
     baseDirectory: .next
