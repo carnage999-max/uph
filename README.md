@@ -69,11 +69,12 @@ ADMIN_EMAIL=admin@ultimatepropertyholdings.com
 ADMIN_PASSWORD=AiaHU!Ak1Ruh^AAU!6tO
 ADMIN_JWT_SECRET=uWayC7DbppWk9cdwbL7m_BV7sXBmnCGFENn6iKeyjlIn3jvx0DD1BnPZjzuwoYjW
 
-# AWS S3
-AWS_REGION=us-east-1
-AWS_ACCESS_KEY_ID=...
-AWS_SECRET_ACCESS_KEY=...
-S3_BUCKET_NAME=uph-media-bucket
+# S3 / AWS credentials (use UPH_ prefixed env vars for deployment providers that
+# reserve the AWS_ prefix like AWS Amplify)
+UPH_AWS_REGION=us-east-1
+UPH_AWS_ACCESS_KEY_ID=...
+UPH_AWS_SECRET_ACCESS_KEY=...
+S3_BUCKET_NAME=uph-media-bucket  # or set UPH_S3_BUCKET
 
 # Optional contact/notification destinations
 RESEND_API_KEY=...

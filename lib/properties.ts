@@ -77,53 +77,82 @@ function mapUnit(unit: any): Unit{
 }
 
 export async function listProperties(){
-  const properties = await prisma.property.findMany({
-    include: {
-      images: true,
-      units: {
-        include: { images: true },
+  try {
+    const properties = await prisma.property.findMany({
+      include: {
+        images: true,
+        units: {
+          include: { images: true },
+        },
       },
-    },
-    orderBy: { createdAt: 'desc' },
-  });
+      orderBy: { createdAt: 'desc' },
+    });
 
-  return properties.map(mapProperty);
+    return properties.map(mapProperty);
+  } catch (err) {
+    // Defensive: if the DB isn't reachable (missing env, network issue, etc.)
+    // log the error and return an empty list so the site doesn't crash.
+    // The real fix is to ensure DATABASE_URL / DATABASE_URL_UNPOOLED are set
+    // in the Amplify environment or via Secrets/SSM.
+    // eslint-disable-next-line no-console
+    console.error('listProperties error:', err);
+    return [] as Property[];
+  }
 }
 
 export async function getPropertyBySlug(slug: string){
-  const property = await prisma.property.findUnique({
-    where: { slug },
-    include: {
-      images: true,
-      units: {
-        include: { images: true },
-        orderBy: { createdAt: 'asc' },
+  try {
+    const property = await prisma.property.findUnique({
+      where: { slug },
+      include: {
+        images: true,
+        units: {
+          include: { images: true },
+          orderBy: { createdAt: 'asc' },
+        },
       },
-    },
-  });
+    });
 
-  return property ? mapProperty(property) : null;
+    return property ? mapProperty(property) : null;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('getPropertyBySlug error:', err);
+    return null;
+  }
 }
 
 export async function getPropertyById(id: string){
-  const property = await prisma.property.findUnique({
-    where: { id },
-    include: {
-      images: true,
-      units: {
-        include: { images: true },
+  try {
+    const property = await prisma.property.findUnique({
+      where: { id },
+      include: {
+        images: true,
+        units: {
+          include: { images: true },
+        },
       },
-    },
-  });
-  return property ? mapProperty(property) : null;
+    });
+    return property ? mapProperty(property) : null;
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('getPropertyById error:', err);
+    return null;
+  }
 }
 
 export async function generateUniquePropertySlug(name: string){
   const base = slugify(name || 'property');
   let slug = base;
   let attempt = 1;
-  while (await prisma.property.findUnique({ where: { slug } })){
-    slug = `${base}-${attempt++}`;
+  try {
+    while (await prisma.property.findUnique({ where: { slug } })){
+      slug = `${base}-${attempt++}`;
+    }
+  } catch (err) {
+    // eslint-disable-next-line no-console
+    console.error('generateUniquePropertySlug error:', err);
+    // In case of DB errors just return the base or with attempt appended
+    return slug;
   }
   return slug;
 }
