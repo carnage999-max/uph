@@ -78,6 +78,7 @@ function mapUnit(unit: any): Unit{
 
 export async function listProperties(){
   try {
+    console.log('[listProperties] Starting...');
     const properties = await prisma.property.findMany({
       include: {
         images: true,
@@ -88,14 +89,15 @@ export async function listProperties(){
       orderBy: { createdAt: 'desc' },
     });
 
+    console.log('[listProperties] Found', properties.length, 'properties');
     return properties.map(mapProperty);
   } catch (err) {
     // Defensive: if the DB isn't reachable (missing env, network issue, etc.)
     // log the error and return an empty list so the site doesn't crash.
     // The real fix is to ensure DATABASE_URL / DATABASE_URL_UNPOOLED are set
     // in the Amplify environment or via Secrets/SSM.
-    // eslint-disable-next-line no-console
-    console.error('listProperties error:', err);
+    console.error('[listProperties] Error:', JSON.stringify(err, null, 2));
+    console.error('[listProperties] Stack:', err instanceof Error ? err.stack : 'N/A');
     return [] as Property[];
   }
 }
