@@ -31,10 +31,11 @@ export async function clearSessionCookie(){
 }
 
 export function isAdminCredentialsValid(email: string, password: string){
-  const expectedEmail = process.env.ADMIN_EMAIL;
-  const expectedPassword = process.env.ADMIN_PASSWORD;
+  // Support fallback env names for Amplify (UPH_ prefix)
+  const expectedEmail = process.env.ADMIN_EMAIL || process.env.UPH_ADMIN_EMAIL;
+  const expectedPassword = process.env.ADMIN_PASSWORD || process.env.UPH_ADMIN_PASSWORD;
   if (!expectedEmail || !expectedPassword){
-    throw new Error('Admin credentials are not configured. Set ADMIN_EMAIL and ADMIN_PASSWORD.');
+    throw new Error('Admin credentials are not configured. Set ADMIN_EMAIL and ADMIN_PASSWORD (or UPH_ADMIN_EMAIL and UPH_ADMIN_PASSWORD).');
   }
   const isEmailMatch = email.trim().toLowerCase() === expectedEmail.trim().toLowerCase();
   const passwordBytesA = Buffer.from(password);

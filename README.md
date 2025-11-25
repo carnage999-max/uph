@@ -64,10 +64,10 @@ Add the following to `.env` (and mirror them in your hosting provider):
 # Database
 DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DB?schema=public
 
-# Admin authentication
-ADMIN_EMAIL=admin@ultimatepropertyholdings.com
-ADMIN_PASSWORD=AiaHU!Ak1Ruh^AAU!6tO
-ADMIN_JWT_SECRET=uWayC7DbppWk9cdwbL7m_BV7sXBmnCGFENn6iKeyjlIn3jvx0DD1BnPZjzuwoYjW
+# Admin authentication (use UPH_ prefix for Amplify)
+UPH_ADMIN_EMAIL=admin@ultimatepropertyholdings.com
+UPH_ADMIN_PASSWORD=AiaHU!Ak1Ruh^AAU!6tO
+UPH_ADMIN_JWT_SECRET=uWayC7DbppWk9cdwbL7m_BV7sXBmnCGFENn6iKeyjlIn3jvx0DD1BnPZjzuwoYjW
 
 # S3 / AWS credentials (use UPH_ prefixed env vars for deployment providers that
 # reserve the AWS_ prefix like AWS Amplify)

@@ -4,9 +4,10 @@ export const SESSION_COOKIE = 'uph_admin_session';
 const encoder = new TextEncoder();
 
 function getSecret(){
-  const secret = process.env.ADMIN_JWT_SECRET;
+  // Support fallback env name for Amplify (UPH_ prefix)
+  const secret = process.env.ADMIN_JWT_SECRET || process.env.UPH_ADMIN_JWT_SECRET;
   if (!secret){
-    throw new Error('Missing ADMIN_JWT_SECRET environment variable.');
+    throw new Error('Missing ADMIN_JWT_SECRET (or UPH_ADMIN_JWT_SECRET) environment variable.');
   }
   return encoder.encode(secret);
 }
