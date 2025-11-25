@@ -10,7 +10,14 @@ export default function PropertyCard({ p }:{ p: Property }){
   return (
     <Link className={`${styles.card} overflow-hidden`} href={`/properties/${p.slug}`}>
       <div className="relative h-56 w-full">
-        <Image src={p.heroImageUrl} alt={p.name} fill className="object-cover" unoptimized />
+        <Image 
+          src={p.heroImageUrl} 
+          alt={p.name} 
+          fill 
+          className="object-cover" 
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          priority={false}
+        />
       </div>
       <div className={styles.cardPad}>
         <div className="flex items-center justify-between">

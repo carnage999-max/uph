@@ -51,7 +51,7 @@ export default function HeroImageUploader({ propertyId, heroImageUrl }: Props){
               alt="Property image preview"
               fill
               className="object-cover"
-              unoptimized
+              sizes="(max-width: 768px) 100vw, 66vw"
               priority
             />
           ) : (

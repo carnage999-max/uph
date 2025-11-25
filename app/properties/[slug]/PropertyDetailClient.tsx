@@ -60,7 +60,14 @@ export default function PropertyDetailClient({ property }: { property: Property 
       </a>
 
       <div className="relative mt-4 overflow-hidden rounded-2xl border" style={{ height: '60vh' }}>
-        <Image src={heroImages[heroIdx]} alt={property.name} fill className="object-cover" unoptimized />
+        <Image 
+          src={heroImages[heroIdx]} 
+          alt={property.name} 
+          fill 
+          className="object-cover" 
+          sizes="100vw"
+          priority={heroIdx === 0}
+        />
         {heroImages.length > 1 && (
           <>
             <button
@@ -93,7 +100,14 @@ export default function PropertyDetailClient({ property }: { property: Property 
               }`}
               onClick={() => setHeroIdx(idx)}
             >
-              <Image src={src} alt={`${property.name} ${idx + 1}`} fill className="object-cover" unoptimized />
+              <Image 
+                src={src} 
+                alt={`${property.name} ${idx + 1}`} 
+                fill 
+                className="object-cover" 
+                sizes="(max-width: 640px) 33vw, 16vw"
+                loading="lazy"
+              />
             </button>
           ))}
         </div>
@@ -141,7 +155,14 @@ export default function PropertyDetailClient({ property }: { property: Property 
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-1 items-center gap-3">
                           <div className="relative h-16 w-24 overflow-hidden rounded-lg border">
-                            <Image src={cover} alt={unit.label} fill className="object-cover" unoptimized />
+                            <Image 
+                              src={cover} 
+                              alt={unit.label} 
+                              fill 
+                              className="object-cover" 
+                              sizes="96px"
+                              loading="lazy"
+                            />
                           </div>
                           <div>
                             <div className="font-semibold text-gray-900">{unit.label}</div>
@@ -225,7 +246,8 @@ export default function PropertyDetailClient({ property }: { property: Property 
                     alt={`${unitGallery.unit.label} photo ${unitGallery.index + 1}`}
                     fill
                     className="object-contain"
-                    unoptimized
+                    sizes="(max-width: 768px) 100vw, 896px"
+                    priority
                   />
                   {unitGallery.unit.gallery.length > 1 && (
                     <>
@@ -267,9 +289,9 @@ export default function PropertyDetailClient({ property }: { property: Property 
                       src={thumb}
                       alt={`${unitGallery.unit.label} thumbnail ${idx + 1}`}
                       fill
-                      sizes="(min-width: 640px) 16rem, 12rem"
+                      sizes="96px"
                       className="object-cover"
-                      unoptimized
+                      loading="lazy"
                     />
                   </button>
                 ))}

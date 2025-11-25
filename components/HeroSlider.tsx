@@ -25,7 +25,7 @@ export default function HeroSlider({ images, headline, subtext }:{ images: strin
               fill
               className={styles.heroImg}
               priority={i===0}
-              unoptimized
+              sizes="100vw"
             />
           </div>
         ))}

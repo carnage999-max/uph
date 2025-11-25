@@ -65,7 +65,15 @@ export default function GalleryManager({ propertyId, images }: Props){
       <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
         {images.map((image)=> (
           <div key={image.id} className="group relative overflow-hidden rounded-xl border">
-            <Image src={image.url} alt="Other property image" width={400} height={300} className="h-40 w-full object-cover" unoptimized />
+            <Image 
+              src={image.url} 
+              alt="Other property image" 
+              width={400} 
+              height={300} 
+              className="h-40 w-full object-cover" 
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 33vw, 25vw"
+              loading="lazy"
+            />
             <button
               type="button"
               onClick={()=> handleDelete(image)}
