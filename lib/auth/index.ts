@@ -31,6 +31,15 @@ export async function clearSessionCookie(){
 }
 
 export function isAdminCredentialsValid(email: string, password: string){
+  // Debug: log what env vars are present at runtime
+  if (process.env.NODE_ENV === 'production') {
+    // Only log in production to avoid noise in local dev
+    // eslint-disable-next-line no-console
+    console.log('[DEBUG] ADMIN_EMAIL:', process.env.ADMIN_EMAIL);
+    console.log('[DEBUG] UPH_ADMIN_EMAIL:', process.env.UPH_ADMIN_EMAIL);
+    console.log('[DEBUG] ADMIN_PASSWORD:', process.env.ADMIN_PASSWORD ? '***' : undefined);
+    console.log('[DEBUG] UPH_ADMIN_PASSWORD:', process.env.UPH_ADMIN_PASSWORD ? '***' : undefined);
+  }
   // Support fallback env names for Amplify (UPH_ prefix)
   const expectedEmail = process.env.ADMIN_EMAIL || process.env.UPH_ADMIN_EMAIL;
   const expectedPassword = process.env.ADMIN_PASSWORD || process.env.UPH_ADMIN_PASSWORD;
