@@ -7,7 +7,7 @@ export default function HeroSlider({ images, headline, subtext }:{ images: strin
   const [idx, setIdx] = useState(0);
   const imgs = useMemo(()=> images.length ? images : ['/images/hero/howland-front.jpeg','/images/hero/pittsfield-front.jpeg','/images/hero/dexter-front.jpeg'], [images]);
   useEffect(()=>{
-    const t = setInterval(()=> setIdx(i => (i+1) % imgs.length), 5000);
+    const t = setInterval(()=> setIdx(i => (i+1) % imgs.length), 10000);
     return () => clearInterval(t);
   }, [imgs.length]);
 
