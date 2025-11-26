@@ -2,7 +2,10 @@
 
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
+import { Play } from 'lucide-react';
 import { styles } from '@/lib/constants';
+import { isVideoUrl } from '@/lib/media';
+import VideoPlayer from '@/components/VideoPlayer';
 import type { Property, Unit } from '@/lib/types';
 
 type GalleryUnit = { unit: Unit; index: number };
@@ -60,18 +63,29 @@ export default function PropertyDetailClient({ property }: { property: Property 
       </a>
 
       <div className="relative mt-4 overflow-hidden rounded-2xl border" style={{ height: '60vh' }}>
-        <Image 
-          src={heroImages[heroIdx]} 
-          alt={property.name} 
-          fill 
-          className="object-cover" 
-          sizes="100vw"
-          priority={heroIdx === 0}
-        />
+        {isVideoUrl(heroImages[heroIdx]) ? (
+          <VideoPlayer
+            key={heroImages[heroIdx]}
+            src={heroImages[heroIdx]}
+            alt={property.name}
+            fill
+            className="object-cover"
+            objectFit="cover"
+          />
+        ) : (
+          <Image 
+            src={heroImages[heroIdx]} 
+            alt={property.name} 
+            fill 
+            className="object-cover" 
+            sizes="100vw"
+            priority={heroIdx === 0}
+          />
+        )}
         {heroImages.length > 1 && (
           <>
             <button
-              aria-label="Previous image"
+              aria-label="Previous media"
               onClick={() => setHeroIdx((idx) => (idx - 1 + heroImages.length) % heroImages.length)}
               className={`${styles.btn} ${styles.btnGhost}`}
               style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }}
@@ -79,7 +93,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
               ‹
             </button>
             <button
-              aria-label="Next image"
+              aria-label="Next media"
               onClick={() => setHeroIdx((idx) => (idx + 1) % heroImages.length)}
               className={`${styles.btn} ${styles.btnGhost}`}
               style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)' }}
@@ -92,24 +106,42 @@ export default function PropertyDetailClient({ property }: { property: Property 
 
       {heroImages.length > 1 && (
         <div className="mt-3 grid grid-cols-3 gap-2 sm:grid-cols-6">
-          {heroImages.map((src, idx) => (
-            <button
-              key={src}
-              className={`relative h-20 w-full overflow-hidden rounded-xl border ${
-                idx === heroIdx ? 'ring-2 ring-gray-900' : ''
-              }`}
-              onClick={() => setHeroIdx(idx)}
-            >
-              <Image 
-                src={src} 
-                alt={`${property.name} ${idx + 1}`} 
-                fill 
-                className="object-cover" 
-                sizes="(max-width: 640px) 33vw, 16vw"
-                loading="lazy"
-              />
-            </button>
-          ))}
+          {heroImages.map((src, idx) => {
+            const isVideo = isVideoUrl(src);
+            return (
+              <button
+                key={src}
+                className={`relative h-20 w-full overflow-hidden rounded-xl border ${
+                  idx === heroIdx ? 'ring-2 ring-gray-900' : ''
+                }`}
+                onClick={() => setHeroIdx(idx)}
+              >
+                {isVideo ? (
+                  <>
+                    <video
+                      src={src}
+                      className="h-full w-full object-cover"
+                      muted
+                      playsInline
+                      preload="metadata"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                      <Play className="h-4 w-4 text-white fill-white" />
+                    </div>
+                  </>
+                ) : (
+                  <Image 
+                    src={src} 
+                    alt={`${property.name} ${idx + 1}`} 
+                    fill 
+                    className="object-cover" 
+                    sizes="(max-width: 640px) 33vw, 16vw"
+                    loading="lazy"
+                  />
+                )}
+              </button>
+            );
+          })}
         </div>
       )}
 
@@ -155,14 +187,29 @@ export default function PropertyDetailClient({ property }: { property: Property 
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-1 items-center gap-3">
                           <div className="relative h-16 w-24 overflow-hidden rounded-lg border">
-                            <Image 
-                              src={cover} 
-                              alt={unit.label} 
-                              fill 
-                              className="object-cover" 
-                              sizes="96px"
-                              loading="lazy"
-                            />
+                            {isVideoUrl(cover) ? (
+                              <>
+                                <video
+                                  src={cover}
+                                  className="h-full w-full object-cover"
+                                  muted
+                                  playsInline
+                                  preload="metadata"
+                                />
+                                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                                  <Play className="h-3 w-3 text-white fill-white" />
+                                </div>
+                              </>
+                            ) : (
+                              <Image 
+                                src={cover} 
+                                alt={unit.label} 
+                                fill 
+                                className="object-cover" 
+                                sizes="96px"
+                                loading="lazy"
+                              />
+                            )}
                           </div>
                           <div>
                             <div className="font-semibold text-gray-900">{unit.label}</div>
@@ -241,27 +288,38 @@ export default function PropertyDetailClient({ property }: { property: Property 
             <div className="relative mt-6 h-[45vh] rounded-xl bg-black sm:h-[55vh]">
               {unitGallery.unit.gallery.length ? (
                 <>
-                  <Image
-                    src={unitGallery.unit.gallery[unitGallery.index]}
-                    alt={`${unitGallery.unit.label} photo ${unitGallery.index + 1}`}
-                    fill
-                    className="object-contain"
-                    sizes="(max-width: 768px) 100vw, 896px"
-                    priority
-                  />
+                  {isVideoUrl(unitGallery.unit.gallery[unitGallery.index]) ? (
+                    <VideoPlayer
+                      key={`${unitGallery.unit.id}-${unitGallery.index}-${unitGallery.unit.gallery[unitGallery.index]}`}
+                      src={unitGallery.unit.gallery[unitGallery.index]}
+                      alt={`${unitGallery.unit.label} media ${unitGallery.index + 1}`}
+                      fill
+                      className="object-contain"
+                      objectFit="contain"
+                    />
+                  ) : (
+                    <Image
+                      src={unitGallery.unit.gallery[unitGallery.index]}
+                      alt={`${unitGallery.unit.label} photo ${unitGallery.index + 1}`}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, 896px"
+                      priority
+                    />
+                  )}
                   {unitGallery.unit.gallery.length > 1 && (
                     <>
                       <button
-                        aria-label="Previous unit photo"
+                        aria-label="Previous unit media"
                         onClick={() => stepUnitImage(-1)}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-2 text-lg font-bold text-gray-800 shadow"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-2 text-lg font-bold text-gray-800 shadow z-10"
                       >
                         ‹
                       </button>
                       <button
-                        aria-label="Next unit photo"
+                        aria-label="Next unit media"
                         onClick={() => stepUnitImage(1)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-2 text-lg font-bold text-gray-800 shadow"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-2 text-lg font-bold text-gray-800 shadow z-10"
                       >
                         ›
                       </button>
@@ -277,24 +335,42 @@ export default function PropertyDetailClient({ property }: { property: Property 
 
             {unitGallery.unit.gallery.length > 1 && (
               <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                {unitGallery.unit.gallery.map((thumb, idx) => (
-                  <button
-                    key={thumb}
-                    className={`relative h-16 w-24 overflow-hidden rounded-lg border ${
-                      idx === unitGallery.index ? 'ring-2 ring-[#111827]' : 'opacity-80'
-                    }`}
-                    onClick={() => setUnitGallery({ unit: unitGallery.unit, index: idx })}
-                  >
-                    <Image
-                      src={thumb}
-                      alt={`${unitGallery.unit.label} thumbnail ${idx + 1}`}
-                      fill
-                      sizes="96px"
-                      className="object-cover"
-                      loading="lazy"
-                    />
-                  </button>
-                ))}
+                {unitGallery.unit.gallery.map((thumb, idx) => {
+                  const isVideo = isVideoUrl(thumb);
+                  return (
+                    <button
+                      key={thumb}
+                      className={`relative h-16 w-24 overflow-hidden rounded-lg border ${
+                        idx === unitGallery.index ? 'ring-2 ring-[#111827]' : 'opacity-80'
+                      }`}
+                      onClick={() => setUnitGallery({ unit: unitGallery.unit, index: idx })}
+                    >
+                      {isVideo ? (
+                        <>
+                          <video
+                            src={thumb}
+                            className="h-full w-full object-cover"
+                            muted
+                            playsInline
+                            preload="metadata"
+                          />
+                          <div className="absolute inset-0 flex items-center justify-center bg-black/30">
+                            <Play className="h-3 w-3 text-white fill-white" />
+                          </div>
+                        </>
+                      ) : (
+                        <Image
+                          src={thumb}
+                          alt={`${unitGallery.unit.label} thumbnail ${idx + 1}`}
+                          fill
+                          sizes="96px"
+                          className="object-cover"
+                          loading="lazy"
+                        />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
