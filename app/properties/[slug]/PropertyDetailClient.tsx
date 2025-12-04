@@ -6,6 +6,7 @@ import { Play } from 'lucide-react';
 import { styles } from '@/lib/constants';
 import { isVideoUrl } from '@/lib/media';
 import VideoPlayer from '@/components/VideoPlayer';
+import ShareButton from '@/components/ShareButton';
 import type { Property, Unit } from '@/lib/types';
 
 type GalleryUnit = { unit: Unit; index: number };
@@ -148,8 +149,17 @@ export default function PropertyDetailClient({ property }: { property: Property 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
         <div className="space-y-6 lg:col-span-2">
           <div>
-            <h1 className="font-montserrat text-2xl font-bold">{property.name}</h1>
-            <div className="text-sm text-gray-600">{property.address}</div>
+            <div className="flex items-start justify-between gap-4">
+              <div className="flex-1">
+                <h1 className="font-montserrat text-2xl font-bold">{property.name}</h1>
+                <div className="text-sm text-gray-600">{property.address}</div>
+              </div>
+              <ShareButton 
+                url={`/properties/${property.slug}`}
+                title={property.name}
+                description={`${property.name} in ${property.city}, Maine. ${property.description.slice(0, 100)}...`}
+              />
+            </div>
             <p className={`${styles.muted} mt-3`}>{property.description}</p>
             <div className="mt-4 text-sm text-gray-700">
               {[

@@ -2,6 +2,14 @@ import ContactForm from './parts/ContactForm';
 import { company } from '@/lib/data';
 import HeroSlider from '@/components/HeroSlider';
 import { styles } from '@/lib/constants';
+import { createMetadata } from '@/lib/metadata';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = createMetadata({
+  title: 'Contact Us',
+  description: 'Get in touch with Ultimate Property Holdings. We are here to help you find your next apartment in Maine. Call us at 207-947-1999 or send us a message.',
+  url: '/contact',
+});
 
 export default function ContactPage(){
   return (

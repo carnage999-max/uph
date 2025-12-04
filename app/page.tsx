@@ -4,8 +4,16 @@ import { styles } from '@/lib/constants';
 import { Building2, MapPin, Wrench, Heart, BadgeCheck, MessageCircle } from 'lucide-react';
 import { listProperties } from '@/lib/properties';
 import MaineMap from '@/components/MaineMap';
+import { createMetadata } from '@/lib/metadata';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = createMetadata({
+  title: 'Home',
+  description: 'Premium residential apartments across Maine. Pet-friendly with $200 one-time fee, bad credit OK, and responsive owners. Modern living with smart investments.',
+  url: '/',
+});
 
 export default async function HomePage(){
   const properties = await listProperties();
@@ -40,7 +48,7 @@ export default async function HomePage(){
                 <MessageCircle className="h-6 w-6" />
               </span>
             </div>
-            <h3 className="mt-4 font-montserrat text-lg font-semibold text-gray-900">Responsive Owners</h3>
+            <h3 className="mt-4 font-montserrat text-base sm:text-lg font-semibold text-gray-900">Responsive Owners</h3>
             <p className="mt-2 text-sm text-gray-600">Quick communication</p>
           </div>
         </div>

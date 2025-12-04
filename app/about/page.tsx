@@ -2,8 +2,16 @@ import HeroSlider from '@/components/HeroSlider';
 import { styles } from '@/lib/constants';
 import { listProperties } from '@/lib/properties';
 import { Building2, HeartHandshake, ShieldCheck } from 'lucide-react';
+import { createMetadata } from '@/lib/metadata';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = createMetadata({
+  title: 'About Us',
+  description: 'Learn about Ultimate Property Holdings. We modernize legacy housing across Maine with resident-first values, quality renovations, and responsive management.',
+  url: '/about',
+});
 
 const leadership = [
   {

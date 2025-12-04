@@ -3,6 +3,14 @@ import { styles } from '@/lib/constants';
 import { company } from '@/lib/data';
 import { AlertTriangle, FileText, PhoneCall } from 'lucide-react';
 import MaintenanceRequestForm from './MaintenanceRequestForm';
+import { createMetadata } from '@/lib/metadata';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = createMetadata({
+  title: 'Maintenance Request',
+  description: 'Submit a maintenance request online. Our responsive team is here to help with plumbing, electrical, heating, appliances, and more. Emergency service available.',
+  url: '/maintenance',
+});
 
 const issueTypes = [
   'Plumbing',

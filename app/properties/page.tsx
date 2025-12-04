@@ -2,8 +2,16 @@ import PropertyCard from '@/components/PropertyCard';
 import HeroSlider from '@/components/HeroSlider';
 import { styles } from '@/lib/constants';
 import { listProperties } from '@/lib/properties';
+import { createMetadata } from '@/lib/metadata';
+import type { Metadata } from 'next';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = createMetadata({
+  title: 'Properties',
+  description: 'Browse our available residential apartments across Maine. Pet-friendly properties with flexible credit options and responsive management.',
+  url: '/properties',
+});
 
 export default async function PropertiesPage(){
   const properties = await listProperties();
