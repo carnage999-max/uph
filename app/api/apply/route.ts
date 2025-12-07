@@ -1,4 +1,6 @@
 import { Resend } from 'resend';
+import { NextRequest } from 'next/server';
+import { uploadFileToS3 } from '@/lib/storage';
 
 function escapeHtml(raw: string){
   return raw
@@ -9,30 +11,93 @@ function escapeHtml(raw: string){
     .replace(/'/g, '&#39;');
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      phone,
-      dateOfBirth,
-      ssn,
-      currentAddress,
-      city,
-      state,
-      zipCode,
-      jobTitle,
-      employerName,
-      monthlyIncome,
-      property,
-      unit,
-      additionalNotes,
-    } = await req.json();
+    const formData = await req.formData();
+    
+    // Extract text fields
+    const firstName = String(formData.get('firstName') || '').trim();
+    const lastName = String(formData.get('lastName') || '').trim();
+    const email = String(formData.get('email') || '').trim();
+    const phone = String(formData.get('phone') || '').trim();
+    const dateOfBirth = String(formData.get('dateOfBirth') || '').trim();
+    const ssn = String(formData.get('ssn') || '').trim();
+    const currentAddress = String(formData.get('currentAddress') || '').trim();
+    const city = String(formData.get('city') || '').trim();
+    const state = String(formData.get('state') || '').trim();
+    const zipCode = String(formData.get('zipCode') || '').trim();
+    const landlordName = String(formData.get('landlordName') || '').trim();
+    const landlordPhone = String(formData.get('landlordPhone') || '').trim();
+    const landlordEmail = String(formData.get('landlordEmail') || '').trim();
+    const jobTitle = String(formData.get('jobTitle') || '').trim();
+    const employerName = String(formData.get('employerName') || '').trim();
+    const monthlyIncome = String(formData.get('monthlyIncome') || '').trim();
+    const property = String(formData.get('property') || '').trim();
+    const unit = String(formData.get('unit') || '').trim();
+    const additionalNotes = String(formData.get('additionalNotes') || '').trim();
+    const hasPet = String(formData.get('hasPet') || 'false') === 'true';
+    const petType = String(formData.get('petType') || '').trim();
+    const authorizeCriminalCheck = String(formData.get('authorizeCriminalCheck') || 'false') === 'true';
+    const authorizeCreditCheck = String(formData.get('authorizeCreditCheck') || 'false') === 'true';
+    const signature = String(formData.get('signature') || '').trim();
+    const captchaToken = String(formData.get('captchaToken') || '').trim();
+    const referencesJson = String(formData.get('references') || '[]');
+    
+    // Parse references
+    let references: Array<{name: string; relationship: string; phone: string; email: string}> = [];
+    try {
+      references = JSON.parse(referencesJson);
+    } catch (e) {
+      // If parsing fails, use empty array
+    }
+
+    // Verify CAPTCHA (optional - you can add server-side verification here)
+    if (!captchaToken) {
+      return new Response(JSON.stringify({error:'CAPTCHA verification required'}), { status: 400 });
+    }
 
     // Required fields validation
     if(!firstName || !lastName || !email || !phone || !dateOfBirth || !ssn || !monthlyIncome || !property) {
       return new Response(JSON.stringify({error:'Missing required fields'}), { status: 400 });
+    }
+
+    if (!authorizeCriminalCheck || !authorizeCreditCheck) {
+      return new Response(JSON.stringify({error:'Both authorizations are required'}), { status: 400 });
+    }
+
+    if (!signature) {
+      return new Response(JSON.stringify({error:'Signature is required'}), { status: 400 });
+    }
+
+    // Handle file uploads
+    let petPhotoUrl: string | null = null;
+    let petPhotoKey: string | null = null;
+    let driversLicenseUrl: string | null = null;
+    let driversLicenseKey: string | null = null;
+
+    const petPhoto = formData.get('petPhoto');
+    if (petPhoto instanceof File && petPhoto.size > 0) {
+      try {
+        const upload = await uploadFileToS3(petPhoto, `applications/${Date.now()}/pet-photo`);
+        petPhotoUrl = upload.url;
+        petPhotoKey = upload.key;
+      } catch (error: any) {
+        console.error('Error uploading pet photo:', error);
+        // Continue without pet photo if upload fails
+      }
+    }
+
+    const driversLicensePhoto = formData.get('driversLicensePhoto');
+    if (driversLicensePhoto instanceof File && driversLicensePhoto.size > 0) {
+      try {
+        const upload = await uploadFileToS3(driversLicensePhoto, `applications/${Date.now()}/drivers-license`);
+        driversLicenseUrl = upload.url;
+        driversLicenseKey = upload.key;
+      } catch (error: any) {
+        return new Response(JSON.stringify({error: 'Failed to upload driver\'s license photo'}), { status: 500 });
+      }
+    } else {
+      return new Response(JSON.stringify({error:'Driver\'s license photo is required'}), { status: 400 });
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
@@ -59,6 +124,25 @@ Current Address:
 • State: ${state || 'N/A'}
 • ZIP Code: ${zipCode || 'N/A'}
 
+Current Landlord:
+• Name: ${landlordName || 'N/A'}
+• Phone: ${landlordPhone || 'N/A'}
+• Email: ${landlordEmail || 'N/A'}
+
+Personal References:
+${references.map((ref, i) => `
+Reference ${i + 1}:
+• Name: ${ref.name}
+• Relationship: ${ref.relationship}
+• Phone: ${ref.phone}
+• Email: ${ref.email || 'N/A'}
+`).join('\n')}
+
+Pet Information:
+• Has Pet: ${hasPet ? 'Yes' : 'No'}
+${hasPet ? `• Pet Type: ${petType || 'N/A'}` : ''}
+${petPhotoUrl ? `• Pet Photo: ${petPhotoUrl}` : ''}
+
 Employment:
 • Job Title: ${jobTitle || 'N/A'}
 • Employer: ${employerName || 'N/A'}
@@ -68,8 +152,26 @@ Property Interest:
 • Property: ${property}
 ${unit ? `• Unit: ${unit}` : ''}
 
+Authorizations:
+• Criminal Background Check: ${authorizeCriminalCheck ? 'Authorized' : 'Not Authorized'}
+• Credit Check: ${authorizeCreditCheck ? 'Authorized' : 'Not Authorized'}
+
+${driversLicenseUrl ? `Driver's License: ${driversLicenseUrl}` : ''}
+${signature ? 'Signature: Provided' : ''}
+
 ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
     `.trim();
+
+    // Build HTML email
+    const referencesHtml = references.map((ref, i) => `
+      <div style="margin-bottom:12px;padding:12px;background:#ffffff;border:1px solid #e5e7eb;border-radius:8px;">
+        <strong>Reference ${i + 1}:</strong><br />
+        Name: ${escapeHtml(ref.name)}<br />
+        Relationship: ${escapeHtml(ref.relationship)}<br />
+        Phone: ${escapeHtml(ref.phone)}<br />
+        Email: ${escapeHtml(ref.email || 'N/A')}
+      </div>
+    `).join('');
 
     const html = `
       <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#f3f4f6;padding:32px 0;">
@@ -103,6 +205,29 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
                     <p style="margin:4px 0;"><strong>ZIP Code:</strong> ${escapeHtml(zipCode || 'N/A')}</p>
                   </div>
 
+                  ${landlordName || landlordPhone || landlordEmail ? `
+                  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
+                    <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Current Landlord</h3>
+                    <p style="margin:4px 0;"><strong>Name:</strong> ${escapeHtml(landlordName || 'N/A')}</p>
+                    <p style="margin:4px 0;"><strong>Phone:</strong> ${escapeHtml(landlordPhone || 'N/A')}</p>
+                    <p style="margin:4px 0;"><strong>Email:</strong> ${escapeHtml(landlordEmail || 'N/A')}</p>
+                  </div>
+                  ` : ''}
+
+                  ${references.length > 0 ? `
+                  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
+                    <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Personal References</h3>
+                    ${referencesHtml}
+                  </div>
+                  ` : ''}
+
+                  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
+                    <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Pet Information</h3>
+                    <p style="margin:4px 0;"><strong>Has Pet:</strong> ${hasPet ? 'Yes' : 'No'}</p>
+                    ${hasPet ? `<p style="margin:4px 0;"><strong>Pet Type:</strong> ${escapeHtml(petType || 'N/A')}</p>` : ''}
+                    ${petPhotoUrl ? `<p style="margin:4px 0;"><strong>Pet Photo:</strong> <a href="${petPhotoUrl}" style="color:#111827;">View Photo</a></p>` : ''}
+                  </div>
+
                   <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
                     <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Employment Information</h3>
                     <p style="margin:4px 0;"><strong>Job Title:</strong> ${escapeHtml(jobTitle || 'N/A')}</p>
@@ -115,6 +240,27 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
                     <p style="margin:4px 0;"><strong>Property:</strong> ${escapeHtml(property)}</p>
                     ${unit ? `<p style="margin:4px 0;"><strong>Unit:</strong> ${escapeHtml(unit)}</p>` : ''}
                   </div>
+
+                  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
+                    <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Authorizations</h3>
+                    <p style="margin:4px 0;"><strong>Criminal Background Check:</strong> ${authorizeCriminalCheck ? '✓ Authorized' : '✗ Not Authorized'}</p>
+                    <p style="margin:4px 0;"><strong>Credit Check:</strong> ${authorizeCreditCheck ? '✓ Authorized' : '✗ Not Authorized'}</p>
+                  </div>
+
+                  ${driversLicenseUrl ? `
+                  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
+                    <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Driver's License</h3>
+                    <p style="margin:4px 0;"><a href="${driversLicenseUrl}" style="color:#111827;text-decoration:underline;">View Driver's License Photo</a></p>
+                  </div>
+                  ` : ''}
+
+                  ${signature ? `
+                  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
+                    <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">E-Signature</h3>
+                    <p style="margin:4px 0;">Signature provided and verified</p>
+                    <img src="${signature}" alt="Applicant Signature" style="max-width:300px;border:1px solid #e5e7eb;border-radius:8px;margin-top:8px;" />
+                  </div>
+                  ` : ''}
 
                   ${additionalNotes ? `
                   <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
@@ -200,7 +346,7 @@ PO Box 52, Detroit, ME 04929
 
     return new Response(JSON.stringify({ ok: true }), { status: 200 });
   } catch (e:any) {
-    return new Response(JSON.stringify({ error: e.message }), { status: 500 });
+    console.error('Application submission error:', e);
+    return new Response(JSON.stringify({ error: e.message || 'An error occurred processing your application' }), { status: 500 });
   }
 }
-

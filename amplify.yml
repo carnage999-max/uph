@@ -19,6 +19,11 @@ frontend:
         - echo "CONTACT_TO=$CONTACT_TO" >> .env.production.local
         - echo "CONTACT_FROM=$CONTACT_FROM" >> .env.production.local
         - echo "APP_ORIGIN=$APP_ORIGIN" >> .env.production.local
+        - echo "NEXT_PUBLIC_TURNSTILE_SITE_KEY=$NEXT_PUBLIC_TURNSTILE_SITE_KEY" >> .env.production.local
+        - echo "UPH_AWS_REGION=$UPH_AWS_REGION" >> .env.production.local
+        - echo "UPH_AWS_ACCESS_KEY_ID=$UPH_AWS_ACCESS_KEY_ID" >> .env.production.local
+        - echo "UPH_AWS_SECRET_ACCESS_KEY=$UPH_AWS_SECRET_ACCESS_KEY" >> .env.production.local
+        - echo "S3_BUCKET_NAME=$S3_BUCKET_NAME" >> .env.production.local
         - echo "[Build] Environment file created (sensitive values masked in logs)"
         - pnpm run build
         - mkdir -p .next && cp .env.production.local .next/.env.production.local

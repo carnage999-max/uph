@@ -80,6 +80,10 @@ S3_BUCKET_NAME=uph-media-bucket  # or set UPH_S3_BUCKET
 RESEND_API_KEY=...
 CONTACT_TO=nathan@membershipauto.com
 MAINTENANCE_TO=nathan@membershipauto.com
+
+# CAPTCHA (Cloudflare Turnstile - optional but recommended)
+# Get your site key from https://dash.cloudflare.com/?to=/:account/turnstile
+NEXT_PUBLIC_TURNSTILE_SITE_KEY=...
 ```
 
 > **Security note**  
