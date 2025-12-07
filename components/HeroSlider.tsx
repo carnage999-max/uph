@@ -40,8 +40,14 @@ export default function HeroSlider({ images, headline, subtext }:{ images: strin
             </p>
             <div className={styles.heroCta}>
               <a
-                href="/properties"
+                href="/apply"
                 className={`${styles.btn} ${styles.btnPrimary} px-6 py-4`}
+              >
+                Apply Now
+              </a>
+              <a
+                href="/properties"
+                className={`${styles.btn} px-6 py-4 border-white/40! bg-white/10 text-white backdrop-blur-sm transition hover:bg-white/20`}
               >
                 View Properties
               </a>

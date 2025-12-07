@@ -9,6 +9,7 @@ const links = [
   { href: '/', label: 'Home' },
   { href: '/about', label: 'About' },
   { href: '/properties', label: 'Properties' },
+  { href: '/apply', label: 'Apply', isPrimary: true },
   { href: '/maintenance', label: 'Maintenance' },
   { href: '/contact', label: 'Contact' },
 ];
@@ -39,8 +40,15 @@ export default function NavBar(){
 
         <nav className={styles.nav}>
           {links.map(l => (
-            <Link key={l.href} href={l.href}
-              className={`${styles.navLink} ${pathname === l.href ? styles.navLinkActive : ''}`}>
+            <Link 
+              key={l.href} 
+              href={l.href}
+              className={
+                l.isPrimary 
+                  ? `${styles.btn} ${styles.btnPrimary} !px-4 !py-2 text-sm`
+                  : `${styles.navLink} ${pathname === l.href ? styles.navLinkActive : ''}`
+              }
+            >
               {l.label}
             </Link>
           ))}
