@@ -15,6 +15,10 @@ frontend:
         - echo "UPH_ADMIN_EMAIL=$UPH_ADMIN_EMAIL" >> .env.production.local
         - echo "UPH_ADMIN_PASSWORD=$UPH_ADMIN_PASSWORD" >> .env.production.local
         - echo "UPH_ADMIN_JWT_SECRET=$UPH_ADMIN_JWT_SECRET" >> .env.production.local
+        - echo "RESEND_API_KEY=$RESEND_API_KEY" >> .env.production.local
+        - echo "CONTACT_TO=$CONTACT_TO" >> .env.production.local
+        - echo "CONTACT_FROM=$CONTACT_FROM" >> .env.production.local
+        - echo "APP_ORIGIN=$APP_ORIGIN" >> .env.production.local
         - echo "[Build] Environment file created (sensitive values masked in logs)"
         - pnpm run build
         - mkdir -p .next && cp .env.production.local .next/.env.production.local
