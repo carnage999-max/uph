@@ -273,22 +273,44 @@ export default function ApplicationForm({ properties }: { properties: Property[]
     try{
       const formDataToSend = new FormData();
       
-      // Add all form fields
-      Object.entries(formData).forEach(([key, value]) => {
-        if (key === 'references') {
-          formDataToSend.append(key, JSON.stringify(value));
-        } else if (key === 'petPhoto' || key === 'driversLicensePhoto') {
-          if (value instanceof File) {
-            formDataToSend.append(key, value);
-          }
-        } else if (key === 'signature') {
-          if (value) {
-            formDataToSend.append(key, value);
-          }
-        } else {
-          formDataToSend.append(key, String(value || ''));
-        }
-      });
+      // Add all form fields with proper type handling
+      formDataToSend.append('property', formData.property);
+      formDataToSend.append('unit', formData.unit);
+      formDataToSend.append('firstName', formData.firstName);
+      formDataToSend.append('lastName', formData.lastName);
+      formDataToSend.append('email', formData.email);
+      formDataToSend.append('phone', formData.phone);
+      formDataToSend.append('dateOfBirth', formData.dateOfBirth);
+      formDataToSend.append('ssn', formData.ssn);
+      formDataToSend.append('currentAddress', formData.currentAddress);
+      formDataToSend.append('city', formData.city);
+      formDataToSend.append('state', formData.state);
+      formDataToSend.append('zipCode', formData.zipCode);
+      formDataToSend.append('landlordName', formData.landlordName);
+      formDataToSend.append('landlordPhone', formData.landlordPhone);
+      formDataToSend.append('landlordEmail', formData.landlordEmail);
+      formDataToSend.append('references', JSON.stringify(formData.references));
+      formDataToSend.append('hasPet', String(formData.hasPet));
+      formDataToSend.append('petType', formData.petType);
+      formDataToSend.append('jobTitle', formData.jobTitle);
+      formDataToSend.append('employerName', formData.employerName);
+      formDataToSend.append('monthlyIncome', formData.monthlyIncome);
+      formDataToSend.append('additionalNotes', formData.additionalNotes);
+      formDataToSend.append('authorizeCriminalCheck', String(formData.authorizeCriminalCheck));
+      formDataToSend.append('authorizeCreditCheck', String(formData.authorizeCreditCheck));
+      
+      // Handle file uploads
+      if (formData.petPhoto instanceof File) {
+        formDataToSend.append('petPhoto', formData.petPhoto);
+      }
+      if (formData.driversLicensePhoto instanceof File) {
+        formDataToSend.append('driversLicensePhoto', formData.driversLicensePhoto);
+      }
+      
+      // Handle signature (it's a string data URL)
+      if (formData.signature) {
+        formDataToSend.append('signature', formData.signature);
+      }
 
       formDataToSend.append('captchaToken', captchaToken);
 
