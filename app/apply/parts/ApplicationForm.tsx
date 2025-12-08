@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 import { styles } from '@/lib/constants';
 import type { Property } from '@/lib/types';
 import SignatureCanvas from 'react-signature-canvas';
@@ -103,6 +103,19 @@ export default function ApplicationForm({ properties }: { properties: Property[]
   const signatureRef = useRef<SignatureCanvas>(null);
   const [petPhotoPreview, setPetPhotoPreview] = useState<string | null>(null);
   const [licensePreview, setLicensePreview] = useState<string | null>(null);
+
+  // Memoize callbacks to prevent CAPTCHA re-initialization
+  const handleCaptchaVerify = useCallback((token: string) => {
+    setCaptchaToken(token);
+  }, []);
+  
+  const handleCaptchaError = useCallback(() => {
+    setCaptchaToken(null);
+  }, []);
+  
+  const handleCaptchaExpire = useCallback(() => {
+    setCaptchaToken(null);
+  }, []);
 
   const totalSteps = 10;
 
@@ -1017,9 +1030,9 @@ export default function ApplicationForm({ properties }: { properties: Property[]
               <p className="text-sm text-gray-600 mb-4">Please complete the verification to prevent spam</p>
               <Captcha
                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
-                onVerify={setCaptchaToken}
-                onError={() => setCaptchaToken(null)}
-                onExpire={() => setCaptchaToken(null)}
+                onVerify={handleCaptchaVerify}
+                onError={handleCaptchaError}
+                onExpire={handleCaptchaExpire}
               />
             </div>
           </div>
