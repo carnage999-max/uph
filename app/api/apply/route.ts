@@ -317,8 +317,10 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
         }),
       };
       pdfBuffer = await generateApplicationPDF(pdfData);
+      console.log(`PDF generated successfully, size: ${pdfBuffer.length} bytes`);
     } catch (pdfError: any) {
       console.error('Failed to generate PDF:', pdfError);
+      console.error('PDF Error details:', pdfError.message, pdfError.stack);
       // Continue without PDF - don't break email sending
     }
 
@@ -327,10 +329,15 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
     if (pdfBuffer) {
       // Sanitize filename
       const sanitizedName = `${firstName}-${lastName}`.replace(/[^a-zA-Z0-9-]/g, '_');
+      const filename = `application-${sanitizedName}-${Date.now()}.pdf`;
+      // Resend requires base64 encoded content
       attachments.push({
-        filename: `application-${sanitizedName}-${Date.now()}.pdf`,
-        content: pdfBuffer,
+        filename,
+        content: pdfBuffer.toString('base64'),
       });
+      console.log(`PDF attachment prepared: ${filename}, base64 length: ${pdfBuffer.toString('base64').length}`);
+    } else {
+      console.log('No PDF buffer available, sending email without attachment');
     }
 
     // Send to internal recipient
