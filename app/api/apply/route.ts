@@ -1,6 +1,7 @@
 import { Resend } from 'resend';
 import { NextRequest } from 'next/server';
 import { uploadFileToS3 } from '@/lib/storage';
+import { generateApplicationPDF } from '@/lib/pdf-generator';
 
 function escapeHtml(raw: string){
   return raw
@@ -281,6 +282,57 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
       </table>
     `;
 
+    // Generate PDF (non-blocking - if it fails, emails still send)
+    let pdfBuffer: Buffer | null = null;
+    try {
+      const pdfData = {
+        firstName,
+        lastName,
+        email,
+        phone,
+        dateOfBirth,
+        ssn,
+        currentAddress,
+        city,
+        state,
+        zipCode,
+        landlordName,
+        landlordPhone,
+        landlordEmail,
+        references,
+        hasPet,
+        petType,
+        jobTitle,
+        employerName,
+        monthlyIncome,
+        property,
+        unit,
+        additionalNotes,
+        authorizeCriminalCheck,
+        authorizeCreditCheck,
+        submittedAt: new Date().toLocaleString('en-US', { 
+          timeZone: 'America/New_York',
+          dateStyle: 'long',
+          timeStyle: 'short'
+        }),
+      };
+      pdfBuffer = await generateApplicationPDF(pdfData);
+    } catch (pdfError: any) {
+      console.error('Failed to generate PDF:', pdfError);
+      // Continue without PDF - don't break email sending
+    }
+
+    // Prepare attachments
+    const attachments = [];
+    if (pdfBuffer) {
+      // Sanitize filename
+      const sanitizedName = `${firstName}-${lastName}`.replace(/[^a-zA-Z0-9-]/g, '_');
+      attachments.push({
+        filename: `application-${sanitizedName}-${Date.now()}.pdf`,
+        content: pdfBuffer,
+      });
+    }
+
     // Send to internal recipient
     await resend.emails.send({
       from: fromAddress,
@@ -288,6 +340,7 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
       subject,
       text: applicationData,
       html,
+      attachments: attachments.length > 0 ? attachments : undefined,
     });
 
     // Send confirmation to applicant
