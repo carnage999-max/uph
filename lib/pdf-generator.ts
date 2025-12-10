@@ -15,6 +15,16 @@ type ApplicationData = {
   state: string;
   zipCode: string;
   
+  // Previous Addresses
+  previousAddress1: string;
+  previousCity1: string;
+  previousState1: string;
+  previousZipCode1: string;
+  previousAddress2: string;
+  previousCity2: string;
+  previousState2: string;
+  previousZipCode2: string;
+  
   // Landlord
   landlordName: string;
   landlordPhone: string;
@@ -84,6 +94,30 @@ export async function generateApplicationPDF(data: ApplicationData): Promise<Buf
       if (data.state) doc.text(`State: ${data.state}`);
       if (data.zipCode) doc.text(`ZIP Code: ${data.zipCode}`);
       doc.moveDown(1);
+
+      // Previous Address 1 Section
+      if (data.previousAddress1 || data.previousCity1 || data.previousState1 || data.previousZipCode1) {
+        doc.fontSize(14).font('Helvetica-Bold').text('Previous Address 1', { underline: true });
+        doc.moveDown(0.3);
+        doc.fontSize(10).font('Helvetica');
+        if (data.previousAddress1) doc.text(`Address: ${data.previousAddress1}`);
+        if (data.previousCity1) doc.text(`City: ${data.previousCity1}`);
+        if (data.previousState1) doc.text(`State: ${data.previousState1}`);
+        if (data.previousZipCode1) doc.text(`ZIP Code: ${data.previousZipCode1}`);
+        doc.moveDown(1);
+      }
+
+      // Previous Address 2 Section
+      if (data.previousAddress2 || data.previousCity2 || data.previousState2 || data.previousZipCode2) {
+        doc.fontSize(14).font('Helvetica-Bold').text('Previous Address 2', { underline: true });
+        doc.moveDown(0.3);
+        doc.fontSize(10).font('Helvetica');
+        if (data.previousAddress2) doc.text(`Address: ${data.previousAddress2}`);
+        if (data.previousCity2) doc.text(`City: ${data.previousCity2}`);
+        if (data.previousState2) doc.text(`State: ${data.previousState2}`);
+        if (data.previousZipCode2) doc.text(`ZIP Code: ${data.previousZipCode2}`);
+        doc.moveDown(1);
+      }
 
       // Current Landlord Section
       if (data.landlordName || data.landlordPhone || data.landlordEmail) {

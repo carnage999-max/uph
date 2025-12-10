@@ -33,6 +33,16 @@ type FormData = {
   state: string;
   zipCode: string;
   
+  // Step 3b: Previous Addresses
+  previousAddress1: string;
+  previousCity1: string;
+  previousState1: string;
+  previousZipCode1: string;
+  previousAddress2: string;
+  previousCity2: string;
+  previousState2: string;
+  previousZipCode2: string;
+  
   // Step 4: Current Landlord
   landlordName: string;
   landlordPhone: string;
@@ -76,6 +86,14 @@ const INITIAL_FORM_DATA: FormData = {
   city: '',
   state: '',
   zipCode: '',
+  previousAddress1: '',
+  previousCity1: '',
+  previousState1: '',
+  previousZipCode1: '',
+  previousAddress2: '',
+  previousCity2: '',
+  previousState2: '',
+  previousZipCode2: '',
   landlordName: '',
   landlordPhone: '',
   landlordEmail: '',
@@ -299,6 +317,14 @@ export default function ApplicationForm({ properties }: { properties: Property[]
       formDataToSend.append('city', formData.city);
       formDataToSend.append('state', formData.state);
       formDataToSend.append('zipCode', formData.zipCode);
+      formDataToSend.append('previousAddress1', formData.previousAddress1);
+      formDataToSend.append('previousCity1', formData.previousCity1);
+      formDataToSend.append('previousState1', formData.previousState1);
+      formDataToSend.append('previousZipCode1', formData.previousZipCode1);
+      formDataToSend.append('previousAddress2', formData.previousAddress2);
+      formDataToSend.append('previousCity2', formData.previousCity2);
+      formDataToSend.append('previousState2', formData.previousState2);
+      formDataToSend.append('previousZipCode2', formData.previousZipCode2);
       formDataToSend.append('landlordName', formData.landlordName);
       formDataToSend.append('landlordPhone', formData.landlordPhone);
       formDataToSend.append('landlordEmail', formData.landlordEmail);
@@ -572,6 +598,124 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                   pattern="[0-9]{5}"
                   maxLength={5}
                 />
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 pt-6 mt-6">
+              <h3 className="font-semibold text-gray-900 mb-4">Previous Address 1</h3>
+              
+              <div>
+                <label htmlFor="previousAddress1" className="block text-sm font-medium text-gray-700 mb-1">
+                  Street Address
+                </label>
+                <input 
+                  id="previousAddress1"
+                  className={styles.inputBase} 
+                  value={formData.previousAddress1}
+                  onChange={(e) => updateFormData('previousAddress1', e.target.value)}
+                  placeholder="123 Main Street" 
+                />
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-3 mt-4">
+                <div>
+                  <label htmlFor="previousCity1" className="block text-sm font-medium text-gray-700 mb-1">
+                    City
+                  </label>
+                  <input 
+                    id="previousCity1"
+                    className={styles.inputBase} 
+                    value={formData.previousCity1}
+                    onChange={(e) => updateFormData('previousCity1', e.target.value)}
+                    placeholder="Detroit" 
+                  />
+                </div>
+                <div>
+                  <label htmlFor="previousState1" className="block text-sm font-medium text-gray-700 mb-1">
+                    State
+                  </label>
+                  <input 
+                    id="previousState1"
+                    className={styles.inputBase} 
+                    value={formData.previousState1}
+                    onChange={(e) => updateFormData('previousState1', e.target.value)}
+                    placeholder="ME" 
+                    maxLength={2}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="previousZipCode1" className="block text-sm font-medium text-gray-700 mb-1">
+                    ZIP Code
+                  </label>
+                  <input 
+                    id="previousZipCode1"
+                    className={styles.inputBase} 
+                    value={formData.previousZipCode1}
+                    onChange={(e) => updateFormData('previousZipCode1', e.target.value)}
+                    placeholder="04929" 
+                    pattern="[0-9]{5}"
+                    maxLength={5}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="border-t border-gray-200 pt-6 mt-6">
+              <h3 className="font-semibold text-gray-900 mb-4">Previous Address 2</h3>
+              
+              <div>
+                <label htmlFor="previousAddress2" className="block text-sm font-medium text-gray-700 mb-1">
+                  Street Address
+                </label>
+                <input 
+                  id="previousAddress2"
+                  className={styles.inputBase} 
+                  value={formData.previousAddress2}
+                  onChange={(e) => updateFormData('previousAddress2', e.target.value)}
+                  placeholder="123 Main Street" 
+                />
+              </div>
+
+              <div className="grid gap-4 sm:grid-cols-3 mt-4">
+                <div>
+                  <label htmlFor="previousCity2" className="block text-sm font-medium text-gray-700 mb-1">
+                    City
+                  </label>
+                  <input 
+                    id="previousCity2"
+                    className={styles.inputBase} 
+                    value={formData.previousCity2}
+                    onChange={(e) => updateFormData('previousCity2', e.target.value)}
+                    placeholder="Detroit" 
+                  />
+                </div>
+                <div>
+                  <label htmlFor="previousState2" className="block text-sm font-medium text-gray-700 mb-1">
+                    State
+                  </label>
+                  <input 
+                    id="previousState2"
+                    className={styles.inputBase} 
+                    value={formData.previousState2}
+                    onChange={(e) => updateFormData('previousState2', e.target.value)}
+                    placeholder="ME" 
+                    maxLength={2}
+                  />
+                </div>
+                <div>
+                  <label htmlFor="previousZipCode2" className="block text-sm font-medium text-gray-700 mb-1">
+                    ZIP Code
+                  </label>
+                  <input 
+                    id="previousZipCode2"
+                    className={styles.inputBase} 
+                    value={formData.previousZipCode2}
+                    onChange={(e) => updateFormData('previousZipCode2', e.target.value)}
+                    placeholder="04929" 
+                    pattern="[0-9]{5}"
+                    maxLength={5}
+                  />
+                </div>
               </div>
             </div>
           </div>

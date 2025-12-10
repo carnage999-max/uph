@@ -27,6 +27,14 @@ export async function POST(req: NextRequest) {
     const city = String(formData.get('city') || '').trim();
     const state = String(formData.get('state') || '').trim();
     const zipCode = String(formData.get('zipCode') || '').trim();
+    const previousAddress1 = String(formData.get('previousAddress1') || '').trim();
+    const previousCity1 = String(formData.get('previousCity1') || '').trim();
+    const previousState1 = String(formData.get('previousState1') || '').trim();
+    const previousZipCode1 = String(formData.get('previousZipCode1') || '').trim();
+    const previousAddress2 = String(formData.get('previousAddress2') || '').trim();
+    const previousCity2 = String(formData.get('previousCity2') || '').trim();
+    const previousState2 = String(formData.get('previousState2') || '').trim();
+    const previousZipCode2 = String(formData.get('previousZipCode2') || '').trim();
     const landlordName = String(formData.get('landlordName') || '').trim();
     const landlordPhone = String(formData.get('landlordPhone') || '').trim();
     const landlordEmail = String(formData.get('landlordEmail') || '').trim();
@@ -125,6 +133,18 @@ Current Address:
 • State: ${state || 'N/A'}
 • ZIP Code: ${zipCode || 'N/A'}
 
+Previous Address 1:
+• Address: ${previousAddress1 || 'N/A'}
+• City: ${previousCity1 || 'N/A'}
+• State: ${previousState1 || 'N/A'}
+• ZIP Code: ${previousZipCode1 || 'N/A'}
+
+Previous Address 2:
+• Address: ${previousAddress2 || 'N/A'}
+• City: ${previousCity2 || 'N/A'}
+• State: ${previousState2 || 'N/A'}
+• ZIP Code: ${previousZipCode2 || 'N/A'}
+
 Current Landlord:
 • Name: ${landlordName || 'N/A'}
 • Phone: ${landlordPhone || 'N/A'}
@@ -205,6 +225,26 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
                     <p style="margin:4px 0;"><strong>State:</strong> ${escapeHtml(state || 'N/A')}</p>
                     <p style="margin:4px 0;"><strong>ZIP Code:</strong> ${escapeHtml(zipCode || 'N/A')}</p>
                   </div>
+
+                  ${previousAddress1 || previousCity1 || previousState1 || previousZipCode1 ? `
+                  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
+                    <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Previous Address 1</h3>
+                    <p style="margin:4px 0;"><strong>Address:</strong> ${escapeHtml(previousAddress1 || 'N/A')}</p>
+                    <p style="margin:4px 0;"><strong>City:</strong> ${escapeHtml(previousCity1 || 'N/A')}</p>
+                    <p style="margin:4px 0;"><strong>State:</strong> ${escapeHtml(previousState1 || 'N/A')}</p>
+                    <p style="margin:4px 0;"><strong>ZIP Code:</strong> ${escapeHtml(previousZipCode1 || 'N/A')}</p>
+                  </div>
+                  ` : ''}
+
+                  ${previousAddress2 || previousCity2 || previousState2 || previousZipCode2 ? `
+                  <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
+                    <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Previous Address 2</h3>
+                    <p style="margin:4px 0;"><strong>Address:</strong> ${escapeHtml(previousAddress2 || 'N/A')}</p>
+                    <p style="margin:4px 0;"><strong>City:</strong> ${escapeHtml(previousCity2 || 'N/A')}</p>
+                    <p style="margin:4px 0;"><strong>State:</strong> ${escapeHtml(previousState2 || 'N/A')}</p>
+                    <p style="margin:4px 0;"><strong>ZIP Code:</strong> ${escapeHtml(previousZipCode2 || 'N/A')}</p>
+                  </div>
+                  ` : ''}
 
                   ${landlordName || landlordPhone || landlordEmail ? `
                   <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
@@ -296,6 +336,14 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
         city,
         state,
         zipCode,
+        previousAddress1,
+        previousCity1,
+        previousState1,
+        previousZipCode1,
+        previousAddress2,
+        previousCity2,
+        previousState2,
+        previousZipCode2,
         landlordName,
         landlordPhone,
         landlordEmail,
