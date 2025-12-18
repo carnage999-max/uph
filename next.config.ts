@@ -39,6 +39,11 @@ const nextConfig: NextConfig = {
     DATABASE_URL: process.env.DATABASE_URL || '',
     DATABASE_URL_UNPOOLED: process.env.DATABASE_URL_UNPOOLED || '',
   },
+  // Increase payload size limits for file uploads
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 5,
+  },
 };
 
 export default nextConfig;

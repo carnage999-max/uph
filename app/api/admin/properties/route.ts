@@ -5,6 +5,10 @@ import { listProperties, generateUniquePropertySlug } from '@/lib/properties';
 import { uploadFileToS3 } from '@/lib/storage';
 import { requireAdminAuth } from '@/lib/auth/api-middleware';
 
+// Configure route to handle large uploads
+export const maxDuration = 60;
+export const revalidate = 0;
+
 export async function GET(request: NextRequest){
   const authError = await requireAdminAuth(request);
   if (authError) return authError;

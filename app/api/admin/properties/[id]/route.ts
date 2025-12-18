@@ -2,6 +2,8 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { deleteFileFromS3 } from '@/lib/storage';
 
+export const maxDuration = 60;
+
 export async function DELETE(_: NextRequest, context: { params: Promise<{ id: string }> }){
   const { id } = await context.params;
   const property = await prisma.property.findUnique({
