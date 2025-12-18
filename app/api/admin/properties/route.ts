@@ -115,7 +115,6 @@ export async function POST(request: NextRequest){
         rentTo,
         amenities: Array.isArray(payload.amenities) ? payload.amenities : [],
         hasUnits: Boolean(payload.hasUnits),
-        underConstruction: Boolean(payload.underConstruction),
         latitude,
         longitude,
         images: {
