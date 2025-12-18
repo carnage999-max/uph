@@ -42,6 +42,7 @@ function mapProperty(property: any): Property{
     rentFrom: property.rentFrom ?? null,
     rentTo: property.rentTo ?? null,
     hasUnits: property.hasUnits,
+    underConstruction: property.underConstruction ?? false,
     latitude: property.latitude,
     longitude: property.longitude,
     units: (property.units ?? []).map(mapUnit),
