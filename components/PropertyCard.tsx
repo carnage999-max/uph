@@ -1,6 +1,7 @@
 import { styles } from '@/lib/constants';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Wrench } from 'lucide-react';
 import type { Property } from '@/lib/types';
 
 export default function PropertyCard({ p }:{ p: Property }){
@@ -18,6 +19,14 @@ export default function PropertyCard({ p }:{ p: Property }){
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           priority={false}
         />
+        {p.underConstruction && (
+          <div className="absolute top-3 right-3">
+            <div className={styles.badgeUnderConstruction}>
+              <Wrench className="h-3.5 w-3.5" />
+              Under Construction
+            </div>
+          </div>
+        )}
       </div>
       <div className={styles.cardPad}>
         <div className="flex items-center justify-between">

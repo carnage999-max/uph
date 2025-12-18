@@ -63,6 +63,7 @@ export default function PropertyCreateWizard(){
   const [typeSelection, setTypeSelection] = useState(propertyTypeOptions[0]);
   const [customType, setCustomType] = useState('');
   const [hasUnits, setHasUnits] = useState(true);
+  const [underConstruction, setUnderConstruction] = useState(false);
   const [units, setUnits] = useState<UnitForm[]>([]);
   const [amenitiesText, setAmenitiesText] = useState('');
   const [heroFile, setHeroFile] = useState<File | null>(null);
@@ -250,6 +251,7 @@ export default function PropertyCreateWizard(){
       rentTo: form.rentTo,
       amenities: parsedAmenities(),
       hasUnits,
+      underConstruction,
       heroImageField: heroKey,
       galleryFields,
       units: unitsPayload,
@@ -336,6 +338,15 @@ export default function PropertyCreateWizard(){
                   </select>
                 </div>
               </div>
+              <label className="flex items-center gap-2 cursor-pointer p-3 rounded-xl border border-gray-200 hover:bg-gray-50">
+                <input
+                  type="checkbox"
+                  checked={underConstruction}
+                  onChange={(e) => setUnderConstruction(e.target.checked)}
+                  className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                />
+                <span className="text-sm font-medium text-gray-900">Mark property as Under Construction</span>
+              </label>
               <Field
                 label="Street address"
                 required

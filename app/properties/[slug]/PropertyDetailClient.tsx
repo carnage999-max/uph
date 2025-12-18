@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useMemo, useState } from 'react';
-import { Play } from 'lucide-react';
+import { Play, Wrench } from 'lucide-react';
 import { styles } from '@/lib/constants';
 import { isVideoUrl } from '@/lib/media';
 import VideoPlayer from '@/components/VideoPlayer';
@@ -82,6 +82,14 @@ export default function PropertyDetailClient({ property }: { property: Property 
             sizes="100vw"
             priority={heroIdx === 0}
           />
+        )}
+        {property.underConstruction && (
+          <div className="absolute top-4 right-4">
+            <div className={styles.badgeUnderConstruction}>
+              <Wrench className="h-3.5 w-3.5" />
+              Under Construction
+            </div>
+          </div>
         )}
         {heroImages.length > 1 && (
           <>

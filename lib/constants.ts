@@ -68,4 +68,7 @@ export const styles = {
   heroOverlay:
     'absolute inset-0 flex items-center justify-start text-white',
   heroCta: 'mt-8 flex flex-wrap items-center gap-3',
+
+  // Status Badges
+  badgeUnderConstruction: 'inline-flex items-center gap-1.5 rounded-lg bg-orange-100 px-3 py-1 text-xs font-semibold text-orange-800 border border-orange-200',
 };

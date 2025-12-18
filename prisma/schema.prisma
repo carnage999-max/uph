@@ -33,6 +33,7 @@ model Property {
   longitude       Float?
   amenities       String[]
   hasUnits        Boolean         @default(false)
+  underConstruction Boolean       @default(false)
   images          PropertyImage[]
   units           Unit[]
 }

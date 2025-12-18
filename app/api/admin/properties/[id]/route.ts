@@ -104,6 +104,10 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
     data.hasUnits = Boolean(body.hasUnits);
   }
 
+  if ('underConstruction' in body){
+    data.underConstruction = Boolean(body.underConstruction);
+  }
+
   const property = await prisma.property.update({
     where: { id },
     data,

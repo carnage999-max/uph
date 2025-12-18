@@ -39,6 +39,7 @@ export type Property = {
   rentFrom: number | null;
   rentTo: number | null;
   hasUnits: boolean;
+  underConstruction: boolean;
   latitude?: number | null;
   longitude?: number | null;
   units: Unit[];

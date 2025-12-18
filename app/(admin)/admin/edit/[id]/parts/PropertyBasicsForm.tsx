@@ -57,6 +57,7 @@ export default function PropertyBasicsForm({ property }: Props){
   });
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
+  const [underConstruction, setUnderConstruction] = useState(property.underConstruction ?? false);
 
   const typeSelection = propertyTypeOptions.includes(property.type) ? property.type : 'Custom';
   const [typeOption, setTypeOption] = useState(typeSelection);
@@ -85,6 +86,7 @@ export default function PropertyBasicsForm({ property }: Props){
       type: typeOption === 'Custom' ? customType || property.type : typeOption,
       rentFrom: form.rentFrom,
       rentTo: form.rentTo,
+      underConstruction,
       amenities: form.amenities
         .split(/[,\n]/)
         .map((item)=> item.trim())
@@ -138,6 +140,16 @@ export default function PropertyBasicsForm({ property }: Props){
             </select>
           </div>
         </div>
+
+        <label className="flex items-center gap-2 cursor-pointer p-3 rounded-xl border border-gray-200 hover:bg-gray-50">
+          <input
+            type="checkbox"
+            checked={underConstruction}
+            onChange={(e) => setUnderConstruction(e.target.checked)}
+            className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+          />
+          <span className="text-sm font-medium text-gray-900">Mark property as Under Construction</span>
+        </label>
 
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Address" value={form.address} onChange={(value)=> handleChange('address', value)} />

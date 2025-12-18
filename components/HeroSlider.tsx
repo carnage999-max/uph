@@ -41,7 +41,7 @@ export default function HeroSlider({ images, headline, subtext }:{ images: strin
             <div className={styles.heroCta}>
               <a
                 href="/apply"
-                className={`${styles.btn} ${styles.btnPrimary} px-6 py-4`}
+                className={`${styles.btn} bg-linear-to-b from-[#FCD34D] to-[#F59E0B] text-gray-900 shadow-[0_6px_22px_rgba(245,158,11,0.35)] hover:shadow-[0_10px_28px_rgba(245,158,11,0.45)] px-6 py-4 font-semibold`}
               >
                 Apply Now
               </a>
