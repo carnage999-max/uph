@@ -26,7 +26,7 @@ frontend:
         - echo "S3_BUCKET_NAME=$S3_BUCKET_NAME" >> .env.production.local
         - echo "[Build] Environment file created (sensitive values masked in logs)"
         - echo "[Build] Applying database migration..."
-        - apt-get update && apt-get install -y postgresql-client
+        - yum install -y postgresql
         - psql "$DATABASE_URL" -f scripts/add-under-construction.sql
         - echo "[Build] Database migration complete"
         - pnpm run build
