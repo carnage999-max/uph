@@ -292,5 +292,29 @@
       "lat": 44.7826,
       "lng": -69.3839
     }
+  },
+  {
+    "id": "135-main-st",
+    "name": "135 Main St",
+    "address": "135 Main St, Pittsfield, ME 04967",
+    "city": "Pittsfield",
+    "state": "ME",
+    "zip": "04967",
+    "status": "Under Construction",
+    "type": "Apartment Complex",
+    "description": "3 story, historic building being renovated into residential apartments",
+    "bedroomsSummary": "TBD",
+    "bathsSummary": "TBD",
+    "sqftApprox": "TBD",
+    "heroImg": "/images/properties/135-main-st/hero.jpeg",
+    "gallery": [],
+    "amenities": [],
+    "rentFrom": null,
+    "rentTo": null,
+    "units": [],
+    "coordinates": {
+      "lat": 44.7805,
+      "lng": -69.3843
+    }
   }
 ]
