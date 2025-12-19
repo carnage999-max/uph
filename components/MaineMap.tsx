@@ -36,18 +36,21 @@ export default function MaineMap() {
           attribution='&copy; <a href="https://cartodb.com/">CartoDB</a>'
           url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png"
         />
-        {properties.map((p: any, index: number) => {
+        {properties.map((p: any) => {
           const coords = p.coordinates;
           if (!coords || typeof coords.lat !== 'number' || typeof coords.lng !== 'number') return null;
           
-          // Slight offset for overlapping markers in same city (0.0002 degrees ~= 20 meters)
-          const latOffset = index % 2 === 0 ? 0.0001 : -0.0001;
-          const lngOffset = Math.floor(index / 2) % 2 === 0 ? 0.0001 : -0.0001;
+          // Apply small offset to 115 Somerset Ave so it doesn't overlap with 135 Main St
+          let lat = coords.lat;
+          let lng = coords.lng;
+          if (p.id === '115-somerset-ave') {
+            lat += 0.0003;  // ~30 meters north
+          }
           
           return (
             <Marker 
               key={p.id} 
-              position={[coords.lat + latOffset, coords.lng + lngOffset]} 
+              position={[lat, lng]} 
               icon={DefaultIcon}
             >
               <Popup>
