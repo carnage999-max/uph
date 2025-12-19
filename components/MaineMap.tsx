@@ -83,6 +83,21 @@ export default function MaineMap() {
           );
         })}
       </MapContainer>
+      
+      {/* Legend */}
+      <div className="bg-white px-4 py-3 border-t border-gray-200 text-sm">
+        <div className="font-semibold text-gray-700 mb-2">Legend</div>
+        <div className="flex gap-6">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-blue-500 rounded-full border border-gray-300"></div>
+            <span className="text-gray-600">Current Locations</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 bg-red-500 rounded-full border border-gray-300"></div>
+            <span className="text-gray-600">Under Construction</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
