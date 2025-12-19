@@ -26,8 +26,7 @@ frontend:
         - echo "S3_BUCKET_NAME=$S3_BUCKET_NAME" >> .env.production.local
         - echo "[Build] Environment file created (sensitive values masked in logs)"
         - echo "[Build] Applying database migration..."
-        - yum install -y postgresql
-        - psql "$DATABASE_URL" -f scripts/add-under-construction.sql
+        - node scripts/migrate.mjs
         - echo "[Build] Database migration complete"
         - pnpm run build
         - mkdir -p .next && cp .env.production.local .next/.env.production.local
