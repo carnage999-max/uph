@@ -17,6 +17,16 @@ const DefaultIcon = L.icon({
   shadowSize: [41, 41],
 });
 
+// Red icon for under construction properties
+const UnderConstructionIcon = L.icon({
+  iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
 
 export default function MaineMap() {
   // Center roughly on Maine
@@ -47,16 +57,23 @@ export default function MaineMap() {
             lat += 0.0003;  // ~30 meters north
           }
           
+          // Use red icon for under construction properties
+          const isUnderConstruction = p.status === 'Under Construction';
+          const icon = isUnderConstruction ? UnderConstructionIcon : DefaultIcon;
+          
           return (
             <Marker 
               key={p.id} 
               position={[lat, lng]} 
-              icon={DefaultIcon}
+              icon={icon}
             >
               <Popup>
                 <div className="text-sm">
                   <div className="font-semibold">{p.name}</div>
                   <div className="text-xs text-gray-600">{p.address}</div>
+                  {isUnderConstruction && (
+                    <div className="mt-1 text-xs font-semibold text-orange-600">Under Construction</div>
+                  )}
                   <div className="mt-2">
                     <a href={`/properties/${p.id}`} className="text-xs font-medium text-blue-600 underline">View listing</a>
                   </div>
