@@ -57,6 +57,45 @@ function generateId(){
   return Math.random().toString(36).slice(2, 11);
 }
 
+async function compressImage(file: File, maxWidth = 2000, quality = 0.8): Promise<File> {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = (event) => {
+      const img = new Image();
+      img.src = event.target?.result as string;
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxWidth) {
+          height = Math.round((height * maxWidth) / width);
+          width = maxWidth;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx?.drawImage(img, 0, 0, width, height);
+
+        canvas.toBlob(
+          (blob) => {
+            if (blob) {
+              const compressedFile = new File([blob], file.name, { type: 'image/jpeg' });
+              resolve(compressedFile);
+            } else {
+              resolve(file);
+            }
+          },
+          'image/jpeg',
+          quality
+        );
+      };
+    };
+  });
+}
+
 export default function PropertyCreateWizard(){
   const router = useRouter();
   const [step, setStep] = useState(0);
@@ -210,35 +249,42 @@ export default function PropertyCreateWizard(){
     setPending(true);
     setError(null);
 
-    const formData = new FormData();
-    const heroKey = 'hero';
-    formData.append(heroKey, heroFile);
-    const galleryFields: string[] = [];
-    galleryFiles.forEach((file, index)=>{
-      const field = `gallery-${index}`;
-      galleryFields.push(field);
-      formData.append(field, file);
-    });
+    try {
+      // Compress images to reduce payload size
+      const compressedHero = await compressImage(heroFile);
+      const compressedGallery = await Promise.all(
+        galleryFiles.map((file) => compressImage(file))
+      );
 
-    const unitsPayload = hasUnits ? units.map((unit, index)=>{
-      const coverField = unit.coverFile ? `unit-${index}-cover` : null;
-      if (unit.coverFile){
-        formData.append(coverField!, unit.coverFile);
-      }
-      const galleryFields = unit.galleryFiles.map((file, galleryIndex)=>{
-        const fieldName = `unit-${index}-gallery-${galleryIndex}`;
-        formData.append(fieldName, file);
-        return fieldName;
+      const formData = new FormData();
+      const heroKey = 'hero';
+      formData.append(heroKey, compressedHero);
+      const galleryFields: string[] = [];
+      compressedGallery.forEach((file, index)=>{
+        const field = `gallery-${index}`;
+        galleryFields.push(field);
+        formData.append(field, file);
       });
-      return {
-        label: unit.label,
-        bedrooms: unit.bedrooms,
-        bathrooms: unit.bathrooms,
-        sqft: unit.sqft,
-        rent: unit.rent,
-        available: unit.available,
-        isHidden: unit.isHidden,
-        coverImageField: coverField,
+
+      const unitsPayload = hasUnits ? units.map((unit, index)=>{
+        const coverField = unit.coverFile ? `unit-${index}-cover` : null;
+        if (unit.coverFile){
+          formData.append(coverField!, unit.coverFile);
+        }
+        const galleryFields = unit.galleryFiles.map((file, galleryIndex)=>{
+          const fieldName = `unit-${index}-gallery-${galleryIndex}`;
+          formData.append(fieldName, file);
+          return fieldName;
+        });
+        return {
+          label: unit.label,
+          bedrooms: unit.bedrooms,
+          bathrooms: unit.bathrooms,
+          sqft: unit.sqft,
+          rent: unit.rent,
+          available: unit.available,
+          isHidden: unit.isHidden,
+          coverImageField: coverField,
         galleryFields,
       };
     }) : [];
@@ -257,9 +303,8 @@ export default function PropertyCreateWizard(){
       units: unitsPayload,
     };
 
-    formData.append('payload', JSON.stringify(payload));
+      formData.append('payload', JSON.stringify(payload));
 
-    try {
       const response = await fetch('/api/admin/properties', {
         method: 'POST',
         body: formData,
