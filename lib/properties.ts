@@ -103,6 +103,7 @@ export async function listProperties(){
         longitude: true,
         amenities: true,
         hasUnits: true,
+        underConstruction: true,
         createdAt: true,
         updatedAt: true,
         images: {
@@ -180,6 +181,7 @@ export async function getPropertyBySlug(slug: string){
         longitude: true,
         amenities: true,
         hasUnits: true,
+        underConstruction: true,
         createdAt: true,
         updatedAt: true,
         images: {
@@ -252,6 +254,7 @@ export async function getPropertyById(id: string){
         longitude: true,
         amenities: true,
         hasUnits: true,
+        underConstruction: true,
         createdAt: true,
         updatedAt: true,
         images: {

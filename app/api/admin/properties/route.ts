@@ -187,6 +187,7 @@ export async function POST(request: NextRequest){
         longitude: true,
         amenities: true,
         hasUnits: true,
+        underConstruction: true,
         createdAt: true,
         updatedAt: true,
         images: {

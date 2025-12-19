@@ -137,6 +137,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
       longitude: true,
       amenities: true,
       hasUnits: true,
+      underConstruction: true,
       createdAt: true,
       updatedAt: true,
       images: {
