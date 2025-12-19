@@ -174,6 +174,12 @@ export async function POST(request: NextRequest){
 
     return NextResponse.json({ property });
   } catch (error: any) {
+    console.error('[POST /api/admin/properties] Error creating property:', {
+      message: error?.message,
+      stack: error?.stack,
+      code: error?.code,
+      details: error,
+    });
     return NextResponse.json({ message: error.message || 'Failed to create property.' }, { status: 500 });
   }
 }
