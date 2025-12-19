@@ -106,8 +106,10 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
     data.hasUnits = Boolean(body.hasUnits);
   }
 
+  // Only add underConstruction to data if it's in the request body
+  // Use conditional spread to avoid errors if column doesn't exist in DB yet
   if ('underConstruction' in body){
-    data.underConstruction = Boolean(body.underConstruction);
+    Object.assign(data, { underConstruction: Boolean(body.underConstruction) });
   }
 
   const property = await prisma.property.update({
@@ -170,12 +172,17 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
         },
       },
     },
-  }).catch(()=>{
+  }).catch((error: any) => {
+    console.error('[PATCH /api/admin/properties/[id]] Error updating property:', {
+      message: error?.message,
+      code: error?.code,
+      details: error,
+    });
     return null;
   });
 
   if (!property){
-    return NextResponse.json({ message: 'Property not found.' }, { status: 404 });
+    return NextResponse.json({ message: 'Property not found or failed to update.' }, { status: 404 });
   }
 
   return NextResponse.json({ property });

@@ -25,9 +25,9 @@ frontend:
         - echo "UPH_AWS_SECRET_ACCESS_KEY=$UPH_AWS_SECRET_ACCESS_KEY" >> .env.production.local
         - echo "S3_BUCKET_NAME=$S3_BUCKET_NAME" >> .env.production.local
         - echo "[Build] Environment file created (sensitive values masked in logs)"
-        - echo "[Build] Running Prisma migrations..."
-        - npx prisma db push --skip-generate
-        - echo "[Build] Database migrations completed"
+        - echo "[Build] Ensuring database schema..."
+        - npx ts-node scripts/ensure-db-schema.ts
+        - echo "[Build] Database schema check complete"
         - pnpm run build
         - mkdir -p .next && cp .env.production.local .next/.env.production.local
   artifacts:
