@@ -316,5 +316,29 @@
       "lat": 44.783214294298254,
       "lng": -69.3823601865081
     }
+  },
+  {
+    "id": "6-1-2-pine-street",
+    "name": "6 1/2 Pine Street",
+    "address": "6 1/2 Pine Street, East Millinocket, ME 04430",
+    "city": "East Millinocket",
+    "state": "ME",
+    "zip": "04430",
+    "status": "Under Construction",
+    "type": "Single Unit 3-Bedroom Home",
+    "description": "Three Bedroom single-family home.",
+    "bedroomsSummary": "TBD",
+    "bathsSummary": "TBD",
+    "sqftApprox": "TBD",
+    "heroImg": "/images/properties/135-main-st/hero.jpeg",
+    "gallery": [],
+    "amenities": [],
+    "rentFrom": null,
+    "rentTo": null,
+    "units": [],
+    "coordinates": {
+      "lat": 45.6523,
+      "lng": -68.6876
+    }
   }
 ]
