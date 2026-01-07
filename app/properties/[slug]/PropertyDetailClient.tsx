@@ -14,6 +14,7 @@ type GalleryUnit = { unit: Unit; index: number };
 export default function PropertyDetailClient({ property }: { property: Property }){
   const [heroIdx, setHeroIdx] = useState(0);
   const [unitGallery, setUnitGallery] = useState<GalleryUnit | null>(null);
+  const [autoPlay, setAutoPlay] = useState(true);
 
   const visibleUnits = useMemo(
     () => property.units.filter((unit) => !unit.isHidden),
@@ -39,6 +40,26 @@ export default function PropertyDetailClient({ property }: { property: Property 
       const nextIndex = (current.index + delta + total) % total;
       return { unit: current.unit, index: nextIndex };
     });
+  };
+
+  // Auto-scroll hero gallery every 4 seconds
+  useEffect(() => {
+    if (!autoPlay || heroImages.length <= 1) return;
+    
+    const interval = setInterval(() => {
+      setHeroIdx((idx) => (idx + 1) % heroImages.length);
+    }, 4000);
+    
+    return () => clearInterval(interval);
+  }, [autoPlay, heroImages.length]);
+
+  // Pause auto-play when user manually navigates
+  const handleHeroNavigation = (newIdx: number) => {
+    setHeroIdx(newIdx);
+    setAutoPlay(false);
+    // Resume auto-play after 5 seconds of inactivity
+    const timeout = setTimeout(() => setAutoPlay(true), 5000);
+    return () => clearTimeout(timeout);
   };
 
   useEffect(() => {
@@ -95,7 +116,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
           <>
             <button
               aria-label="Previous media"
-              onClick={() => setHeroIdx((idx) => (idx - 1 + heroImages.length) % heroImages.length)}
+              onClick={() => handleHeroNavigation((heroIdx - 1 + heroImages.length) % heroImages.length)}
               className={`${styles.btn} ${styles.btnGhost}`}
               style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)' }}
             >
@@ -103,7 +124,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
             </button>
             <button
               aria-label="Next media"
-              onClick={() => setHeroIdx((idx) => (idx + 1) % heroImages.length)}
+              onClick={() => handleHeroNavigation((heroIdx + 1) % heroImages.length)}
               className={`${styles.btn} ${styles.btnGhost}`}
               style={{ position: 'absolute', right: '1rem', top: '50%', transform: 'translateY(-50%)' }}
             >
@@ -123,7 +144,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
                 className={`relative h-20 w-full overflow-hidden rounded-xl border ${
                   idx === heroIdx ? 'ring-2 ring-gray-900' : ''
                 }`}
-                onClick={() => setHeroIdx(idx)}
+                onClick={() => handleHeroNavigation(idx)}
               >
                 {isVideo ? (
                   <>
