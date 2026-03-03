@@ -73,6 +73,13 @@ export default function MaintenanceRequestForm({ issueTypes }: Props){
         <input id="maintenance-phone" name="phone" type="tel" placeholder="(207) 555-0123" required className={styles.inputBase} />
       </div>
 
+      <div className="md:col-span-1 space-y-2">
+        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-email">
+          Email address (optional)
+        </label>
+        <input id="maintenance-email" name="email" type="email" placeholder="you@example.com" className={styles.inputBase} />
+      </div>
+
       <div className="md:col-span-2 space-y-2">
         <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-address">
           Property address
