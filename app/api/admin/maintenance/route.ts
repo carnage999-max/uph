@@ -11,19 +11,45 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const status = searchParams.get('status');
-    const sortBy = searchParams.get('sortBy') || 'createdAt';
-    const sortOrder = searchParams.get('sortOrder') || 'desc';
+    const search = searchParams.get('search');
+    const page = Math.max(1, parseInt(searchParams.get('page') || '1'));
+    const pageSize = 10;
+    const skip = (page - 1) * pageSize;
 
-    const where = status ? { status } : {};
+    const where: any = {};
 
-    const requests = await prisma.maintenanceRequest.findMany({
-      where,
-      orderBy: {
-        [sortBy]: sortOrder,
+    if (status) {
+      where.status = status;
+    }
+
+    if (search) {
+      where.name = {
+        contains: search,
+        mode: 'insensitive',
+      };
+    }
+
+    const [requests, total] = await Promise.all([
+      prisma.maintenanceRequest.findMany({
+        where,
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: pageSize,
+      }),
+      prisma.maintenanceRequest.count({ where }),
+    ]);
+
+    const totalPages = Math.ceil(total / pageSize);
+
+    return NextResponse.json({
+      requests,
+      pagination: {
+        page,
+        pageSize,
+        total,
+        totalPages,
       },
     });
-
-    return NextResponse.json(requests);
   } catch (error: any) {
     console.error('Error fetching maintenance requests:', error);
     return NextResponse.json(

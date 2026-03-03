@@ -17,7 +17,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             <span className="text-xs text-gray-500">Signed in as {session.email}</span>
           </div>
           <div className="flex items-center gap-3">
-            <nav className="hidden items-center gap-3 sm:flex">
+            <nav className="flex flex-wrap items-center gap-3">
               <Link href="/admin" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
                 Overview
               </Link>

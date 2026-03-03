@@ -81,7 +81,9 @@ model UnitImage {
 model MaintenanceRequest {
   id              String   @id @default(uuid())
   createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
   name            String
+  email           String?
   phone           String
   address         String
   issueType       String
@@ -90,4 +92,8 @@ model MaintenanceRequest {
   attachmentUrl   String?
   attachmentKey   String?
   status          String   @default("new")
+  statusUpdatedAt DateTime?
+  adminComment    String?
+  commentAttachmentUrl String?
+  commentAttachmentKey String?
 }
