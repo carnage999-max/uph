@@ -45,6 +45,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
   const [expandedId, setExpandedId] = useState<string | null>(null);
   const [updating, setUpdating] = useState<string | null>(null);
   const [updateingModal, setUpdatingModal] = useState<string | null>(null);
+  const [selectedStatus, setSelectedStatus] = useState<string>('');
   const [comment, setComment] = useState<string>('');
   const [mediaFile, setMediaFile] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -73,8 +74,12 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
     }
   }
 
-  async function handleUpdateStatus(id: string, newStatus: string) {
-    setUpdatingModal(id);
+  async function handleUpdateStatus(id: string) {
+    const request = requests.find((r) => r.id === id);
+    if (request) {
+      setSelectedStatus(request.status);
+      setUpdatingModal(id);
+    }
   }
 
   async function submitStatusUpdate(id: string, newStatus: string) {
@@ -105,6 +110,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
       const updated = await response.json();
       setRequests((prev) => prev.map((r) => (r.id === id ? updated : r)));
       setUpdatingModal(null);
+      setSelectedStatus('');
       setComment('');
       setMediaFile(null);
     } catch (error) {
@@ -211,7 +217,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      handleUpdateStatus(request.id, request.status);
+                      handleUpdateStatus(request.id);
                     }}
                     className={`${styles.btn} ${styles.btnPrimary} whitespace-nowrap`}
                   >
@@ -318,12 +324,8 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
               <div>
                 <label className="text-sm font-semibold text-gray-700 mb-2 block">New Status</label>
                 <select
-                  value={
-                    requests.find((r) => r.id === updateingModal)?.status || ''
-                  }
-                  onChange={(e) => {
-                    // Status will be applied on submit
-                  }}
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
                   className={`${styles.inputBase} w-full rounded-lg`}
                 >
                   {STATUS_OPTIONS.map((status) => (
@@ -363,21 +365,23 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
 
               <div className="flex gap-2 justify-end pt-4 border-t border-gray-200">
                 <button
-                  onClick={() => setUpdatingModal(null)}
+                  onClick={() => {
+                    setUpdatingModal(null);
+                    setSelectedStatus('');
+                    setComment('');
+                    setMediaFile(null);
+                  }}
                   className={`${styles.btn} ${styles.btnGhost}`}
                 >
                   Cancel
                 </button>
                 <button
                   onClick={() => {
-                    const newStatus = requests.find(
-                      (r) => r.id === updateingModal
-                    )?.status;
-                    if (newStatus) {
-                      submitStatusUpdate(updateingModal, newStatus);
+                    if (selectedStatus && updateingModal) {
+                      submitStatusUpdate(updateingModal, selectedStatus);
                     }
                   }}
-                  disabled={updating === updateingModal}
+                  disabled={updating === updateingModal || !selectedStatus}
                   className={`${styles.btn} ${styles.btnPrimary}`}
                 >
                   {updating === updateingModal ? 'Updating...' : 'Update'}

@@ -11,25 +11,25 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   return (
     <div className="min-h-screen bg-gray-100">
       <header className="border-b border-gray-200 bg-white">
-        <div className={`${styles.container} flex items-center justify-between py-4`}>
-          <div className="flex flex-col">
-            <span className="font-montserrat text-lg font-semibold text-gray-900">Admin Dashboard</span>
-            <span className="text-xs text-gray-500">Signed in as {session.email}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <nav className="flex flex-wrap items-center gap-3">
-              <Link href="/admin" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
-                Overview
-              </Link>
-              <Link href="/admin/maintenance" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
-                Maintenance
-              </Link>
-              <Link href="/admin/create" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
-                New Property
-              </Link>
-            </nav>
+        <div className={`${styles.container} flex flex-col gap-4 py-4`}>
+          <div className="flex items-center justify-between">
+            <div className="flex flex-col">
+              <span className="font-montserrat text-lg font-semibold text-gray-900">Admin Dashboard</span>
+              <span className="text-xs text-gray-500">Signed in as {session.email}</span>
+            </div>
             <SignOutButton />
           </div>
+          <nav className="flex flex-wrap items-center gap-3">
+            <Link href="/admin" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
+              Overview
+            </Link>
+            <Link href="/admin/maintenance" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
+              Maintenance
+            </Link>
+            <Link href="/admin/create" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
+              New Property
+            </Link>
+          </nav>
         </div>
       </header>
       <main className="py-10">
