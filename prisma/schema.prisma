@@ -81,7 +81,6 @@ model UnitImage {
 model MaintenanceRequest {
   id              String   @id @default(uuid())
   createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
   name            String
   email           String?
   phone           String

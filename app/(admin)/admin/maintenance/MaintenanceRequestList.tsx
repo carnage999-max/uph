@@ -6,7 +6,6 @@ import { styles } from '@/lib/constants';
 type MaintenanceRequest = {
   id: string;
   createdAt: string;
-  updatedAt?: Date;
   name: string;
   email?: string | null;
   phone: string;
