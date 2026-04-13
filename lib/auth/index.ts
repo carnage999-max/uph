@@ -1,3 +1,4 @@
+import './env-loader';
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
 import { createSessionToken, verifySessionToken, SESSION_COOKIE } from './session';
@@ -56,6 +57,13 @@ export function isAdminCredentialsValid(email: string, password: string){
 export { createSessionToken, verifySessionToken, SESSION_COOKIE } from './session';
 
 export function isValidMaintenanceApiKey(key?: string | null): boolean {
+  // Debug: log what env vars are present at runtime
+  if (process.env.NODE_ENV === 'production') {
+    // Only log in production to see if env vars are loading
+    // eslint-disable-next-line no-console
+    console.log('[DEBUG] MAINTENANCE_API_KEY:', process.env.MAINTENANCE_API_KEY ? '***' : undefined);
+    console.log('[DEBUG] UPH_MAINTENANCE_API_KEY:', process.env.UPH_MAINTENANCE_API_KEY ? '***' : undefined);
+  }
   const expected = process.env.MAINTENANCE_API_KEY || process.env.UPH_MAINTENANCE_API_KEY;
   if (!expected) {
     throw new Error('MAINTENANCE_API_KEY is not configured. Set MAINTENANCE_API_KEY or UPH_MAINTENANCE_API_KEY.');

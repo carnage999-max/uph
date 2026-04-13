@@ -24,6 +24,8 @@ frontend:
         - echo "UPH_AWS_ACCESS_KEY_ID=$UPH_AWS_ACCESS_KEY_ID" >> .env.production.local
         - echo "UPH_AWS_SECRET_ACCESS_KEY=$UPH_AWS_SECRET_ACCESS_KEY" >> .env.production.local
         - echo "S3_BUCKET_NAME=$S3_BUCKET_NAME" >> .env.production.local
+        - echo "UPH_MAINTENANCE_API_KEY=$UPH_MAINTENANCE_API_KEY" >> .env.production.local
+        - echo "UPH_MAINTENANCE_API_CORS_ORIGIN=$UPH_MAINTENANCE_API_CORS_ORIGIN" >> .env.production.local
         - echo "[Build] Environment file created (sensitive values masked in logs)"
         - echo "[Build] Applying database migration..."
         - node scripts/migrate.mjs

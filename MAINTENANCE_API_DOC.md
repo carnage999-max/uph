@@ -3,6 +3,10 @@
 ## Overview
 This API exposes maintenance-request management endpoints for an external task manager to list, inspect, and update maintenance requests (the same actions available to the admin UI). Updating certain statuses triggers an email to the request creator.
 
+## Configuration (External Task Manager)
+- **API Base URL:** `https://ultimatepropertyholdings.com` (or your deployed domain)
+- **API Key:** Obtain from the UPH admin and set as `MAINTENANCE_API_KEY` in your task manager environment.
+
 ## Authentication
 - Provide a single API key via one of the headers:
   - `Authorization: Bearer <API_KEY>`
