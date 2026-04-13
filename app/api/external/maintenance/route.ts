@@ -3,21 +3,36 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { isValidMaintenanceApiKey } from '@/lib/auth';
 
-function addCorsHeaders(response: NextResponse): NextResponse {
-  const corsOrigin = process.env.MAINTENANCE_API_CORS_ORIGIN || process.env.UPH_MAINTENANCE_API_CORS_ORIGIN || '*';
+function addCorsHeaders(response: NextResponse, requestOrigin?: string): NextResponse {
+  const corsOriginsEnv = process.env.MAINTENANCE_API_CORS_ORIGIN || process.env.UPH_MAINTENANCE_API_CORS_ORIGIN || '*';
+  let corsOrigin = '*';
+  
+  // If env contains comma-separated origins, parse and match
+  if (corsOriginsEnv !== '*' && requestOrigin) {
+    const allowedOrigins = corsOriginsEnv.split(',').map(o => o.trim());
+    if (allowedOrigins.includes(requestOrigin)) {
+      corsOrigin = requestOrigin;
+    }
+  } else if (corsOriginsEnv !== '*') {
+    corsOrigin = corsOriginsEnv;
+  }
+  
   response.headers.set('Access-Control-Allow-Origin', corsOrigin);
   response.headers.set('Access-Control-Allow-Methods', 'GET, PATCH, OPTIONS');
   response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key');
   return response;
 }
 
-export async function OPTIONS() {
+export async function OPTIONS(request: NextRequest) {
+  const origin = request.headers.get('origin');
   return addCorsHeaders(
-    new NextResponse(null, { status: 204 })
+    new NextResponse(null, { status: 204 }),
+    origin || undefined
   );
 }
 
 export async function GET(request: NextRequest) {
+  const origin = request.headers.get('origin');
   try {
     const authHeader = request.headers.get('authorization') || '';
     const apiKeyHeader = request.headers.get('x-api-key') || '';
@@ -25,11 +40,11 @@ export async function GET(request: NextRequest) {
 
     try {
       if (!isValidMaintenanceApiKey(token)) {
-        return addCorsHeaders(NextResponse.json({ message: 'Unauthorized' }, { status: 401 }));
+        return addCorsHeaders(NextResponse.json({ message: 'Unauthorized' }, { status: 401 }), origin || undefined);
       }
     } catch (err: any) {
       console.error('API key config error:', err);
-      return addCorsHeaders(NextResponse.json({ message: err.message || 'Server configuration error' }, { status: 500 }));
+      return addCorsHeaders(NextResponse.json({ message: err.message || 'Server configuration error' }, { status: 500 }), origin || undefined);
     }
 
     const { searchParams } = new URL(request.url);
@@ -73,13 +88,13 @@ export async function GET(request: NextRequest) {
         totalPages,
       },
     });
-    return addCorsHeaders(response);
+    return addCorsHeaders(response, origin || undefined);
   } catch (error: any) {
     console.error('Error fetching maintenance requests (external):', error);
     const errorResponse = NextResponse.json(
       { message: error.message || 'Failed to fetch maintenance requests' },
       { status: 500 }
     );
-    return addCorsHeaders(errorResponse);
+    return addCorsHeaders(errorResponse, origin || undefined);
   }
 }
