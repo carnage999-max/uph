@@ -48,6 +48,7 @@ export async function POST(request: NextRequest){
       issueType,
       entryPermission,
       description,
+      email,
       attachmentUrl,
       attachmentKey,
     },
