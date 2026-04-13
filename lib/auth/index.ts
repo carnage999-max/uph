@@ -54,3 +54,12 @@ export function isAdminCredentialsValid(email: string, password: string){
 }
 
 export { createSessionToken, verifySessionToken, SESSION_COOKIE } from './session';
+
+export function isValidMaintenanceApiKey(key?: string | null): boolean {
+  const expected = process.env.MAINTENANCE_API_KEY || process.env.UPH_MAINTENANCE_API_KEY;
+  if (!expected) {
+    throw new Error('MAINTENANCE_API_KEY is not configured. Set MAINTENANCE_API_KEY or UPH_MAINTENANCE_API_KEY.');
+  }
+  if (!key) return false;
+  return key.trim() === expected.trim();
+}
