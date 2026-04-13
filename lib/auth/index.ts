@@ -1,4 +1,3 @@
-import './env-loader';
 import { cookies } from 'next/headers';
 import crypto from 'crypto';
 import { createSessionToken, verifySessionToken, SESSION_COOKIE } from './session';
