@@ -1,7 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { styles } from '@/lib/constants';
+import Captcha from '@/app/apply/parts/Captcha';
 
 type Props = {
   issueTypes: string[];
@@ -10,11 +11,35 @@ type Props = {
 export default function MaintenanceRequestForm({ issueTypes }: Props){
   const [status, setStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
+  // Memoize callbacks to prevent CAPTCHA re-initialization
+  const handleCaptchaVerify = useCallback((token: string) => {
+    setCaptchaToken(token);
+  }, []);
+
+  const handleCaptchaError = useCallback(() => {
+    setCaptchaToken(null);
+  }, []);
+
+  const handleCaptchaExpire = useCallback(() => {
+    setCaptchaToken(null);
+  }, []);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>){
     event.preventDefault();
     const form = event.currentTarget;
     const formData = new FormData(form);
+
+    if (!captchaToken) {
+      setStatus({
+        type: 'error',
+        message: 'Please complete the CAPTCHA verification.',
+      });
+      return;
+    }
+
+    formData.append('captchaToken', captchaToken);
 
     setSubmitting(true);
     setStatus(null);
@@ -35,6 +60,7 @@ export default function MaintenanceRequestForm({ issueTypes }: Props){
         message: 'Thanks! Your maintenance request has been received. We\'ll be in touch shortly.',
       });
       form.reset();
+      setCaptchaToken(null);
     } catch (error: any) {
       setStatus({
         type: 'error',
@@ -137,6 +163,20 @@ export default function MaintenanceRequestForm({ issueTypes }: Props){
         <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={submitting}>
           {submitting ? 'Submitting...' : 'Submit Request'}
         </button>
+      </div>
+
+      <div className="md:col-span-2 border-t border-gray-200 pt-4">
+        <h3 className="font-semibold text-gray-900 mb-4">Security Verification</h3>
+        <p className="text-sm text-gray-600 mb-4">Please complete the verification to prevent spam</p>
+        <Captcha
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+          onVerify={handleCaptchaVerify}
+          onError={handleCaptchaError}
+          onExpire={handleCaptchaExpire}
+        />
+        {!captchaToken && (
+          <p className="text-xs text-gray-500 mt-2">CAPTCHA verification required to submit</p>
+        )}
       </div>
     </form>
   );

@@ -2,6 +2,7 @@ import { Resend } from 'resend';
 import { NextRequest } from 'next/server';
 import { uploadFileToS3 } from '@/lib/storage';
 import { generateApplicationPDF } from '@/lib/pdf-generator';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 function escapeHtml(raw: string){
   return raw
@@ -60,9 +61,10 @@ export async function POST(req: NextRequest) {
       // If parsing fails, use empty array
     }
 
-    // Verify CAPTCHA (optional - you can add server-side verification here)
-    if (!captchaToken) {
-      return new Response(JSON.stringify({error:'CAPTCHA verification required'}), { status: 400 });
+    // Verify CAPTCHA token
+    const captchaResult = await verifyTurnstileToken(captchaToken);
+    if (!captchaResult.success) {
+      return new Response(JSON.stringify({error: captchaResult.error || 'CAPTCHA verification failed'}), { status: 400 });
     }
 
     // Required fields validation

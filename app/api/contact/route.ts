@@ -1,4 +1,5 @@
 import { Resend } from 'resend';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 function escapeHtml(raw: string){
   return raw
@@ -11,7 +12,14 @@ function escapeHtml(raw: string){
 
 export async function POST(req: Request) {
   try {
-    const { name, email, phone, message, aboutProperty, aboutUnit } = await req.json();
+    const { name, email, phone, message, aboutProperty, aboutUnit, captchaToken } = await req.json();
+    
+    // Verify CAPTCHA token
+    const captchaResult = await verifyTurnstileToken(captchaToken);
+    if (!captchaResult.success) {
+      return new Response(JSON.stringify({error: captchaResult.error || 'CAPTCHA verification failed'}), { status: 400 });
+    }
+
     if(!name || !email || !message) return new Response(JSON.stringify({error:'Missing fields'}), { status: 400 });
     const resend = new Resend(process.env.RESEND_API_KEY);
     const fromAddress = process.env.CONTACT_FROM || 'Ultimate Property Holdings <properties@nathanreardon.com>';

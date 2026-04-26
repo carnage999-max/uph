@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
 import { uploadFileToS3 } from '@/lib/storage';
+import { verifyTurnstileToken } from '@/lib/turnstile';
 
 function escapeHtml(raw: string){
   return raw
@@ -21,6 +22,13 @@ export async function POST(request: NextRequest){
   const entryPermission = String(formData.get('entryPermission') || 'yes').trim();
   const description = String(formData.get('description') || '').trim();
   const email = String(formData.get('email') || '').trim();
+  const captchaToken = String(formData.get('captchaToken') || '').trim();
+
+  // Verify CAPTCHA token
+  const captchaResult = await verifyTurnstileToken(captchaToken);
+  if (!captchaResult.success) {
+    return NextResponse.json({ message: captchaResult.error || 'CAPTCHA verification failed' }, { status: 400 });
+  }
 
   if (!name || !phone || !address || !issueType || !description){
     return NextResponse.json({ message: 'Missing required fields.' }, { status: 400 });
