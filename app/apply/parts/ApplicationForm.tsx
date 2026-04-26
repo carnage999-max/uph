@@ -1173,7 +1173,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
               <h3 className="font-semibold text-gray-900 mb-4">CAPTCHA Verification</h3>
               <p className="text-sm text-gray-600 mb-4">Please complete the verification to prevent spam</p>
               <Captcha
-                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
                 onVerify={handleCaptchaVerify}
                 onError={handleCaptchaError}
                 onExpire={handleCaptchaExpire}

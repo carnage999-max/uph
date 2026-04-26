@@ -68,7 +68,7 @@ export default function ContactForm(){
       <div className="border-t border-gray-200 pt-4">
         <p className="text-sm text-gray-600 mb-4">Security Verification</p>
         <Captcha
-          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || '1x00000000000000000000AA'}
+          siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
           onVerify={handleCaptchaVerify}
           onError={handleCaptchaError}
           onExpire={handleCaptchaExpire}
