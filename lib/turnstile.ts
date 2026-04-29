@@ -3,10 +3,10 @@
  */
 
 export async function verifyTurnstileToken(token: string): Promise<{ success: boolean; error?: string }> {
-  const secretKey = process.env.TURNSTILE_SECRET_KEY;
+  const secretKey = process.env.TURNSTILE_SECRET_KEY || process.env.UPH_TURNSTILE_SECRET_KEY;
 
   if (!secretKey) {
-    console.error('TURNSTILE_SECRET_KEY is not set in environment variables');
+    console.error('TURNSTILE_SECRET_KEY is not set in environment variables. Set UPH_TURNSTILE_SECRET_KEY in Amplify environment variables.');
     // In development, allow requests to proceed without verification
     if (process.env.NODE_ENV === 'development') {
       return { success: true };
