@@ -82,7 +82,7 @@ curl -X PATCH \
 - Keep the API key secret and rotate periodically.
 - All requests must use HTTPS.
 - **CORS:** Set `MAINTENANCE_API_CORS_ORIGIN` (or `UPH_MAINTENANCE_API_CORS_ORIGIN`) to allow requests from your task manager origin (e.g., `https://tasks.myapp.com`). Defaults to `*` if not set.
-- Attachments are uploaded to S3 — ensure S3 env vars (`UPH_S3_BUCKET`, `UPH_AWS_REGION`, `UPH_AWS_ACCESS_KEY_ID`, `UPH_AWS_SECRET_ACCESS_KEY`) are configured on the server.
+- Attachments are uploaded to object storage — ensure bucket, region, access key, and secret key env vars are configured on the server. For Amplify, use the `UPH_*` variants.
 - Email sending uses Resend — set `RESEND_API_KEY` and `CONTACT_FROM`/`CONTACT_TO` as needed.
 
 ## Implementation references
@@ -102,4 +102,3 @@ curl -X PATCH \
 If you'd like, I can also:
 - Create a small Postman collection or OpenAPI snippet for this surface
 - Add request signing or rotateable API keys stored in the database
-

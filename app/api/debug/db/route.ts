@@ -1,6 +1,10 @@
 import { prisma } from '@/lib/prisma';
 
 export async function GET() {
+  if (process.env.NODE_ENV === 'production') {
+    return new Response('Not found', { status: 404 });
+  }
+
   try {
     console.log('[test-db] Testing database connection...');
     
