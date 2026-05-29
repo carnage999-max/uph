@@ -1,5 +1,6 @@
 import './globals.css';
 import 'leaflet/dist/leaflet.css';
+import AdsBySe7enInc from '@/components/AdsBySe7enInc';
 import Footer from '@/components/Footer';
 import NavBar from '@/components/NavBar';
 import StructuredData from '@/components/StructuredData';
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }){
         <NavBar />
         <main className="">{children}</main>
         <Footer />
+        <AdsBySe7enInc />
       </body>
     </html>
   );
