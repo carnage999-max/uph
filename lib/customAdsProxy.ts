@@ -85,11 +85,20 @@ export async function proxyCustomAdsRequest({
   headerNames: string[];
   body?: BodyInit;
 }){
+  let upstreamUrl: URL;
+
+  try {
+    upstreamUrl = buildUpstreamUrl(pathname, search);
+  } catch (error) {
+    console.error('[customAdsProxy] Configuration error:', error);
+    return NextResponse.json({ message: 'CUSTOM_ADS_SERVICE_URL is not configured.' }, { status: 500 });
+  }
+
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), PROXY_TIMEOUT_MS);
 
   try {
-    const upstreamResponse = await fetch(buildUpstreamUrl(pathname, search), {
+    const upstreamResponse = await fetch(upstreamUrl, {
       method,
       headers: buildForwardedHeaders(request, headerNames),
       body,
