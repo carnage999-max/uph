@@ -2,7 +2,12 @@ const SITE_KEY = 'ultimate-property-holdings';
 const LOCAL_ADS_BASE_URL = '/reader-tools';
 
 export default function AdsBySe7enInc(){
-  if (!process.env.NEXT_PUBLIC_CUSTOM_ADS_URL?.trim()) return null;
+  const adsEnabled = Boolean(
+    process.env.NEXT_PUBLIC_CUSTOM_ADS_URL?.trim() ||
+    process.env.CUSTOM_ADS_SERVICE_URL?.trim()
+  );
+
+  if (!adsEnabled) return null;
 
   const optionalAttributes: Record<string, string> = {};
   const maxSlots = process.env.NEXT_PUBLIC_CUSTOM_ADS_MAX_SLOTS?.trim();

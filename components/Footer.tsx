@@ -1,6 +1,10 @@
 import Link from 'next/link';
-import { Facebook, Instagram, Linkedin } from 'lucide-react';
+import { Facebook, Instagram } from 'lucide-react';
 import Image from 'next/image';
+
+function getCurrentYear(){
+  return new Date().getFullYear();
+}
 
 export default function Footer() {
   return (
@@ -82,7 +86,7 @@ export default function Footer() {
 
       {/* === Bottom Bar === */}
       <div className="border-t border-gray-700 mt-4 py-4 text-center text-gray-400 text-xs">
-        © 2025 Ultimate Property Holdings LLC. All Rights Reserved.
+        © {getCurrentYear()} Ultimate Property Holdings LLC. All Rights Reserved.
       </div>
 
       
