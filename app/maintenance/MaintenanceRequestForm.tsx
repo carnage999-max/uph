@@ -86,38 +86,38 @@ export default function MaintenanceRequestForm({ issueTypes }: Props){
       )}
 
       <div className="md:col-span-1 space-y-2">
-        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-name">
+        <label className="text-sm font-semibold text-[#e8e8e8]" htmlFor="maintenance-name">
           Full name
         </label>
         <input id="maintenance-name" name="name" type="text" placeholder="Jane Doe" required className={styles.inputBase} />
       </div>
 
       <div className="md:col-span-1 space-y-2">
-        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-phone">
+        <label className="text-sm font-semibold text-[#e8e8e8]" htmlFor="maintenance-phone">
           Phone number
         </label>
         <input id="maintenance-phone" name="phone" type="tel" placeholder="(207) 555-0123" required className={styles.inputBase} />
       </div>
 
       <div className="md:col-span-1 space-y-2">
-        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-email">
+        <label className="text-sm font-semibold text-[#e8e8e8]" htmlFor="maintenance-email">
           Email address (optional)
         </label>
         <input id="maintenance-email" name="email" type="email" placeholder="you@example.com" className={styles.inputBase} />
       </div>
 
       <div className="md:col-span-2 space-y-2">
-        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-address">
+        <label className="text-sm font-semibold text-[#e8e8e8]" htmlFor="maintenance-address">
           Property address
         </label>
         <input id="maintenance-address" name="address" type="text" placeholder="123 Main St, Unit 2" required className={styles.inputBase} />
       </div>
 
       <div className="md:col-span-1 space-y-2">
-        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-issue">
+        <label className="text-sm font-semibold text-[#e8e8e8]" htmlFor="maintenance-issue">
           Issue type
         </label>
-        <select id="maintenance-issue" name="issueType" className={`${styles.inputBase} bg-white`} defaultValue="" required>
+        <select id="maintenance-issue" name="issueType" className={styles.inputBase} defaultValue="" required>
           <option value="" disabled>Choose an issue</option>
           {issueTypes.map(type => (
             <option key={type} value={type}>{type}</option>
@@ -126,17 +126,17 @@ export default function MaintenanceRequestForm({ issueTypes }: Props){
       </div>
 
       <div className="md:col-span-1 space-y-2">
-        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-access">
+        <label className="text-sm font-semibold text-[#e8e8e8]" htmlFor="maintenance-access">
           Entry permission
         </label>
-        <select id="maintenance-access" name="entryPermission" className={`${styles.inputBase} bg-white`} defaultValue="yes">
+        <select id="maintenance-access" name="entryPermission" className={styles.inputBase} defaultValue="yes">
           <option value="yes">Yes, maintenance can enter with key</option>
           <option value="no">No, please call to schedule</option>
         </select>
       </div>
 
       <div className="md:col-span-2 space-y-2">
-        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-description">
+        <label className="text-sm font-semibold text-[#e8e8e8]" htmlFor="maintenance-description">
           Describe the issue
         </label>
         <textarea
@@ -150,14 +150,14 @@ export default function MaintenanceRequestForm({ issueTypes }: Props){
       </div>
 
       <div className="md:col-span-2 space-y-2">
-        <label className="text-sm font-semibold text-gray-700" htmlFor="maintenance-media">
+        <label className="text-sm font-semibold text-[#e8e8e8]" htmlFor="maintenance-media">
           Upload photo or video (optional)
         </label>
-        <input id="maintenance-media" name="media" type="file" className={`${styles.inputBase} cursor-pointer`} />
+        <input id="maintenance-media" name="media" type="file" className={`${styles.inputBase} cursor-pointer file:mr-3 file:rounded-full file:border-0 file:bg-[rgba(201,162,39,0.18)] file:px-3 file:py-1.5 file:text-xs file:font-semibold file:text-[#e5c878]`} />
       </div>
 
-      <div className="md:col-span-2 flex flex-col gap-2 rounded-2xl border border-gray-200 bg-gray-50 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <p className="text-sm text-gray-600">
+      <div className="md:col-span-2 flex flex-col gap-2 rounded-2xl border border-white/10 bg-white/4 p-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm text-[#b0b0b0]">
           After submitting, our team emails a confirmation with your ticket number.
         </p>
         <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={submitting}>
@@ -165,9 +165,9 @@ export default function MaintenanceRequestForm({ issueTypes }: Props){
         </button>
       </div>
 
-      <div className="md:col-span-2 border-t border-gray-200 pt-4">
-        <h3 className="font-semibold text-gray-900 mb-4">Security Verification</h3>
-        <p className="text-sm text-gray-600 mb-4">Please complete the verification to prevent spam</p>
+      <div className="md:col-span-2 border-t border-white/10 pt-4">
+        <h3 className="mb-4 font-semibold text-[#e8e8e8]">Security Verification</h3>
+        <p className="mb-4 text-sm text-[#b0b0b0]">Please complete the verification to prevent spam.</p>
         <Captcha
           siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
           onVerify={handleCaptchaVerify}
@@ -175,7 +175,7 @@ export default function MaintenanceRequestForm({ issueTypes }: Props){
           onExpire={handleCaptchaExpire}
         />
         {!captchaToken && (
-          <p className="text-xs text-gray-500 mt-2">CAPTCHA verification required to submit</p>
+          <p className="mt-2 text-xs text-[#8f8f8f]">CAPTCHA verification required to submit.</p>
         )}
       </div>
     </form>

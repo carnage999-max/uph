@@ -1,10 +1,13 @@
 import { Metadata } from 'next';
 
+const fallbackSiteOrigin = 'https://atlasproperties.net';
+
 export const siteConfig = {
-  name: 'Ultimate Property Holdings',
-  description: 'Premium residential apartments across Maine. Pet-friendly, responsive management, and flexible credit options.',
-  url: 'https://ultimatepropertyholdings.com',
-  ogImage: '/logo/uph.jpeg', // Use existing logo as default OG image
+  name: 'Atlas Properties',
+  description:
+    'Premium residential apartments across Maine. Pet-friendly, responsive management, and flexible credit options.',
+  url: process.env.NEXT_PUBLIC_APP_ORIGIN || process.env.APP_ORIGIN || fallbackSiteOrigin,
+  ogImage: '/logo/atlas.png',
   links: {
     contact: '/contact',
     properties: '/properties',

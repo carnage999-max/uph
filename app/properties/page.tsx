@@ -20,7 +20,7 @@ export default async function PropertiesPage(){
       <HeroSlider images={[]} headline="Our Properties" subtext="Browse available units and neighborhoods." />
       <div className={`${styles.container} grid gap-6 sm:grid-cols-2 lg:grid-cols-3`}>
         {properties.length === 0 ? (
-          <div className={`${styles.card} ${styles.cardPad} text-sm text-gray-600`}>
+          <div className={`${styles.card} ${styles.cardPad} text-sm ${styles.muted}`}>
             No properties are published yet. Use the admin dashboard to add your first listing.
           </div>
         ) : (

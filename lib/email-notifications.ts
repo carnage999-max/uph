@@ -1,4 +1,6 @@
 import { Resend } from 'resend';
+import { company } from '@/lib/data';
+import { siteConfig } from '@/lib/metadata';
 
 function escapeHtml(raw: string) {
   return raw
@@ -49,9 +51,9 @@ export async function sendMaintenanceStatusUpdateEmail({
   commentAttachmentUrl?: string;
 }) {
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const fromAddress = process.env.CONTACT_FROM || 'Ultimate Property Holdings <properties@nathanreardon.com>';
-  const siteOrigin = process.env.APP_ORIGIN || 'https://ultimatepropertyholdings.com';
-  const logoUrl = new URL('/logo/uph.jpeg', siteOrigin).toString();
+  const fromAddress = process.env.CONTACT_FROM || `${company.name} <${company.email}>`;
+  const siteOrigin = siteConfig.url;
+  const logoUrl = new URL('/logo/atlas.png', siteOrigin).toString();
   const timestamp = new Date().toLocaleString('en-US', {
     weekday: 'long',
     year: 'numeric',
@@ -76,7 +78,7 @@ Status Updated: ${timestamp}
 
 ${comment ? `Admin Comment:\n${comment}\n\n` : ''}
 ${commentAttachmentUrl ? `Attachment: ${commentAttachmentUrl}\n\n` : ''}
-— Ultimate Property Holdings`;
+— Atlas Properties`;
 
   const html = `
     <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#f3f4f6;padding:32px 0;">
@@ -85,8 +87,8 @@ ${commentAttachmentUrl ? `Attachment: ${commentAttachmentUrl}\n\n` : ''}
           <table width="640" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:16px;padding:32px;font-family:'Open Sans',Arial,sans-serif;color:#111827;box-shadow:0 12px 40px rgba(15,23,42,0.08);">
             <tr>
               <td align="center" style="padding-bottom:24px;">
-                <img src="${logoUrl}" alt="Ultimate Property Holdings" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
-                <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Ultimate Property Holdings</div>
+                <img src="${logoUrl}" alt="Atlas Properties" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
+                <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Atlas Properties</div>
               </td>
             </tr>
             <tr>
@@ -131,7 +133,7 @@ ${commentAttachmentUrl ? `Attachment: ${commentAttachmentUrl}\n\n` : ''}
             </tr>
             <tr>
               <td style="padding-top:28px;font-size:12px;color:#6b7280;text-align:center;">
-                © ${new Date().getFullYear()} Ultimate Property Holdings. PO Box 52, Detroit, ME 04929 • <a href="tel:2079471999" style="color:#6b7280;">207-947-1999</a>
+                © ${new Date().getFullYear()} Atlas Properties. PO Box 52, Detroit, ME 04929 • <a href="tel:2079471999" style="color:#6b7280;">207-947-1999</a>
               </td>
             </tr>
           </table>

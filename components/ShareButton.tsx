@@ -2,6 +2,7 @@
 
 import { Share2, Facebook, Twitter, Mail, Link2, Check, MessageCircle } from 'lucide-react';
 import { useState } from 'react';
+import { styles } from '@/lib/constants';
 
 interface ShareButtonProps {
   url: string;
@@ -54,7 +55,7 @@ export default function ShareButton({ url, title, description }: ShareButtonProp
     <div className="relative">
       <button
         onClick={handleNativeShare}
-        className="flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-50 hover:border-gray-400"
+        className={`${styles.btn} ${styles.btnGhost} gap-2 px-4 py-2.5 text-sm`}
         aria-label="Share property"
       >
         <Share2 className="h-4 w-4" />
@@ -67,13 +68,13 @@ export default function ShareButton({ url, title, description }: ShareButtonProp
             className="fixed inset-0 z-10" 
             onClick={() => setIsOpen(false)}
           />
-          <div className="absolute right-0 top-full mt-2 z-20 w-56 rounded-lg border border-gray-200 bg-white p-3 shadow-lg">
+          <div className="absolute right-0 top-full z-20 mt-2 w-56 rounded-2xl border border-[rgba(201,162,39,0.18)] bg-[#121212]/95 p-3 text-[#e8e8e8] shadow-[0_18px_40px_rgba(0,0,0,0.45)] backdrop-blur-xl">
             <div className="space-y-2">
               <a
                 href={shareLinks.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100"
+                className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors hover:bg-white/6"
               >
                 <Facebook className="h-5 w-5 text-blue-600" />
                 <span>Facebook</span>
@@ -82,7 +83,7 @@ export default function ShareButton({ url, title, description }: ShareButtonProp
                 href={shareLinks.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100"
+                className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors hover:bg-white/6"
               >
                 <Twitter className="h-5 w-5 text-sky-500" />
                 <span>Twitter</span>
@@ -91,21 +92,21 @@ export default function ShareButton({ url, title, description }: ShareButtonProp
                 href={shareLinks.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100"
+                className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors hover:bg-white/6"
               >
                 <MessageCircle className="h-5 w-5 text-green-600" />
                 <span>WhatsApp</span>
               </a>
               <a
                 href={shareLinks.email}
-                className="flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100"
+                className="flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors hover:bg-white/6"
               >
-                <Mail className="h-5 w-5 text-gray-600" />
+                <Mail className="h-5 w-5 text-[#b0b0b0]" />
                 <span>Email</span>
               </a>
               <button
                 onClick={handleCopyLink}
-                className="flex w-full items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors hover:bg-gray-100"
+                className="flex w-full items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors hover:bg-white/6"
               >
                 {copied ? (
                   <>
@@ -114,7 +115,7 @@ export default function ShareButton({ url, title, description }: ShareButtonProp
                   </>
                 ) : (
                   <>
-                    <Link2 className="h-5 w-5 text-gray-600" />
+                    <Link2 className="h-5 w-5 text-[#b0b0b0]" />
                     <span>Copy Link</span>
                   </>
                 )}

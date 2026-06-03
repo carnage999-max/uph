@@ -1,5 +1,7 @@
 import { Resend } from 'resend';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { company } from '@/lib/data';
+import { siteConfig } from '@/lib/metadata';
 
 function escapeHtml(raw: string){
   return raw
@@ -22,13 +24,13 @@ export async function POST(req: Request) {
 
     if(!name || !email || !message) return new Response(JSON.stringify({error:'Missing fields'}), { status: 400 });
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const fromAddress = process.env.CONTACT_FROM || 'Ultimate Property Holdings <properties@nathanreardon.com>';
-    const internalRecipient = process.env.CONTACT_TO || 'info@ultimatepropertyholdings.com';
-    const siteOrigin = process.env.APP_ORIGIN || 'https://ultimatepropertyholdings.com';
-    const logoUrl = new URL('/logo/uph.jpeg', siteOrigin).toString();
+    const fromAddress = process.env.CONTACT_FROM || `${company.name} <${company.email}>`;
+    const internalRecipient = process.env.CONTACT_TO || company.email;
+    const siteOrigin = siteConfig.url;
+    const logoUrl = new URL('/logo/atlas.png', siteOrigin).toString();
     const escapedMessage = escapeHtml(message).replace(/\n/g, '<br />');
 
-    const subj: string[] = ['UPH Website Inquiry'];
+    const subj: string[] = ['Atlas Website Inquiry'];
     if(aboutProperty) subj.push(`Property: ${aboutProperty}`);
     if(aboutUnit) subj.push(`Unit: ${aboutUnit}`);
     const subject = subj.join(' — ') + ` — ${name}`;
@@ -47,8 +49,8 @@ ${message}`;
             <table width="640" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:16px;padding:32px;font-family:'Open Sans',Arial,sans-serif;color:#111827;box-shadow:0 12px 40px rgba(15,23,42,0.08);">
               <tr>
                 <td align="center" style="padding-bottom:24px;">
-                  <img src="${logoUrl}" alt="Ultimate Property Holdings" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
-                  <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Ultimate Property Holdings</div>
+                  <img src="${logoUrl}" alt="Atlas Properties" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
+                  <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Atlas Properties</div>
                 </td>
               </tr>
               <tr>
@@ -64,7 +66,7 @@ ${message}`;
               </tr>
               <tr>
                 <td style="padding-top:28px;font-size:12px;color:#6b7280;text-align:center;">
-                  © ${new Date().getFullYear()} Ultimate Property Holdings. PO Box 52, Detroit, ME 04929.
+                  © ${new Date().getFullYear()} Atlas Properties. PO Box 52, Detroit, ME 04929.
                 </td>
               </tr>
             </table>
@@ -78,10 +80,10 @@ ${message}`;
       subject, text, html,
     });
 
-    const userSubject = `We received your message${aboutProperty ? ` about ${aboutProperty}` : ''} — Ultimate Property Holdings`;
+    const userSubject = `We received your message${aboutProperty ? ` about ${aboutProperty}` : ''} — Atlas Properties`;
     const userText = `Hi ${name},
 
-Thanks for reaching out to Ultimate Property Holdings. This email confirms we received your message${aboutProperty ? ` regarding ${aboutProperty}${aboutUnit ? ` (${aboutUnit})` : ''}` : ''}.
+Thanks for reaching out to Atlas Properties. This email confirms we received your message${aboutProperty ? ` regarding ${aboutProperty}${aboutUnit ? ` (${aboutUnit})` : ''}` : ''}.
 
 Here is a copy for your records:
 
@@ -89,7 +91,7 @@ ${message}
 
 We will follow up shortly${phone ? ` at ${phone}` : ''}. If you need to add anything, just reply to this email.
 
-— Ultimate Property Holdings`;
+— Atlas Properties`;
     const userHtml = `
       <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#f3f4f6;padding:32px 0;">
         <tr>
@@ -97,18 +99,18 @@ We will follow up shortly${phone ? ` at ${phone}` : ''}. If you need to add anyt
             <table width="640" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:16px;padding:32px;font-family:'Open Sans',Arial,sans-serif;color:#111827;box-shadow:0 12px 40px rgba(15,23,42,0.08);">
               <tr>
                 <td align="center" style="padding-bottom:24px;">
-                  <img src="${logoUrl}" alt="Ultimate Property Holdings" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
-                  <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Ultimate Property Holdings</div>
+                  <img src="${logoUrl}" alt="Atlas Properties" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
+                  <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Atlas Properties</div>
                 </td>
               </tr>
               <tr>
                 <td style="font-size:16px;line-height:1.6;">
                   <p style="margin:0 0 16px;">Hi ${escapeHtml(name)},</p>
-                  <p style="margin:0 0 16px;">Thanks for reaching out to Ultimate Property Holdings. We received your message${aboutProperty ? ` regarding <strong>${escapeHtml(aboutProperty)}${aboutUnit ? ` — ${escapeHtml(aboutUnit)}` : ''}</strong>` : ''} and a member of our team will follow up shortly${phone ? ` at <a href="tel:${escapeHtml(phone)}" style="color:#111827;">${escapeHtml(phone)}</a>` : ''}.</p>
+                  <p style="margin:0 0 16px;">Thanks for reaching out to Atlas Properties. We received your message${aboutProperty ? ` regarding <strong>${escapeHtml(aboutProperty)}${aboutUnit ? ` — ${escapeHtml(aboutUnit)}` : ''}</strong>` : ''} and a member of our team will follow up shortly${phone ? ` at <a href="tel:${escapeHtml(phone)}" style="color:#111827;">${escapeHtml(phone)}</a>` : ''}.</p>
                   <p style="margin:24px 0 8px;font-weight:600;">Here’s a copy for your records:</p>
                   <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:16px;">${escapedMessage}</div>
                   <p style="margin:24px 0 0;">Need to update details? Reply to this email and we’ll take it from there.</p>
-                  <p style="margin:16px 0 0;">— Ultimate Property Holdings</p>
+                  <p style="margin:16px 0 0;">— Atlas Properties</p>
                 </td>
               </tr>
               <tr>

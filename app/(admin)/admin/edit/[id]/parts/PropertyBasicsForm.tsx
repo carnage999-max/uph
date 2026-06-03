@@ -112,7 +112,7 @@ export default function PropertyBasicsForm({ property }: Props){
   }
 
   return (
-    <section className={`${styles.card} ${styles.cardPad}`}>
+    <section className={`${styles.cardAdmin} ${styles.cardAdminPad}`}>
       <form onSubmit={handleSubmit} className="space-y-5">
         <div className="flex flex-col gap-1">
           <h2 className="font-montserrat text-lg font-semibold text-gray-900">Property basics</h2>

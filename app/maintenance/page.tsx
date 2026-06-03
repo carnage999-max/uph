@@ -58,14 +58,14 @@ export default function MaintenancePage(){
         <div className="space-y-10">
           <div className={`${styles.card} ${styles.cardPad} space-y-6`}>
             <header className="space-y-2">
-              <div className="inline-flex items-center gap-2 rounded-full bg-gray-100 px-3 py-1 text-xs font-semibold text-gray-700">
+              <div className="inline-flex items-center gap-2 rounded-full border border-[rgba(201,162,39,0.22)] bg-[rgba(201,162,39,0.08)] px-3 py-1 text-xs font-semibold text-[#e5c878]">
                 <FileText className="h-4 w-4" />
                 Submit a Request
               </div>
-              <h1 className="font-montserrat text-2xl font-semibold text-gray-900">
+              <h1 className="font-cinzel text-3xl font-semibold text-[#e8e8e8]">
                 Let us know what needs attention
               </h1>
-              <p className="text-sm text-gray-600">
+              <p className="text-sm text-[#b0b0b0]">
                 Provide a few details so our maintenance team can review and schedule a fix.
               </p>
             </header>
@@ -89,14 +89,14 @@ export default function MaintenancePage(){
 
           <div className={`${styles.card} ${styles.cardPad} space-y-4`}>
             <header className="flex items-center gap-2">
-              <PhoneCall className="h-5 w-5 text-gray-700" />
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900">Maintenance Status</h2>
+              <PhoneCall className="h-5 w-5 text-[#e5c878]" />
+              <h2 className="font-cinzel text-2xl font-semibold text-[#e8e8e8]">Maintenance Status</h2>
             </header>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-[#b0b0b0]">
               We&apos;re rolling out tenant portal access soon. Once live, you&apos;ll be able to log in, review updates, and message the maintenance team directly.
             </p>
-            <div className="rounded-2xl border border-dashed border-gray-300 bg-gray-50 p-4 text-sm text-gray-600">
-              <div className="font-semibold text-gray-800">Need an update now?</div>
+            <div className="rounded-2xl border border-dashed border-[rgba(201,162,39,0.2)] bg-white/4 p-4 text-sm text-[#b0b0b0]">
+              <div className="font-semibold text-[#e8e8e8]">Need an update now?</div>
               <p>
                 Reach our support desk at{' '}
                 <a className="underline" href={`tel:${company.phone.replace(/[^0-9]/g, '')}`}>
@@ -112,12 +112,12 @@ export default function MaintenancePage(){
         </div>
 
         <aside className={`${styles.card} ${styles.cardPad} space-y-4`}>
-          <h2 className="font-montserrat text-xl font-semibold text-gray-900">Maintenance FAQ</h2>
-          <div className="space-y-4 text-sm text-gray-700">
+          <h2 className="font-cinzel text-2xl font-semibold text-[#e8e8e8]">Maintenance FAQ</h2>
+          <div className="space-y-4 text-sm text-[#d0d0d0]">
             {faqs.map(faq => (
-              <div key={faq.question} className="rounded-xl border border-gray-200 bg-white p-4">
-                <div className="font-semibold text-gray-900">{faq.question}</div>
-                <p className="mt-1 text-gray-600">{faq.answer}</p>
+              <div key={faq.question} className="rounded-xl border border-white/8 bg-white/4 p-4">
+                <div className="font-semibold text-[#e8e8e8]">{faq.question}</div>
+                <p className="mt-1 text-[#b0b0b0]">{faq.answer}</p>
               </div>
             ))}
           </div>

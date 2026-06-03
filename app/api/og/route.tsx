@@ -6,7 +6,7 @@ export const runtime = 'edge';
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   
-  const title = searchParams.get('title') || 'Ultimate Property Holdings';
+  const title = searchParams.get('title') || 'Atlas Properties';
   const location = searchParams.get('location') || '';
   const rent = searchParams.get('rent') || '';
   const image = searchParams.get('image') || '';
@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
                 fontWeight: 600,
               }}
             >
-              Ultimate Property Holdings
+              Atlas Properties
             </div>
 
             {/* Property Info */}

@@ -6,6 +6,28 @@ import NavBar from '@/components/NavBar';
 import StructuredData from '@/components/StructuredData';
 import { createMetadata, siteConfig } from '@/lib/metadata';
 import type { Metadata } from 'next';
+import { Cinzel, Montserrat, Open_Sans } from 'next/font/google';
+
+const cinzel = Cinzel({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-cinzel',
+  display: 'swap',
+});
+
+const montserrat = Montserrat({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-montserrat',
+  display: 'swap',
+});
+
+const openSans = Open_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-open-sans',
+  display: 'swap',
+});
 
 export const metadata: Metadata = {
   ...createMetadata({}),
@@ -14,7 +36,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }){
   return (
-    <html lang="en">
+    <html
+      lang="en"
+      className={`${cinzel.variable} ${montserrat.variable} ${openSans.variable}`}
+    >
       <head>
         <StructuredData type="organization" />
       </head>

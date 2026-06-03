@@ -3,6 +3,8 @@ import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
 import { uploadFileToS3 } from '@/lib/storage';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { company } from '@/lib/data';
+import { siteConfig } from '@/lib/metadata';
 
 function escapeHtml(raw: string){
   return raw
@@ -65,10 +67,10 @@ export async function POST(request: NextRequest){
   // Send confirmation emails
   try {
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const fromAddress = process.env.CONTACT_FROM || 'Ultimate Property Holdings <properties@nathanreardon.com>';
-    const internalRecipient = process.env.CONTACT_TO || 'info@ultimatepropertyholdings.com';
-    const siteOrigin = process.env.APP_ORIGIN || 'https://ultimatepropertyholdings.com';
-    const logoUrl = new URL('/logo/uph.jpeg', siteOrigin).toString();
+    const fromAddress = process.env.CONTACT_FROM || `${company.name} <${company.email}>`;
+    const internalRecipient = process.env.CONTACT_TO || company.email;
+    const siteOrigin = siteConfig.url;
+    const logoUrl = new URL('/logo/atlas.png', siteOrigin).toString();
     const escapedDescription = escapeHtml(description).replace(/\n/g, '<br />');
 
     const subject = `Maintenance Request — ${name} — ${address}`;
@@ -89,8 +91,8 @@ ${description}`;
             <table width="640" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:16px;padding:32px;font-family:'Open Sans',Arial,sans-serif;color:#111827;box-shadow:0 12px 40px rgba(15,23,42,0.08);">
               <tr>
                 <td align="center" style="padding-bottom:24px;">
-                  <img src="${logoUrl}" alt="Ultimate Property Holdings" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
-                  <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Ultimate Property Holdings</div>
+                  <img src="${logoUrl}" alt="Atlas Properties" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
+                  <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Atlas Properties</div>
                 </td>
               </tr>
               <tr>
@@ -108,7 +110,7 @@ ${description}`;
               </tr>
               <tr>
                 <td style="padding-top:28px;font-size:12px;color:#6b7280;text-align:center;">
-                  © ${new Date().getFullYear()} Ultimate Property Holdings. PO Box 52, Detroit, ME 04929.
+                  © ${new Date().getFullYear()} Atlas Properties. PO Box 52, Detroit, ME 04929.
                 </td>
               </tr>
             </table>
@@ -127,7 +129,7 @@ ${description}`;
 
     // Send user confirmation email if email provided
     if (email) {
-      const userSubject = `Maintenance Request Received — Ultimate Property Holdings`;
+      const userSubject = `Maintenance Request Received — Atlas Properties`;
       const userText = `Hi ${name},
 
 Thank you for submitting a maintenance request. We have received your request and our team will review it shortly.
@@ -138,7 +140,7 @@ Issue Type: ${issueType}
 
 We will contact you at ${phone} to schedule a time that works best for you.
 
-— Ultimate Property Holdings`;
+— Atlas Properties`;
 
       const userHtml = `
         <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="background:#f3f4f6;padding:32px 0;">
@@ -147,8 +149,8 @@ We will contact you at ${phone} to schedule a time that works best for you.
               <table width="640" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:16px;padding:32px;font-family:'Open Sans',Arial,sans-serif;color:#111827;box-shadow:0 12px 40px rgba(15,23,42,0.08);">
                 <tr>
                   <td align="center" style="padding-bottom:24px;">
-                    <img src="${logoUrl}" alt="Ultimate Property Holdings" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
-                    <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Ultimate Property Holdings</div>
+                    <img src="${logoUrl}" alt="Atlas Properties" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
+                    <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Atlas Properties</div>
                   </td>
                 </tr>
                 <tr>
@@ -170,7 +172,7 @@ We will contact you at ${phone} to schedule a time that works best for you.
                       </tr>
                     </table>
                     <p style="margin:16px 0 0;">We will contact you at <a href="tel:${escapeHtml(phone)}" style="color:#0066cc;">${escapeHtml(phone)}</a> to schedule a time that works best for you.</p>
-                    <p style="margin:16px 0 0;">— Ultimate Property Holdings</p>
+                    <p style="margin:16px 0 0;">— Atlas Properties</p>
                   </td>
                 </tr>
                 <tr>

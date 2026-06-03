@@ -3,6 +3,8 @@ import { NextRequest } from 'next/server';
 import { uploadFileToS3 } from '@/lib/storage';
 import { generateApplicationPDF } from '@/lib/pdf-generator';
 import { verifyTurnstileToken } from '@/lib/turnstile';
+import { company } from '@/lib/data';
+import { siteConfig } from '@/lib/metadata';
 
 function escapeHtml(raw: string){
   return raw
@@ -112,10 +114,10 @@ export async function POST(req: NextRequest) {
     }
 
     const resend = new Resend(process.env.RESEND_API_KEY);
-    const fromAddress = process.env.CONTACT_FROM || 'Ultimate Property Holdings <properties@nathanreardon.com>';
-    const internalRecipient = process.env.CONTACT_TO || 'info@ultimatepropertyholdings.com';
-    const siteOrigin = process.env.APP_ORIGIN || 'https://ultimatepropertyholdings.com';
-    const logoUrl = new URL('/logo/uph.jpeg', siteOrigin).toString();
+    const fromAddress = process.env.CONTACT_FROM || `${company.name} <${company.email}>`;
+    const internalRecipient = process.env.CONTACT_TO || company.email;
+    const siteOrigin = siteConfig.url;
+    const logoUrl = new URL('/logo/atlas.png', siteOrigin).toString();
 
     const fullName = `${firstName} ${lastName}`;
     const subject = `New Rental Application — ${fullName} — ${property}${unit ? ` — ${unit}` : ''}`;
@@ -203,7 +205,7 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
             <table width="640" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:16px;padding:32px;font-family:'Open Sans',Arial,sans-serif;color:#111827;box-shadow:0 12px 40px rgba(15,23,42,0.08);">
               <tr>
                 <td align="center" style="padding-bottom:24px;">
-                  <img src="${logoUrl}" alt="Ultimate Property Holdings" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
+                  <img src="${logoUrl}" alt="Atlas Properties" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
                   <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">New Rental Application</div>
                 </td>
               </tr>
@@ -315,7 +317,7 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
               </tr>
               <tr>
                 <td style="padding-top:28px;font-size:12px;color:#6b7280;text-align:center;">
-                  © ${new Date().getFullYear()} Ultimate Property Holdings. PO Box 52, Detroit, ME 04929.
+                  © ${new Date().getFullYear()} Atlas Properties. PO Box 52, Detroit, ME 04929.
                 </td>
               </tr>
             </table>
@@ -401,7 +403,7 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
     });
 
     // Send confirmation to applicant
-    const userSubject = `Application Received — Ultimate Property Holdings`;
+    const userSubject = `Application Received — Atlas Properties`;
     const userText = `Hi ${firstName},
 
 Thank you for submitting your rental application for ${property}${unit ? ` (${unit})` : ''}. We have received your application and will review it promptly.
@@ -411,7 +413,7 @@ A member of our team will contact you shortly at ${phone} or ${email} to discuss
 If you have any questions in the meantime, please don't hesitate to reach out.
 
 Best regards,
-Ultimate Property Holdings
+Atlas Properties
 PO Box 52, Detroit, ME 04929
 207-947-1999`;
 
@@ -422,8 +424,8 @@ PO Box 52, Detroit, ME 04929
             <table width="640" cellpadding="0" cellspacing="0" role="presentation" style="background:#ffffff;border-radius:16px;padding:32px;font-family:'Open Sans',Arial,sans-serif;color:#111827;box-shadow:0 12px 40px rgba(15,23,42,0.08);">
               <tr>
                 <td align="center" style="padding-bottom:24px;">
-                  <img src="${logoUrl}" alt="Ultimate Property Holdings" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
-                  <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Ultimate Property Holdings</div>
+                  <img src="${logoUrl}" alt="Atlas Properties" width="80" height="80" style="border-radius:16px;object-fit:cover;display:block;" />
+                  <div style="margin-top:12px;font-size:20px;font-weight:700;font-family:'Montserrat',Arial,sans-serif;">Atlas Properties</div>
                 </td>
               </tr>
               <tr>
@@ -432,7 +434,7 @@ PO Box 52, Detroit, ME 04929
                   <p style="margin:0 0 16px;">Thank you for submitting your rental application for <strong>${escapeHtml(property)}${unit ? ` — ${escapeHtml(unit)}` : ''}</strong>. We have received your application and will review it promptly.</p>
                   <p style="margin:0 0 16px;">A member of our team will contact you shortly at <a href="tel:${escapeHtml(phone)}" style="color:#111827;">${escapeHtml(phone)}</a> or <a href="mailto:${escapeHtml(email)}" style="color:#111827;">${escapeHtml(email)}</a> to discuss next steps.</p>
                   <p style="margin:24px 0 0;">If you have any questions in the meantime, please don't hesitate to reach out.</p>
-                  <p style="margin:16px 0 0;">Best regards,<br />Ultimate Property Holdings</p>
+                  <p style="margin:16px 0 0;">Best regards,<br />Atlas Properties</p>
                 </td>
               </tr>
               <tr>

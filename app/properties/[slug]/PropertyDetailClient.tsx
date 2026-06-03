@@ -142,7 +142,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
               <button
                 key={src}
                 className={`relative h-20 w-full overflow-hidden rounded-xl border ${
-                  idx === heroIdx ? 'ring-2 ring-gray-900' : ''
+                  idx === heroIdx ? 'ring-2 ring-[rgba(201,162,39,0.55)]' : 'border-white/10'
                 }`}
                 onClick={() => handleHeroNavigation(idx)}
               >
@@ -181,7 +181,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
             <div className="flex items-start justify-between gap-4">
               <div className="flex-1">
                 <h1 className="font-montserrat text-2xl font-bold">{property.name}</h1>
-                <div className="text-sm text-gray-600">{property.address}</div>
+                <div className="text-sm text-[#b0b0b0]">{property.address}</div>
               </div>
               <ShareButton 
                 url={`/properties/${property.slug}`}
@@ -190,7 +190,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
               />
             </div>
             <p className={`${styles.muted} mt-3`}>{property.description}</p>
-            <div className="mt-4 text-sm text-gray-700">
+            <div className="mt-4 text-sm text-[#d0d0d0]">
               {[
                 property.sqftApprox ? `Approx. ${property.sqftApprox}` : null,
                 property.bathsSummary || null,
@@ -203,7 +203,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
           {visibleUnits.length > 0 && (
             <section>
               <h3 className="font-montserrat text-lg font-semibold">Units</h3>
-              <p className="mt-2 text-sm text-gray-600">
+              <p className="mt-2 text-sm text-[#b0b0b0]">
                 Select a unit to browse specific interiors and finishes.
               </p>
               <div className="mt-4 grid gap-3">
@@ -221,7 +221,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
                           openUnitGallery(unit);
                         }
                       }}
-                      className="group rounded-xl border p-4 transition hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563eb]"
+                      className="group rounded-xl border border-white/10 bg-white/4 p-4 transition hover:border-[rgba(201,162,39,0.3)] hover:shadow-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-[rgba(201,162,39,0.5)]"
                     >
                       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-1 items-center gap-3">
@@ -251,11 +251,11 @@ export default function PropertyDetailClient({ property }: { property: Property 
                             )}
                           </div>
                           <div>
-                            <div className="font-semibold text-gray-900">{unit.label}</div>
-                            <div className="text-sm text-gray-600">
+                            <div className="font-semibold text-[#e8e8e8]">{unit.label}</div>
+                            <div className="text-sm text-[#b0b0b0]">
                               {unit.bedrooms} BR • {unit.bathrooms} BA • {unit.sqft} sqft
                             </div>
-                            <div className="mt-1 text-xs uppercase tracking-wide text-gray-500">
+                            <div className="mt-1 text-xs uppercase tracking-wide text-[#8f8f8f]">
                               {unit.gallery.length ? `Click to view ${unit.gallery.length} photos` : 'Gallery coming soon'}
                             </div>
                           </div>
@@ -264,7 +264,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
                           <span className={styles.badgeDark}>
                             {unit.available ? 'Available' : 'Waitlist'}
                           </span>
-                          <div className="text-sm font-semibold text-gray-900">
+                          <div className="text-sm font-semibold text-[#e8e8e8]">
                             {unit.rent ? `$${unit.rent.toLocaleString()}` : 'Contact'}
                           </div>
                           <a
@@ -286,7 +286,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
 
         <aside className={`${styles.card} ${styles.cardPad}`}>
           <div className="font-montserrat text-lg font-semibold">Amenities</div>
-          <ul className="mt-2 list-disc pl-6 text-sm text-gray-700">
+          <ul className="mt-2 list-disc pl-6 text-sm text-[#d0d0d0]">
             {property.amenities.map((amenity) => (
               <li key={amenity}>{amenity}</li>
             ))}
@@ -298,7 +298,7 @@ export default function PropertyDetailClient({ property }: { property: Property 
           >
             Send a Message
           </a>
-          <div className="mt-6 text-sm text-gray-600">
+          <div className="mt-6 text-sm text-[#b0b0b0]">
             Office: PO Box 52, Detroit, ME 04929
             <br />
             Phone: <a className="underline" href="tel:12079471999">207-947-1999</a>
@@ -308,19 +308,19 @@ export default function PropertyDetailClient({ property }: { property: Property 
 
       {unitGallery && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 px-4 py-10 backdrop-blur-sm">
-          <div className="relative w-full max-w-4xl rounded-2xl bg-white p-6 shadow-2xl">
+          <div className="relative w-full max-w-4xl rounded-2xl border border-[rgba(201,162,39,0.18)] bg-[#111111] p-6 text-[#e8e8e8] shadow-2xl">
             <button
               aria-label="Close gallery"
-              className="absolute right-4 top-4 text-2xl text-gray-500 transition hover:text-gray-800"
+              className="absolute right-4 top-4 text-2xl text-[#8f8f8f] transition hover:text-[#e8e8e8]"
               onClick={closeUnitGallery}
             >
               ✕
             </button>
 
-            <h3 className="font-montserrat text-xl font-semibold text-gray-900">
+            <h3 className="font-montserrat text-xl font-semibold text-[#e8e8e8]">
               {unitGallery.unit.label}
             </h3>
-            <div className="mt-2 text-sm text-gray-600">
+            <div className="mt-2 text-sm text-[#b0b0b0]">
               {unitGallery.unit.bedrooms} BR • {unitGallery.unit.bathrooms} BA • {unitGallery.unit.sqft} sqft
             </div>
 
@@ -351,14 +351,14 @@ export default function PropertyDetailClient({ property }: { property: Property 
                       <button
                         aria-label="Previous unit media"
                         onClick={() => stepUnitImage(-1)}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-2 text-lg font-bold text-gray-800 shadow z-10"
+                        className="absolute left-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/70 px-3 py-2 text-lg font-bold text-[#e8e8e8] shadow"
                       >
                         ‹
                       </button>
                       <button
                         aria-label="Next unit media"
                         onClick={() => stepUnitImage(1)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/80 px-3 py-2 text-lg font-bold text-gray-800 shadow z-10"
+                        className="absolute right-4 top-1/2 z-10 -translate-y-1/2 rounded-full bg-black/70 px-3 py-2 text-lg font-bold text-[#e8e8e8] shadow"
                       >
                         ›
                       </button>

@@ -2,8 +2,16 @@
 
 @layer base {
   :root {
-    --background: #ffffff;
-    --foreground: #171717;
+    --atlas-canvas: #0a0a0a;
+    --atlas-surface: #1a1a1a;
+    --atlas-silver: #e8e8e8;
+    --atlas-silver-muted: #b0b0b0;
+    --atlas-gold: #c9a227;
+    --atlas-gold-light: #e5c878;
+    --atlas-gold-dark: #a57c00;
+    --atlas-gold-bronze: #6b4a1f;
+    --background: var(--atlas-canvas);
+    --foreground: var(--atlas-silver);
   }
 
   html,
@@ -14,9 +22,9 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: 'Open Sans', Arial, Helvetica, sans-serif;
+    font-family: var(--font-open-sans), 'Open Sans', Arial, Helvetica, sans-serif;
     margin: 0;
-    line-height: 1.5;
+    line-height: 1.6;
     overflow-x: hidden;
   }
 
@@ -26,11 +34,308 @@
   }
 
   .font-montserrat {
-    font-family: 'Montserrat', sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', sans-serif;
   }
 
   .font-opensans {
-    font-family: 'Open Sans', sans-serif;
+    font-family: var(--font-open-sans), 'Open Sans', sans-serif;
+  }
+
+  .font-cinzel {
+    font-family: var(--font-cinzel), 'Cinzel', Georgia, serif;
+  }
+}
+
+@layer components {
+  /* Glassmorphism cards */
+  .glass-card {
+    position: relative;
+    border-radius: 1rem;
+    background: rgba(22, 22, 22, 0.52);
+    backdrop-filter: blur(18px) saturate(150%);
+    -webkit-backdrop-filter: blur(18px) saturate(150%);
+    border: 1px solid rgba(201, 162, 39, 0.16);
+    box-shadow:
+      0 10px 40px rgba(0, 0, 0, 0.42),
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+    transition:
+      box-shadow 0.3s ease,
+      border-color 0.3s ease,
+      transform 0.3s ease;
+  }
+
+  .glass-card:hover {
+    border-color: rgba(229, 200, 120, 0.28);
+    box-shadow:
+      0 16px 48px rgba(0, 0, 0, 0.5),
+      0 0 24px rgba(201, 162, 39, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 12rem;
+    margin-top: 0.75rem;
+  }
+
+  .section-divider::before,
+  .section-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(201, 162, 39, 0.45) 20%,
+      rgba(201, 162, 39, 0.45) 80%,
+      transparent
+    );
+  }
+
+  .section-divider__diamond {
+    width: 6px;
+    height: 6px;
+    transform: rotate(45deg);
+    background: linear-gradient(135deg, #fff2b0, #b9934b);
+    box-shadow: 0 0 8px rgba(229, 200, 120, 0.45);
+    flex-shrink: 0;
+  }
+
+  /* ── Luxury CTA plaque button ── */
+  .luxury-cta {
+    position: relative;
+    display: inline-flex;
+    align-items: stretch;
+    justify-content: center;
+    width: min(100%, 520px);
+    min-width: min(100%, 280px);
+    padding: 3px;
+    border: none;
+    border-radius: 9999px;
+    cursor: pointer;
+    text-decoration: none;
+    background: linear-gradient(
+      145deg,
+      #fff2b0 0%,
+      #e5c878 14%,
+      #b9934b 38%,
+      #8a662c 58%,
+      #6b4a1f 78%,
+      #b9934b 92%,
+      #e5c878 100%
+    );
+    box-shadow:
+      0 14px 32px rgba(0, 0, 0, 0.55),
+      0 3px 0 rgba(255, 242, 176, 0.28),
+      0 0 0 1px rgba(107, 74, 31, 0.65);
+    transition:
+      transform 0.22s ease,
+      box-shadow 0.28s ease,
+      filter 0.28s ease;
+    isolation: isolate;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .luxury-cta:focus-visible {
+    outline: 2px solid rgba(229, 200, 120, 0.65);
+    outline-offset: 4px;
+  }
+
+  .luxury-cta:hover:not(.luxury-cta--disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.06);
+    box-shadow:
+      0 18px 40px rgba(0, 0, 0, 0.58),
+      0 4px 0 rgba(255, 242, 176, 0.38),
+      0 0 28px rgba(201, 162, 39, 0.22),
+      0 0 0 1px rgba(229, 200, 120, 0.45);
+  }
+
+  .luxury-cta:active:not(.luxury-cta--disabled) {
+    transform: translateY(1px);
+    box-shadow:
+      0 6px 16px rgba(0, 0, 0, 0.5),
+      0 1px 0 rgba(255, 242, 176, 0.2),
+      inset 0 2px 6px rgba(0, 0, 0, 0.35);
+  }
+
+  .luxury-cta--disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    filter: grayscale(0.25);
+  }
+
+  .luxury-cta__surface {
+    position: relative;
+    display: flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 0.65rem;
+    min-height: 64px;
+    padding: 0.65rem 1.1rem;
+    border-radius: 9999px;
+    overflow: hidden;
+    background: linear-gradient(180deg, #050505 0%, #1a1a18 48%, #090909 100%);
+    box-shadow:
+      inset 0 2px 4px rgba(0, 0, 0, 0.55),
+      inset 0 -1px 0 rgba(255, 242, 176, 0.06);
+  }
+
+  .luxury-cta__surface::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(255, 255, 255, 0.028) 2px,
+      rgba(255, 255, 255, 0.028) 3px
+    );
+    opacity: 0.85;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .luxury-cta__surface::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 242, 176, 0.14),
+      inset 0 -5px 14px rgba(0, 0, 0, 0.55),
+      inset 0 0 20px rgba(201, 162, 39, 0.04);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .luxury-cta__body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    flex: 1;
+    min-width: 0;
+    padding: 0 0.25rem;
+  }
+
+  .luxury-cta__column {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    width: 12px;
+    gap: 1px;
+  }
+
+  .luxury-cta__column-cap,
+  .luxury-cta__column-base {
+    width: 10px;
+    height: 3px;
+    border-radius: 1px;
+    background: linear-gradient(90deg, #6b4a1f, #e5c878, #fff2b0, #e5c878, #6b4a1f);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  }
+
+  .luxury-cta__column-shaft {
+    width: 6px;
+    flex: 1;
+    min-height: 22px;
+    border-radius: 1px;
+    background: linear-gradient(
+      180deg,
+      #fff2b0 0%,
+      #e5c878 22%,
+      #b9934b 55%,
+      #8a662c 85%,
+      #6b4a1f 100%
+    );
+    box-shadow:
+      inset 1px 0 rgba(255, 242, 176, 0.35),
+      inset -1px 0 rgba(0, 0, 0, 0.35);
+  }
+
+  .luxury-cta__ornament {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 220px;
+    opacity: 0.9;
+  }
+
+  .luxury-cta__line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(185, 147, 75, 0.25) 8%,
+      rgba(229, 200, 120, 0.75) 50%,
+      rgba(185, 147, 75, 0.25) 92%,
+      transparent
+    );
+  }
+
+  .luxury-cta__diamond {
+    width: 5px;
+    height: 5px;
+    flex-shrink: 0;
+    transform: rotate(45deg);
+    background: linear-gradient(135deg, #fff2b0 0%, #b9934b 55%, #8a662c 100%);
+    box-shadow:
+      0 0 6px rgba(229, 200, 120, 0.45),
+      0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+
+  .luxury-cta__label {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-cinzel), 'Cinzel', Georgia, serif;
+    font-size: clamp(0.72rem, 2.2vw, 0.95rem);
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    line-height: 1.2;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: #e8d49a;
+    text-shadow:
+      0 1px 0 rgba(255, 242, 176, 0.55),
+      0 2px 4px rgba(0, 0, 0, 0.75),
+      0 -1px 0 rgba(107, 74, 31, 0.85);
+  }
+
+  /* Compact variant — nav, cards */
+  .luxury-cta--sm {
+    width: auto;
+    min-width: 0;
+    max-width: none;
+  }
+
+  .luxury-cta--sm .luxury-cta__surface {
+    min-height: 40px;
+    padding: 0.4rem 1rem;
+  }
+
+  .luxury-cta--sm .luxury-cta__label {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+  }
+
+  .luxury-cta--sm .luxury-cta__body {
+    gap: 0;
   }
 }
 

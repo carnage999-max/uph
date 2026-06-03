@@ -9,7 +9,7 @@ export default async function AdminLoginPage(){
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 py-16">
-      <div className={`${styles.card} ${styles.cardPad} w-full max-w-md space-y-6`}>
+      <div className={`${styles.cardAdmin} ${styles.cardAdminPad} w-full max-w-md space-y-6`}>
         <div className="space-y-2 text-center">
           <h1 className="font-montserrat text-2xl font-semibold text-gray-900">
             Admin Access

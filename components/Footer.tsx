@@ -2,33 +2,40 @@ import Link from 'next/link';
 import { Facebook, Instagram } from 'lucide-react';
 import Image from 'next/image';
 
-function getCurrentYear(){
+function getCurrentYear() {
   return new Date().getFullYear();
 }
 
 export default function Footer() {
   return (
-    <footer className="relative z-50 bg-[#111827] text-white mt-16">
-      <div className="max-w-6xl mx-auto px-6 py-12 grid grid-cols-1 md:grid-cols-3 gap-10">
-        {/* === Brand Section === */}
+    <footer className="relative z-50 mt-16 border-t border-[rgba(201,162,39,0.12)] bg-[#050505] text-white">
+      <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-6 py-12 md:grid-cols-3">
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <Image src="/logo/uph.jpeg" alt="Logo" width={50} height={50} preload />
-            <span className="text-lg font-semibold">
-              Ultimate Property Holdings
-            </span>
+            <Image
+              src="/logo/atlas.png"
+              alt="Atlas Properties"
+              width={50}
+              height={50}
+              className="h-12 w-12 object-contain"
+              preload
+            />
+            <div className="leading-tight">
+              <span className="font-cinzel text-lg font-semibold text-[#e8e8e8]">
+                Atlas Properties
+              </span>
+            </div>
           </div>
-          <p className="text-gray-300 text-sm leading-relaxed">
+          <p className="text-sm leading-relaxed text-[#9ca3af]">
             Premium residential apartments managed with care across Maine.
           </p>
         </div>
 
-        {/* === Quick Links === */}
         <div>
-          <h3 className="text-white text-base font-semibold mb-3">
+          <h3 className="mb-3 font-cinzel text-base font-semibold text-[#e8e8e8]">
             Quick Links
           </h3>
-          <ul className="space-y-2 text-gray-300">
+          <ul className="space-y-2 text-[#9ca3af]">
             {[
               { href: '/', label: 'Home' },
               { href: '/about', label: 'About' },
@@ -39,7 +46,7 @@ export default function Footer() {
               <li key={link.href}>
                 <Link
                   href={link.href}
-                  className="hover:text-white transition-colors duration-200"
+                  className="transition-colors duration-200 hover:text-[#e5c878]"
                 >
                   {link.label}
                 </Link>
@@ -48,48 +55,45 @@ export default function Footer() {
           </ul>
         </div>
 
-        {/* === Contact & Socials === */}
-        <div className="text-gray-300 space-y-3">
-          <h3 className="text-white text-base font-semibold">Contact</h3>
+        <div className="space-y-3 text-[#9ca3af]">
+          <h3 className="font-cinzel text-base font-semibold text-[#e8e8e8]">
+            Contact
+          </h3>
           <p>PO Box 52, Detroit, ME 04929</p>
           <p>
             Phone:{' '}
             <a
               href="tel:12079471999"
-              className="underline hover:text-white transition-colors duration-200"
+              className="underline transition-colors duration-200 hover:text-[#e5c878]"
             >
               207-947-1999
             </a>
           </p>
 
-          {/* Social Media Links */}
           <div className="flex items-center gap-4 pt-2">
             <Link
               href="https://www.facebook.com/ultimatepropertyholdings/"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              className="rounded-full border border-[rgba(201,162,39,0.2)] bg-white/5 p-2 transition-colors hover:border-[rgba(201,162,39,0.4)] hover:bg-white/10"
             >
-              <Facebook size={18} className="text-white" />
+              <Facebook size={18} className="text-[#e5c878]" />
             </Link>
             <Link
               href="https://www.instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+              className="rounded-full border border-[rgba(201,162,39,0.2)] bg-white/5 p-2 transition-colors hover:border-[rgba(201,162,39,0.4)] hover:bg-white/10"
             >
-              <Instagram size={18} className="text-white" />
+              <Instagram size={18} className="text-[#e5c878]" />
             </Link>
           </div>
         </div>
       </div>
 
-      {/* === Bottom Bar === */}
-      <div className="border-t border-gray-700 mt-4 py-4 text-center text-gray-400 text-xs">
-        © {getCurrentYear()} Ultimate Property Holdings LLC. All Rights Reserved.
+      <div className="border-t border-[rgba(201,162,39,0.1)] py-4 text-center text-xs text-[#6b7280]">
+        © {getCurrentYear()} Atlas Properties. All Rights Reserved.
       </div>
-
-      
     </footer>
   );
 }

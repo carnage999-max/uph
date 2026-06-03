@@ -42,7 +42,7 @@ export default function HeroImageUploader({ propertyId, heroImageUrl }: Props){
   console.log('heroImageUrl', heroImageUrl);
 
   return (
-    <section className={`${styles.card} overflow-hidden`}>
+    <section className={`${styles.cardAdmin} overflow-hidden`}>
       <div className="grid gap-6 md:grid-cols-[2fr_1fr]">
         <div className="relative h-72 w-full bg-gray-100">
           {heroImageUrl ? (
@@ -60,7 +60,7 @@ export default function HeroImageUploader({ propertyId, heroImageUrl }: Props){
             </div>
           )}
         </div>
-        <div className={`${styles.cardPad} space-y-3`}>
+        <div className={`${styles.cardAdminPad} space-y-3`}>
           <div>
             <h2 className="font-montserrat text-lg font-semibold text-gray-900">Property image</h2>
             <p className="text-sm text-gray-600">

@@ -57,7 +57,7 @@ export default function GalleryManager({ propertyId, images }: Props){
   }
 
   return (
-    <section className={`${styles.card} ${styles.cardPad} space-y-4`}>
+    <section className={`${styles.cardAdmin} ${styles.cardAdminPad} space-y-4`}>
       <div>
         <h2 className="font-montserrat text-lg font-semibold text-gray-900">Other images</h2>
         <p className="text-sm text-gray-600">Supplement the property image with interior or exterior shots.</p>

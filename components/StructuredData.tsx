@@ -22,7 +22,7 @@ export default function StructuredData(props: StructuredDataProps) {
       name: siteConfig.name,
       description: siteConfig.description,
       url: siteConfig.url,
-      logo: `${siteConfig.url}/logo/uph.jpeg`,
+      logo: `${siteConfig.url}/logo/atlas.png`,
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Detroit',
@@ -35,7 +35,7 @@ export default function StructuredData(props: StructuredDataProps) {
         '@type': 'ContactPoint',
         telephone: '+1-207-947-1999',
         contactType: 'Customer Service',
-        email: 'info@ultimatepropertyholdings.com',
+        email: 'info@atlasproperties.net',
       },
       sameAs: [
         // Add social media links here when available

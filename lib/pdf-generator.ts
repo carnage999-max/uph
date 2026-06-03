@@ -197,7 +197,7 @@ export async function generateApplicationPDF(data: ApplicationData): Promise<Buf
       );
       doc.moveDown(0.5);
       doc.text(
-        'This signature authorizes Ultimate Property Holdings to process this rental application.',
+        'This signature authorizes Atlas Properties to process this rental application.',
         { align: 'center' }
       );
 

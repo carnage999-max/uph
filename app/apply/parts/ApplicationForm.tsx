@@ -136,6 +136,11 @@ export default function ApplicationForm({ properties }: { properties: Property[]
   }, []);
 
   const totalSteps = 10;
+  const stepTitleClass = 'mb-2 font-cinzel text-2xl font-semibold text-[#e8e8e8]';
+  const stepCopyClass = 'text-sm text-[#b0b0b0]';
+  const labelClass = 'mb-1 block text-sm font-semibold text-[#e8e8e8]';
+  const sectionDividerClass = 'mt-6 border-t border-white/10 pt-6';
+  const inlinePanelClass = 'rounded-xl border border-white/8 bg-white/4 p-4';
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -382,13 +387,13 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Property Selection</h2>
-              <p className="text-sm text-gray-600">Select the property and unit you're interested in</p>
+              <h2 className={stepTitleClass}>Property Selection</h2>
+              <p className={stepCopyClass}>Select the property and unit you're interested in</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="property" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="property" className={labelClass}>
                   Property <span className="text-red-500">*</span>
                 </label>
                 <select
@@ -412,7 +417,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
               {availableUnits.length > 0 && (
                 <div>
-                  <label htmlFor="unit" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="unit" className={labelClass}>
                     Unit <span className="text-red-500">*</span>
                   </label>
                   <select
@@ -439,13 +444,13 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Personal Information</h2>
-              <p className="text-sm text-gray-600">Please provide your personal details</p>
+              <h2 className={stepTitleClass}>Personal Information</h2>
+              <p className={stepCopyClass}>Please provide your personal details</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="firstName" className={labelClass}>
                   First Name <span className="text-red-500">*</span>
                 </label>
                 <input 
@@ -458,7 +463,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 />
               </div>
               <div>
-                <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="lastName" className={labelClass}>
                   Last Name <span className="text-red-500">*</span>
                 </label>
                 <input 
@@ -474,7 +479,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="email" className={labelClass}>
                   Email <span className="text-red-500">*</span>
                 </label>
                 <input 
@@ -488,7 +493,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 />
               </div>
               <div>
-                <label htmlFor="phone" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="phone" className={labelClass}>
                   Phone <span className="text-red-500">*</span>
                 </label>
                 <input 
@@ -505,7 +510,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="dateOfBirth" className={labelClass}>
                   Date of Birth <span className="text-red-500">*</span>
                 </label>
                 <input 
@@ -518,7 +523,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 />
               </div>
               <div>
-                <label htmlFor="ssn" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="ssn" className={labelClass}>
                   Social Security Number <span className="text-red-500">*</span>
                 </label>
                 <input 
@@ -532,7 +537,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                   maxLength={11}
                   required 
                 />
-                <p className="mt-1 text-xs text-gray-500">Format: XXX-XX-XXXX</p>
+                <p className="mt-1 text-xs text-[#8f8f8f]">Format: XXX-XX-XXXX</p>
               </div>
             </div>
           </div>
@@ -542,12 +547,12 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Current Address</h2>
-              <p className="text-sm text-gray-600">Your current residential address</p>
+              <h2 className={stepTitleClass}>Current Address</h2>
+              <p className={stepCopyClass}>Your current residential address</p>
             </div>
 
             <div>
-              <label htmlFor="currentAddress" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="currentAddress" className={labelClass}>
                 Street Address
               </label>
               <input 
@@ -561,7 +566,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
-                <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="city" className={labelClass}>
                   City
                 </label>
                 <input 
@@ -573,7 +578,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 />
               </div>
               <div>
-                <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="state" className={labelClass}>
                   State
                 </label>
                 <input 
@@ -586,7 +591,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 />
               </div>
               <div>
-                <label htmlFor="zipCode" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="zipCode" className={labelClass}>
                   ZIP Code
                 </label>
                 <input 
@@ -601,11 +606,11 @@ export default function ApplicationForm({ properties }: { properties: Property[]
               </div>
             </div>
 
-            <div className="border-t border-gray-200 pt-6 mt-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Previous Address 1</h3>
+            <div className={sectionDividerClass}>
+              <h3 className="mb-4 font-semibold text-[#e8e8e8]">Previous Address 1</h3>
               
               <div>
-                <label htmlFor="previousAddress1" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="previousAddress1" className={labelClass}>
                   Street Address
                 </label>
                 <input 
@@ -619,7 +624,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
               <div className="grid gap-4 sm:grid-cols-3 mt-4">
                 <div>
-                  <label htmlFor="previousCity1" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="previousCity1" className={labelClass}>
                     City
                   </label>
                   <input 
@@ -631,7 +636,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                   />
                 </div>
                 <div>
-                  <label htmlFor="previousState1" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="previousState1" className={labelClass}>
                     State
                   </label>
                   <input 
@@ -644,7 +649,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                   />
                 </div>
                 <div>
-                  <label htmlFor="previousZipCode1" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="previousZipCode1" className={labelClass}>
                     ZIP Code
                   </label>
                   <input 
@@ -660,11 +665,11 @@ export default function ApplicationForm({ properties }: { properties: Property[]
               </div>
             </div>
 
-            <div className="border-t border-gray-200 pt-6 mt-6">
-              <h3 className="font-semibold text-gray-900 mb-4">Previous Address 2</h3>
+            <div className={sectionDividerClass}>
+              <h3 className="mb-4 font-semibold text-[#e8e8e8]">Previous Address 2</h3>
               
               <div>
-                <label htmlFor="previousAddress2" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="previousAddress2" className={labelClass}>
                   Street Address
                 </label>
                 <input 
@@ -678,7 +683,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
               <div className="grid gap-4 sm:grid-cols-3 mt-4">
                 <div>
-                  <label htmlFor="previousCity2" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="previousCity2" className={labelClass}>
                     City
                   </label>
                   <input 
@@ -690,7 +695,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                   />
                 </div>
                 <div>
-                  <label htmlFor="previousState2" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="previousState2" className={labelClass}>
                     State
                   </label>
                   <input 
@@ -703,7 +708,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                   />
                 </div>
                 <div>
-                  <label htmlFor="previousZipCode2" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="previousZipCode2" className={labelClass}>
                     ZIP Code
                   </label>
                   <input 
@@ -725,12 +730,12 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Current Landlord Information</h2>
-              <p className="text-sm text-gray-600">Please provide your current landlord's contact information</p>
+              <h2 className={stepTitleClass}>Current Landlord Information</h2>
+              <p className={stepCopyClass}>Please provide your current landlord&apos;s contact information</p>
             </div>
 
             <div>
-              <label htmlFor="landlordName" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="landlordName" className={labelClass}>
                 Landlord Name
               </label>
               <input 
@@ -744,7 +749,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="landlordPhone" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="landlordPhone" className={labelClass}>
                   Landlord Phone
                 </label>
                 <input 
@@ -757,7 +762,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 />
               </div>
               <div>
-                <label htmlFor="landlordEmail" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="landlordEmail" className={labelClass}>
                   Landlord Email
                 </label>
                 <input 
@@ -777,14 +782,14 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Personal References</h2>
-              <p className="text-sm text-gray-600">Please provide at least two personal references</p>
+              <h2 className={stepTitleClass}>Personal References</h2>
+              <p className={stepCopyClass}>Please provide at least two personal references</p>
             </div>
 
             {formData.references.map((ref, index) => (
-              <div key={index} className="border border-gray-200 rounded-xl p-4 space-y-4">
+              <div key={index} className={`${inlinePanelClass} space-y-4`}>
                 <div className="flex items-center justify-between">
-                  <h3 className="font-semibold text-gray-900">Reference {index + 1}</h3>
+                  <h3 className="font-semibold text-[#e8e8e8]">Reference {index + 1}</h3>
                   {formData.references.length > 2 && (
                     <button
                       type="button"
@@ -797,7 +802,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={labelClass}>
                     Full Name <span className="text-red-500">*</span>
                   </label>
                   <input 
@@ -810,7 +815,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                  <label className={labelClass}>
                     Relationship <span className="text-red-500">*</span>
                   </label>
                   <input 
@@ -824,7 +829,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className={labelClass}>
                       Phone <span className="text-red-500">*</span>
                     </label>
                     <input 
@@ -837,7 +842,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className={labelClass}>
                       Email
                     </label>
                     <input 
@@ -866,8 +871,8 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Pet Information</h2>
-              <p className="text-sm text-gray-600">Do you have any pets?</p>
+              <h2 className={stepTitleClass}>Pet Information</h2>
+              <p className={stepCopyClass}>Do you have any pets?</p>
             </div>
 
             <div>
@@ -883,16 +888,16 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                       setPetPhotoPreview(null);
                     }
                   }}
-                  className="w-5 h-5 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                  className="h-5 w-5 rounded border-white/20 bg-[#1a1a1a] text-[#c9a227] focus:ring-[rgba(201,162,39,0.45)]"
                 />
-                <span className="text-sm font-medium text-gray-700">I have a pet</span>
+                <span className="text-sm font-medium text-[#e8e8e8]">I have a pet</span>
               </label>
             </div>
 
             {formData.hasPet && (
               <>
                 <div>
-                  <label htmlFor="petType" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="petType" className={labelClass}>
                     Pet Type <span className="text-red-500">*</span>
                   </label>
                   <input 
@@ -906,7 +911,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 </div>
 
                 <div>
-                  <label htmlFor="petPhoto" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="petPhoto" className={labelClass}>
                     Pet Photo <span className="text-red-500">*</span>
                   </label>
                   <div className="space-y-2">
@@ -930,7 +935,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                         <img 
                           src={petPhotoPreview} 
                           alt="Pet preview" 
-                          className="h-32 w-32 object-cover rounded-lg border border-gray-200"
+                          className="h-32 w-32 rounded-lg border border-white/10 object-cover"
                         />
                         <button
                           type="button"
@@ -955,12 +960,12 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Driver's License</h2>
-              <p className="text-sm text-gray-600">Please upload a photo of your driver's license</p>
+              <h2 className={stepTitleClass}>Driver&apos;s License</h2>
+              <p className={stepCopyClass}>Please upload a photo of your driver&apos;s license</p>
             </div>
 
             <div>
-              <label htmlFor="driversLicensePhoto" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="driversLicensePhoto" className={labelClass}>
                 Driver's License Photo <span className="text-red-500">*</span>
               </label>
               <div className="space-y-2">
@@ -984,7 +989,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                     <img 
                       src={licensePreview} 
                       alt="License preview" 
-                      className="h-48 w-auto object-contain rounded-lg border border-gray-200 bg-gray-50"
+                      className="h-48 w-auto rounded-lg border border-white/10 bg-[#0f0f0f] object-contain"
                     />
                     <button
                       type="button"
@@ -1007,43 +1012,43 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Authorizations</h2>
-              <p className="text-sm text-gray-600">Please authorize the following checks</p>
+              <h2 className={stepTitleClass}>Authorizations</h2>
+              <p className={stepCopyClass}>Please authorize the following checks</p>
             </div>
 
             <div className="space-y-4">
-              <label className="flex items-start gap-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-gray-50">
+              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/8 bg-white/4 p-4 hover:bg-white/6">
                 <input
                   type="checkbox"
                   checked={formData.authorizeCriminalCheck}
                   onChange={(e) => updateFormData('authorizeCriminalCheck', e.target.checked)}
-                  className="mt-1 w-5 h-5 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                  className="mt-1 h-5 w-5 rounded border-white/20 bg-[#1a1a1a] text-[#c9a227] focus:ring-[rgba(201,162,39,0.45)]"
                   required
                 />
                 <div className="flex-1">
-                  <span className="text-sm font-medium text-gray-900 block">
+                  <span className="block text-sm font-medium text-[#e8e8e8]">
                     Criminal Background Check Authorization <span className="text-red-500">*</span>
                   </span>
-                  <span className="text-xs text-gray-600 mt-1 block">
-                    I authorize Ultimate Property Holdings to conduct a criminal background check as part of my rental application.
+                  <span className="mt-1 block text-xs text-[#b0b0b0]">
+                    I authorize Atlas Properties to conduct a criminal background check as part of my rental application.
                   </span>
                 </div>
               </label>
 
-              <label className="flex items-start gap-3 cursor-pointer p-4 border border-gray-200 rounded-xl hover:bg-gray-50">
+              <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-white/8 bg-white/4 p-4 hover:bg-white/6">
                 <input
                   type="checkbox"
                   checked={formData.authorizeCreditCheck}
                   onChange={(e) => updateFormData('authorizeCreditCheck', e.target.checked)}
-                  className="mt-1 w-5 h-5 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                  className="mt-1 h-5 w-5 rounded border-white/20 bg-[#1a1a1a] text-[#c9a227] focus:ring-[rgba(201,162,39,0.45)]"
                   required
                 />
                 <div className="flex-1">
-                  <span className="text-sm font-medium text-gray-900 block">
+                  <span className="block text-sm font-medium text-[#e8e8e8]">
                     Credit Check Authorization <span className="text-red-500">*</span>
                   </span>
-                  <span className="text-xs text-gray-600 mt-1 block">
-                    I authorize Ultimate Property Holdings to conduct a credit check as part of my rental application.
+                  <span className="mt-1 block text-xs text-[#b0b0b0]">
+                    I authorize Atlas Properties to conduct a credit check as part of my rental application.
                   </span>
                 </div>
               </label>
@@ -1055,15 +1060,15 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">E-Signature</h2>
-              <p className="text-sm text-gray-600">Please sign below to authorize this application</p>
+              <h2 className={stepTitleClass}>E-Signature</h2>
+              <p className={stepCopyClass}>Please sign below to authorize this application</p>
             </div>
 
-            <div className="border-2 border-gray-200 rounded-xl p-4 bg-white">
+            <div className="rounded-xl border border-white/10 bg-[#0f0f0f] p-4">
               <SignatureCanvas
                 ref={signatureRef}
                 canvasProps={{
-                  className: 'w-full h-48 border border-gray-300 rounded-lg',
+                  className: 'h-48 w-full rounded-lg border border-white/10 bg-white',
                 }}
                 backgroundColor="#ffffff"
                 penColor="#111827"
@@ -1094,9 +1099,9 @@ export default function ApplicationForm({ properties }: { properties: Property[]
               </div>
             )}
 
-            <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-              <p className="text-xs text-blue-800">
-                <strong>Legal Notice:</strong> By signing this application, you acknowledge that all information provided is true and accurate to the best of your knowledge. This signature is legally binding and authorizes Ultimate Property Holdings to process your rental application.
+            <div className="rounded-xl border border-[rgba(201,162,39,0.22)] bg-[rgba(201,162,39,0.08)] p-4">
+              <p className="text-xs text-[#e5c878]">
+                <strong>Legal Notice:</strong> By signing this application, you acknowledge that all information provided is true and accurate to the best of your knowledge. This signature is legally binding and authorizes Atlas Properties to process your rental application.
               </p>
             </div>
           </div>
@@ -1106,13 +1111,13 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         return (
           <div className="space-y-6">
             <div>
-              <h2 className="font-montserrat text-xl font-semibold text-gray-900 mb-2">Employment Information</h2>
-              <p className="text-sm text-gray-600">Please provide your employment details</p>
+              <h2 className={stepTitleClass}>Employment Information</h2>
+              <p className={stepCopyClass}>Please provide your employment details</p>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <div>
-                <label htmlFor="jobTitle" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="jobTitle" className={labelClass}>
                   Job Title / Position
                 </label>
                 <input 
@@ -1124,7 +1129,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 />
               </div>
               <div>
-                <label htmlFor="employerName" className="block text-sm font-medium text-gray-700 mb-1">
+                <label htmlFor="employerName" className={labelClass}>
                   Employer Name
                 </label>
                 <input 
@@ -1138,7 +1143,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
             </div>
 
             <div>
-              <label htmlFor="monthlyIncome" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="monthlyIncome" className={labelClass}>
                 Monthly Income <span className="text-red-500">*</span>
               </label>
               <input 
@@ -1152,11 +1157,11 @@ export default function ApplicationForm({ properties }: { properties: Property[]
                 placeholder="5000.00" 
                 required 
               />
-              <p className="mt-1 text-xs text-gray-500">Enter your total monthly income</p>
+              <p className="mt-1 text-xs text-[#8f8f8f]">Enter your total monthly income</p>
             </div>
 
             <div>
-              <label htmlFor="additionalNotes" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="additionalNotes" className={labelClass}>
                 Additional Notes or Comments
               </label>
               <textarea 
@@ -1169,9 +1174,9 @@ export default function ApplicationForm({ properties }: { properties: Property[]
               />
             </div>
 
-            <div className="border-t border-gray-200 pt-6">
-              <h3 className="font-semibold text-gray-900 mb-4">CAPTCHA Verification</h3>
-              <p className="text-sm text-gray-600 mb-4">Please complete the verification to prevent spam</p>
+            <div className={sectionDividerClass}>
+              <h3 className="mb-4 font-semibold text-[#e8e8e8]">CAPTCHA Verification</h3>
+              <p className="mb-4 text-sm text-[#b0b0b0]">Please complete the verification to prevent spam.</p>
               <Captcha
                 siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY!}
                 onVerify={handleCaptchaVerify}
@@ -1193,16 +1198,16 @@ export default function ApplicationForm({ properties }: { properties: Property[]
       {/* Progress Indicator */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">
+          <span className="text-sm font-medium text-[#e8e8e8]">
             Step {currentStep} of {totalSteps}
           </span>
-          <span className="text-sm text-gray-500">
+          <span className="text-sm text-[#8f8f8f]">
             {Math.round((currentStep / totalSteps) * 100)}% Complete
           </span>
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2">
+        <div className="h-2 w-full rounded-full bg-white/8">
           <div 
-            className="bg-gray-900 h-2 rounded-full transition-all duration-300"
+            className="h-2 rounded-full bg-linear-to-r from-[#c9a227] via-[#e5c878] to-[#a57c00] transition-all duration-300"
             style={{ width: `${(currentStep / totalSteps) * 100}%` }}
           />
         </div>
@@ -1214,7 +1219,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
       </div>
 
       {/* Navigation Buttons */}
-      <div className="flex items-center justify-between pt-6 border-t border-gray-200">
+      <div className="flex items-center justify-between border-t border-white/10 pt-6">
         <button
           type="button"
           onClick={prevStep}
@@ -1247,13 +1252,13 @@ export default function ApplicationForm({ properties }: { properties: Property[]
 
       {/* Status Messages */}
       {ok && (
-        <div className="rounded-xl bg-green-50 border border-green-200 p-4">
-          <p className="text-sm text-green-800">{ok}</p>
+        <div className="rounded-xl border border-emerald-500/25 bg-emerald-950/40 p-4">
+          <p className="text-sm text-emerald-300">{ok}</p>
         </div>
       )}
       {err && (
-        <div className="rounded-xl bg-red-50 border border-red-200 p-4">
-          <p className="text-sm text-red-800">{err}</p>
+        <div className="rounded-xl border border-red-500/25 bg-red-950/40 p-4">
+          <p className="text-sm text-red-300">{err}</p>
         </div>
       )}
     </form>

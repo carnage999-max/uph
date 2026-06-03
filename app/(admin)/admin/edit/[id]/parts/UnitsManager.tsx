@@ -279,7 +279,7 @@ export default function UnitsManager({ propertyId, units }: Props){
   }
 
   return (
-    <section className={`${styles.card} ${styles.cardPad} space-y-5`}>
+    <section className={`${styles.cardAdmin} ${styles.cardAdminPad} space-y-5`}>
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="font-montserrat text-lg font-semibold text-gray-900">Units</h2>

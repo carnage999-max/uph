@@ -38,7 +38,7 @@ export async function GET() {
               letterSpacing: '-0.02em',
             }}
           >
-            Ultimate Property Holdings
+            Atlas Properties
           </div>
 
           {/* Tagline */}
@@ -123,7 +123,7 @@ export async function GET() {
             color: '#6B7280',
           }}
         >
-          ultimatepropertyholdings.com
+          atlasproperties.net
         </div>
       </div>
     ),

@@ -21,7 +21,7 @@ export default async function AdminDashboardPage(){
       </div>
 
       {properties.length === 0 ? (
-        <div className={`${styles.card} ${styles.cardPad} text-sm text-gray-600`}>
+        <div className={`${styles.cardAdmin} ${styles.cardAdminPad} text-sm text-gray-600`}>
           No properties yet. Use the “Add Property” button to create your first listing.
         </div>
       ) : (
@@ -30,7 +30,7 @@ export default async function AdminDashboardPage(){
             const visibleUnits = property.units.filter((unit)=> !unit.isHidden);
             const availableUnits = visibleUnits.filter((unit)=> unit.available);
             return (
-              <div key={property.id} className={`${styles.card} ${styles.cardPad} flex flex-col gap-4`}>
+              <div key={property.id} className={`${styles.cardAdmin} ${styles.cardAdminPad} flex flex-col gap-4`}>
                 <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
                   <div>
                     <div className="font-montserrat text-lg font-semibold text-gray-900">

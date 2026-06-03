@@ -183,7 +183,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
 
       {/* List */}
       {requests.length === 0 ? (
-        <div className={`${styles.card} ${styles.cardPad} text-center text-sm text-gray-600`}>
+        <div className={`${styles.cardAdmin} ${styles.cardAdminPad} text-center text-sm text-gray-600`}>
           No maintenance requests found.
         </div>
       ) : (
@@ -192,7 +192,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
             {requests.map((request) => (
               <div
                 key={request.id}
-                className={`${styles.card} ${styles.cardPad} cursor-pointer transition-shadow hover:shadow-md`}
+                className={`${styles.cardAdmin} ${styles.cardAdminPad} cursor-pointer transition-shadow hover:shadow-md`}
                 onClick={() => setExpandedId(expandedId === request.id ? null : request.id)}
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
@@ -315,7 +315,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
           onClick={() => setUpdatingModal(null)}
         >
           <div
-            className={`${styles.card} ${styles.cardPad} w-full max-w-md`}
+            className={`${styles.cardAdmin} ${styles.cardAdminPad} w-full max-w-md`}
             onClick={(e) => e.stopPropagation()}
           >
             <h3 className="font-montserrat text-lg font-semibold text-gray-900 mb-4">Update Status</h3>

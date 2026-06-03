@@ -328,7 +328,7 @@ export default function PropertyCreateWizard(){
   const stepTitle = useMemo(()=> steps[step], [step]);
 
   return (
-    <div className={`${styles.card} ${styles.cardPad} space-y-6`}>
+    <div className={`${styles.cardAdmin} ${styles.cardAdminPad} space-y-6`}>
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wide text-gray-500">
           Step {step + 1} of {steps.length}
