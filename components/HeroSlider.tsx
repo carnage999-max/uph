@@ -53,6 +53,16 @@ export default function HeroSlider({
           <div
             className={`${styles.container} relative z-10 flex max-w-3xl flex-col gap-4 py-20 sm:py-28`}
           >
+            <div className="relative mx-auto h-28 w-28 overflow-hidden rounded-3xl border border-white/10 shadow-[0_18px_38px_rgba(0,0,0,0.42)] sm:hidden">
+              <Image
+                src="/logo/atlas.png"
+                alt="Atlas Properties logo"
+                fill
+                className="object-cover"
+                sizes="112px"
+                priority
+              />
+            </div>
             <p className={styles.sectionLabel}>Atlas Properties</p>
             <h1 className="font-cinzel text-4xl font-bold tracking-tight text-[#e8e8e8] drop-shadow-[0_10px_30px_rgba(0,0,0,0.65)] sm:text-6xl">
               {headline}
