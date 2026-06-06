@@ -16,16 +16,17 @@ export default function PropertyCard({ p }: { p: Property }) {
       className={`${styles.card} group block overflow-hidden`}
       href={`/properties/${p.slug}`}
     >
-      <div className="relative h-56 w-full">
-        <Image
-          src={p.heroImageUrl}
-          alt={p.name}
-          fill
-          className="object-cover transition duration-500 group-hover:scale-[1.03]"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          priority={false}
-        />
-        <div className="absolute inset-0 bg-linear-to-t from-[#0a0a0a]/80 via-transparent to-transparent" />
+      <div className="relative aspect-[4/3] w-full bg-[#111111]">
+        <div className="absolute inset-3">
+          <Image
+            src={p.heroImageUrl}
+            alt={p.name}
+            fill
+            className="object-contain"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            priority={false}
+          />
+        </div>
         {p.underConstruction && (
           <div className="absolute top-3 right-3">
             <div className={styles.badgeUnderConstruction}>
