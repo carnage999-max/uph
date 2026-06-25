@@ -32,6 +32,15 @@ const openSans = Open_Sans({
 export const metadata: Metadata = {
   ...createMetadata({}),
   metadataBase: new URL(siteConfig.url),
+  manifest: '/manifest.webmanifest',
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png', sizes: 'any' },
+      { url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+    ],
+    apple: [{ url: '/apple-icon.png', type: 'image/png', sizes: '180x180' }],
+    shortcut: ['/favicon.ico'],
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }){
