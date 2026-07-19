@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { deleteFileFromS3 } from '@/lib/storage';
+import { deleteFileFromMedia } from '@/lib/storage';
 
 export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string; unitId: string }> }){
   const { unitId } = await context.params;
@@ -71,7 +71,7 @@ export async function DELETE(_: NextRequest, context: { params: Promise<{ id: st
 
   for (const key of keys){
     try {
-      await deleteFileFromS3(key);
+      await deleteFileFromMedia(key);
     } catch {
       // ignore clean up errors
     }

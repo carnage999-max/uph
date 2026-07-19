@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { deleteFileFromS3 } from '@/lib/storage';
+import { deleteFileFromMedia } from '@/lib/storage';
 
 export async function DELETE(_: NextRequest, context: { params: Promise<{ id: string; unitId: string; imageId: string }> }){
   const { unitId, imageId } = await context.params;
@@ -17,7 +17,7 @@ export async function DELETE(_: NextRequest, context: { params: Promise<{ id: st
 
   if (image.storageKey){
     try {
-      await deleteFileFromS3(image.storageKey);
+      await deleteFileFromMedia(image.storageKey);
     } catch {
       // ignore
     }

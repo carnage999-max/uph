@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { uploadFileToS3, deleteFileFromS3 } from '@/lib/storage';
+import { uploadFileToMedia, deleteFileFromMedia } from '@/lib/storage';
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string; unitId: string }> }){
   const { id, unitId } = await context.params;
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     return NextResponse.json({ message: 'Unit not found.' }, { status: 404 });
   }
 
-  const upload = await uploadFileToS3(file, `properties/${unit.property.slug || id}/units/${unitId}/cover`);
+  const upload = await uploadFileToMedia(file, `properties/${unit.property.slug || id}/units/${unitId}/cover`);
 
   const updated = await prisma.unit.update({
     where: { id: unitId },
@@ -36,7 +36,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
   if (unit.coverImageKey){
     try {
-      await deleteFileFromS3(unit.coverImageKey);
+      await deleteFileFromMedia(unit.coverImageKey);
     } catch {
       // ignore clean-up errors
     }

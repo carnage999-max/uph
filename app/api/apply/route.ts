@@ -1,6 +1,6 @@
 import { Resend } from 'resend';
 import { NextRequest } from 'next/server';
-import { uploadFileToS3 } from '@/lib/storage';
+import { uploadFileToMedia } from '@/lib/storage';
 import { generateApplicationPDF } from '@/lib/pdf-generator';
 import { verifyTurnstileToken } from '@/lib/turnstile';
 import { company } from '@/lib/data';
@@ -91,7 +91,7 @@ export async function POST(req: NextRequest) {
     const petPhoto = formData.get('petPhoto');
     if (petPhoto instanceof File && petPhoto.size > 0) {
       try {
-        const upload = await uploadFileToS3(petPhoto, `applications/${Date.now()}/pet-photo`);
+        const upload = await uploadFileToMedia(petPhoto, `applications/${Date.now()}/pet-photo`);
         petPhotoUrl = upload.url;
         petPhotoKey = upload.key;
       } catch (error: any) {
@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
     const driversLicensePhoto = formData.get('driversLicensePhoto');
     if (driversLicensePhoto instanceof File && driversLicensePhoto.size > 0) {
       try {
-        const upload = await uploadFileToS3(driversLicensePhoto, `applications/${Date.now()}/drivers-license`);
+        const upload = await uploadFileToMedia(driversLicensePhoto, `applications/${Date.now()}/drivers-license`);
         driversLicenseUrl = upload.url;
         driversLicenseKey = upload.key;
       } catch (error: any) {

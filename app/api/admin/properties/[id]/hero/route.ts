@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { uploadFileToS3, deleteFileFromS3 } from '@/lib/storage';
+import { uploadFileToMedia, deleteFileFromMedia } from '@/lib/storage';
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }){
   const { id } = await context.params;
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     return NextResponse.json({ message: 'Property not found.' }, { status: 404 });
   }
 
-  const upload = await uploadFileToS3(file, `properties/${property.slug || id}/hero`);
+  const upload = await uploadFileToMedia(file, `properties/${property.slug || id}/hero`);
 
   const updated = await prisma.property.update({
     where: { id },
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
   if (property.heroImageKey){
     try {
-      await deleteFileFromS3(property.heroImageKey);
+      await deleteFileFromMedia(property.heroImageKey);
     } catch {
       // ignore clean-up errors
     }

@@ -1,99 +1,69 @@
-import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import crypto from 'crypto';
+import { mkdir, unlink, writeFile } from 'node:fs/promises';
+import path from 'node:path';
 import sharp from 'sharp';
 
-// Prefer UPH_ names for Amplify, but keep AWS_/generic S3 fallbacks for local use
-// and S3-compatible providers such as R2 or B2.
-const bucket = process.env.S3_BUCKET_NAME || process.env.UPH_S3_BUCKET;
-const region = process.env.UPH_AWS_REGION || process.env.AWS_REGION;
-const accessKeyId = process.env.UPH_AWS_ACCESS_KEY_ID || process.env.AWS_ACCESS_KEY_ID;
-const secretAccessKey = process.env.UPH_AWS_SECRET_ACCESS_KEY || process.env.AWS_SECRET_ACCESS_KEY;
-const endpoint = process.env.UPH_S3_ENDPOINT || process.env.S3_ENDPOINT;
-const publicUrlBase = (process.env.UPH_S3_PUBLIC_URL_BASE || process.env.S3_PUBLIC_URL_BASE || '').replace(/\/+$/, '');
-const forcePathStyle = /^(1|true|yes)$/i.test(
-  process.env.UPH_S3_FORCE_PATH_STYLE || process.env.S3_FORCE_PATH_STYLE || ''
-);
-
-if (bucket && (!region || !accessKeyId || !secretAccessKey)){
-  console.warn(
-    'Storage credentials are incomplete. Uploads will fail until region, access key, secret key, and bucket are set.'
-  );
-}
-
-if (endpoint && !publicUrlBase) {
-  console.warn(
-    'Custom S3 endpoint detected without S3_PUBLIC_URL_BASE/UPH_S3_PUBLIC_URL_BASE. Stored asset URLs may not be publicly reachable.'
-  );
-}
-
-const s3Client = bucket && region && accessKeyId && secretAccessKey
-  ? new S3Client({
-      region,
-      credentials: { accessKeyId, secretAccessKey },
-      endpoint,
-      forcePathStyle,
-    })
-  : null;
+const mediaRoot = process.env.MEDIA_ROOT ||
+  (process.env.NODE_ENV === 'production' ? '/app/media' : path.join(process.cwd(), 'media'));
+const mediaUrl = process.env.MEDIA_URL || '/media/';
 
 function encodeObjectKey(key: string){
   return key.split('/').map((segment)=> encodeURIComponent(segment)).join('/');
 }
 
-function buildObjectUrl(key: string){
-  const encodedKey = encodeObjectKey(key);
-
-  if (publicUrlBase) {
-    return `${publicUrlBase}/${encodedKey}`;
-  }
-
-  if (endpoint) {
-    const normalizedEndpoint = endpoint.replace(/\/+$/, '');
-    if (forcePathStyle) {
-      return `${normalizedEndpoint}/${bucket}/${encodedKey}`;
-    }
-    return `${normalizedEndpoint}/${encodedKey}`;
-  }
-
-  return `https://${bucket}.s3.${region}.amazonaws.com/${encodedKey}`;
+function buildMediaUrl(key: string){
+  return `${mediaUrl.replace(/\/?$/, '/')}${encodeObjectKey(key)}`;
 }
 
-function sanitizeFileName(name: string){
-  return name
+function sanitizePathSegment(value: string){
+  return value
     .toLowerCase()
     .replace(/[^a-z0-9.-]+/g, '-')
     .replace(/-+/g, '-')
     .replace(/^-|-$/g, '');
 }
 
+function sanitizePrefix(prefix: string){
+  return prefix
+    .split('/')
+    .map((segment)=> sanitizePathSegment(segment))
+    .filter(Boolean)
+    .join('/');
+}
+
+function sanitizeFileName(name: string){
+  return sanitizePathSegment(name) || 'upload';
+}
+
+function assertInsideMediaRoot(targetPath: string){
+  const root = path.resolve(mediaRoot);
+  const target = path.resolve(targetPath);
+  if (target !== root && !target.startsWith(`${root}${path.sep}`)){
+    throw new Error('Resolved media path is outside MEDIA_ROOT.');
+  }
+}
+
 /**
- * Compress and optimize image before upload
- * - Converts to JPEG format for consistency
- * - Resizes if image is larger than 3840px on the longest side
- * - Compresses with quality 85 (good balance of size/quality)
- * - Strips EXIF data to reduce file size
+ * Compress and optimize image before upload.
  */
-async function optimizeImage(file: File): Promise<{ buffer: Buffer; contentType: string }> {
+async function optimizeFile(file: File): Promise<Buffer> {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
-  
-  // Check if it's an image file
-  const isImage = file.type.startsWith('image/');
-  if (!isImage) {
-    return { buffer, contentType: file.type || 'application/octet-stream' };
+
+  if (!file.type.startsWith('image/')) {
+    return buffer;
   }
 
   try {
     const image = sharp(buffer);
     const metadata = await image.metadata();
-    
-    // Max dimensions: 3840px on longest side (4K width, good for web)
     const maxDimension = 3840;
-    const needsResize = metadata.width && metadata.height && 
-                        (metadata.width > maxDimension || metadata.height > maxDimension);
+    const needsResize = metadata.width && metadata.height &&
+      (metadata.width > maxDimension || metadata.height > maxDimension);
 
     let processedImage = image
       .jpeg({ quality: 85, progressive: true, mozjpeg: true })
-      .withMetadata({}); // Strip metadata (EXIF, etc.)
+      .withMetadata({});
 
     if (needsResize) {
       processedImage = processedImage.resize(maxDimension, maxDimension, {
@@ -102,58 +72,43 @@ async function optimizeImage(file: File): Promise<{ buffer: Buffer; contentType:
       });
     }
 
-    const optimizedBuffer = await processedImage.toBuffer();
-    
-    return {
-      buffer: optimizedBuffer,
-      contentType: 'image/jpeg',
-    };
+    return processedImage.toBuffer();
   } catch (error) {
-    // If optimization fails, return original file
-    console.warn('Image optimization failed, uploading original:', error);
-    return { buffer, contentType: file.type || 'application/octet-stream' };
+    console.warn('Image optimization failed, saving original:', error);
+    return buffer;
   }
 }
 
-export async function uploadFileToS3(file: File, prefix: string){
-  if (!s3Client || !bucket){
-    throw new Error(
-      'Storage client is not configured. Set bucket, region, access key, and secret key environment variables.'
-    );
-  }
-
+export async function uploadFileToMedia(file: File, prefix: string){
+  const safePrefix = sanitizePrefix(prefix);
   const originalName = file.name || 'upload';
-  let safeName = sanitizeFileName(originalName);
-  if (!safeName) safeName = 'upload';
-  
-  // Use .jpg extension for optimized images, keep original extension for non-images
-  const ext = file.type.startsWith('image/') ? '.jpg' : '';
-  const key = `${prefix}/${Date.now()}-${crypto.randomUUID()}-${safeName}${ext}`;
-  
-  // Optimize image if it's an image file
-  const { buffer, contentType } = await optimizeImage(file);
+  const safeName = sanitizeFileName(originalName);
+  const baseName = file.type.startsWith('image/') ? safeName.replace(/\.[^.]+$/, '') : safeName;
+  const fileName = file.type.startsWith('image/')
+    ? `${Date.now()}-${crypto.randomUUID()}-${baseName}.jpg`
+    : `${Date.now()}-${crypto.randomUUID()}-${safeName}`;
+  const key = [safePrefix, fileName].filter(Boolean).join('/');
+  const targetPath = path.join(mediaRoot, key);
 
-  await s3Client.send(new PutObjectCommand({
-    Bucket: bucket,
-    Key: key,
-    Body: buffer,
-    ContentType: contentType,
-    CacheControl: 'public, max-age=31536000, immutable', // Cache for 1 year
-  }));
+  assertInsideMediaRoot(targetPath);
+  await mkdir(path.dirname(targetPath), { recursive: true });
+  await writeFile(targetPath, await optimizeFile(file));
 
   return {
-    url: buildObjectUrl(key),
+    url: buildMediaUrl(key),
     key,
   };
 }
 
-export async function deleteFileFromS3(key: string){
-  if (!s3Client || !bucket){
-    throw new Error('S3 client is not configured.');
-  }
+export async function deleteFileFromMedia(key: string){
+  const targetPath = path.join(mediaRoot, key);
+  assertInsideMediaRoot(targetPath);
 
-  await s3Client.send(new DeleteObjectCommand({
-    Bucket: bucket,
-    Key: key,
-  }));
+  try {
+    await unlink(targetPath);
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+      throw error;
+    }
+  }
 }

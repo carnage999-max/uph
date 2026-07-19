@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { Resend } from 'resend';
 import { prisma } from '@/lib/prisma';
-import { uploadFileToS3 } from '@/lib/storage';
+import { uploadFileToMedia } from '@/lib/storage';
 import { verifyTurnstileToken } from '@/lib/turnstile';
 import { company } from '@/lib/data';
 import { siteConfig } from '@/lib/metadata';
@@ -42,7 +42,7 @@ export async function POST(request: NextRequest){
 
   if (media instanceof File && media.size > 0){
     try {
-      const upload = await uploadFileToS3(media, `maintenance/${Date.now()}`);
+      const upload = await uploadFileToMedia(media, `maintenance/${Date.now()}`);
       attachmentUrl = upload.url;
       attachmentKey = upload.key;
     } catch (error: any) {

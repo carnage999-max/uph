@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { uploadFileToS3 } from '@/lib/storage';
+import { uploadFileToMedia } from '@/lib/storage';
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }){
   const { id } = await context.params;
@@ -26,7 +26,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
   const uploads = [];
   for (const file of files){
-    const upload = await uploadFileToS3(file, `properties/${property.slug || id}/gallery`);
+    const upload = await uploadFileToMedia(file, `properties/${property.slug || id}/gallery`);
     uploads.push(upload);
   }
 

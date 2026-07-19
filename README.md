@@ -1,7 +1,7 @@
 # Ultimate Property Holdings
 
 Modern property marketing site built with **Next.js App Router**, **TypeScript**, and **Tailwind**.  
-It now includes a secure admin console for managing listings, units, and maintenance tickets backed by **PostgreSQL (Prisma)** and **S3-compatible object storage** for media.
+It includes a secure admin console for managing listings, units, and maintenance tickets backed by **PostgreSQL (Prisma)** and local filesystem media storage.
 
 ---
 
@@ -42,7 +42,7 @@ It now includes a secure admin console for managing listings, units, and mainten
 | Next.js App Router | Renders public pages and server components; hosts admin UI. |
 | Prisma ORM | Data access, migrations, and type-safe client. |
 | PostgreSQL | Persistent storage for properties, units, media, and maintenance tickets. |
-| S3-compatible object storage | File storage for property/unit imagery and maintenance attachments. |
+| Local filesystem media storage | File storage for property/unit imagery and maintenance attachments. |
 | JWT session | `ADMIN_EMAIL` / `ADMIN_PASSWORD` auth with `ADMIN_JWT_SECRET` signed cookie. |
 
 ---
@@ -51,8 +51,8 @@ It now includes a secure admin console for managing listings, units, and mainten
 
 - Node.js ≥ 20
 - pnpm (or npm/yarn) – repo uses pnpm
-- PostgreSQL instance (Neon, RDS, etc.) reachable via `DATABASE_URL`
-- S3-compatible bucket + API credentials with `PutObject`/`DeleteObject`
+- PostgreSQL instance reachable via `DATABASE_URL`
+- Writable media directory exposed through `MEDIA_ROOT`
 
 ---
 
@@ -71,23 +71,15 @@ ADMIN_PASSWORD=replace-me
 ADMIN_JWT_SECRET=replace-me-with-a-long-random-secret
 
 # Storage
-# Local/dev can use AWS_* or UPH_AWS_*.
-# Amplify should use UPH_* names because AWS_* is reserved there.
-S3_BUCKET_NAME=uph-media-bucket
-AWS_REGION=us-east-1
-AWS_ACCESS_KEY_ID=...
-AWS_SECRET_ACCESS_KEY=...
-
-# Optional for S3-compatible providers like Cloudflare R2 / Backblaze B2
-S3_ENDPOINT=
-S3_PUBLIC_URL_BASE=
-S3_FORCE_PATH_STYLE=true
+MEDIA_ROOT=/app/media
+MEDIA_URL=/media/
 
 # Optional contact/notification destinations
 RESEND_API_KEY=...
 CONTACT_FROM=Ultimate Property Holdings <noreply@example.com>
 CONTACT_TO=ops@example.com
 APP_ORIGIN=http://localhost:3000
+NEXT_PUBLIC_APP_ORIGIN=http://localhost:3000
 
 # External maintenance API (optional)
 MAINTENANCE_API_KEY=
@@ -155,7 +147,7 @@ Key entities:
 1. Browse to `/admin/login` and authenticate using `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 2. Dashboard (`/admin`) lists all properties with availability snapshots and quick actions.
 3. Use `/admin/create` wizard to add new properties (hero image + optional units).  
-   - Uploads go directly to object storage; generated URLs + keys are stored in the DB.
+  - Uploads are written to `MEDIA_ROOT`; generated `/media/...` URLs + keys are stored in the DB.
 4. `/admin/edit/[id]` allows:
    - Updating hero image & gallery.
    - Editing core metadata and amenity lists.
@@ -169,7 +161,7 @@ Key entities:
 
 - Public `/maintenance` page contains the online request form.
 - Submissions hit `POST /api/maintenance`, saving data to `MaintenanceRequest`.
-- Optional photo/video uploads are stored in object storage with stored object keys for auditing.
+- Optional photo/video uploads are stored in `MEDIA_ROOT` with stored object keys for auditing.
 - Admin reporting endpoints can be added later (e.g., `/admin/maintenance`) to display/request status changes.
 
 ---
@@ -192,7 +184,7 @@ lib/
   constants.ts                – shared className tokens
   prisma.ts                   – Prisma client singleton
   properties.ts               – read helpers mapping Prisma models
-  storage.ts                  – S3 upload/delete utilities
+  storage.ts                  – local media upload/delete utilities
 prisma/
   schema.prisma               – data model
   prisma.config.ts            – CLI config
@@ -205,4 +197,4 @@ prisma/
 - Seed properties via the admin wizard using the historical data in `data/properties.json`.
 - Integrate Resend (or preferred email service) for contact & maintenance notifications.
 - Harden admin with multi-user support or role-based access if needed.
-- If moving off AWS S3, follow [docs/r2-migration.md](/Users/Apple/Desktop/11011/uph/docs/r2-migration.md) for the Cloudflare R2 cutover.
+- For Coolify deployment on se7en, follow [DEPLOY_COOLIFY.md](/Users/Apple/Desktop/11011/uph/DEPLOY_COOLIFY.md).

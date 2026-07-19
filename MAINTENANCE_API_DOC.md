@@ -82,7 +82,7 @@ curl -X PATCH \
 - Keep the API key secret and rotate periodically.
 - All requests must use HTTPS.
 - **CORS:** Set `MAINTENANCE_API_CORS_ORIGIN` (or `UPH_MAINTENANCE_API_CORS_ORIGIN`) to allow requests from your task manager origin (e.g., `https://tasks.myapp.com`). Defaults to `*` if not set.
-- Attachments are uploaded to object storage — ensure bucket, region, access key, and secret key env vars are configured on the server. For Amplify, use the `UPH_*` variants.
+- Attachments are written to local media storage — ensure `MEDIA_ROOT` is writable and `MEDIA_URL` is configured on the server.
 - Email sending uses Resend — set `RESEND_API_KEY` and `CONTACT_FROM`/`CONTACT_TO` as needed.
 
 ## Implementation references

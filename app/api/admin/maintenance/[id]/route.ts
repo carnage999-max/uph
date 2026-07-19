@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requireAdminSession } from '@/lib/auth';
-import { uploadFileToS3 } from '@/lib/storage';
+import { uploadFileToMedia } from '@/lib/storage';
 import { sendMaintenanceStatusUpdateEmail } from '@/lib/email-notifications';
 
 export async function PATCH(
@@ -31,7 +31,7 @@ export async function PATCH(
 
       if (media instanceof File && media.size > 0) {
         try {
-          const upload = await uploadFileToS3(media, `maintenance-updates/${Date.now()}`);
+          const upload = await uploadFileToMedia(media, `maintenance-updates/${Date.now()}`);
           commentAttachmentUrl = upload.url;
           commentAttachmentKey = upload.key;
         } catch (error: any) {

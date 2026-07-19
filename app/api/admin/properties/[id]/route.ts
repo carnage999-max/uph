@@ -1,6 +1,6 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { deleteFileFromS3 } from '@/lib/storage';
+import { deleteFileFromMedia } from '@/lib/storage';
 
 export const maxDuration = 60;
 
@@ -38,7 +38,7 @@ export async function DELETE(_: NextRequest, context: { params: Promise<{ id: st
 
   for (const key of keysToRemove){
     try {
-      await deleteFileFromS3(key);
+      await deleteFileFromMedia(key);
     } catch {
       // Silently ignore clean-up errors to avoid failing the request
     }

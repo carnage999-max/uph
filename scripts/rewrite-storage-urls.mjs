@@ -36,14 +36,12 @@ async function main() {
   const apply = hasFlag('apply');
   const publicUrlBase = normalizeBaseUrl(
     getArgValue('base') ||
-      process.env.R2_PUBLIC_URL_BASE ||
-      process.env.S3_PUBLIC_URL_BASE ||
-      process.env.UPH_S3_PUBLIC_URL_BASE
+      process.env.MEDIA_URL
   );
 
   if (!publicUrlBase) {
     throw new Error(
-      'Missing public URL base. Pass --base=https://assets.example.com or set S3_PUBLIC_URL_BASE / UPH_S3_PUBLIC_URL_BASE.'
+      'Missing public URL base. Pass --base=/media or set MEDIA_URL.'
     );
   }
 
@@ -145,7 +143,7 @@ async function main() {
 
   if (!apply) {
     console.log('');
-    console.log('Dry run complete. After your objects are copied to R2, apply with:');
+    console.log('Dry run complete. After your objects are copied to MEDIA_ROOT, apply with:');
     console.log(`pnpm storage:rewrite-urls -- --base=${publicUrlBase} --apply`);
     return;
   }

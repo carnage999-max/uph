@@ -12,7 +12,6 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.916.0",
     "@prisma/client": "^6.18.0",
     "@types/pdfkit": "^0.17.4",
     "@types/react-signature-canvas": "^1.0.7",

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { listProperties, generateUniquePropertySlug } from '@/lib/properties';
-import { uploadFileToS3 } from '@/lib/storage';
+import { uploadFileToMedia } from '@/lib/storage';
 import { requireAdminAuth } from '@/lib/auth/api-middleware';
 
 // Configure route to handle large uploads
@@ -50,13 +50,13 @@ export async function POST(request: NextRequest){
   const slug = await generateUniquePropertySlug(payload.name);
 
   try {
-    const heroUpload = await uploadFileToS3(heroFile, `properties/${slug}/hero`);
+    const heroUpload = await uploadFileToMedia(heroFile, `properties/${slug}/hero`);
 
     const galleryUploads: Array<{ url: string; key: string }> = [];
     for (const fieldName of payload.galleryFields ?? []){
       const galleryFile = formData.get(fieldName);
       if (galleryFile instanceof File && galleryFile.size > 0){
-        const upload = await uploadFileToS3(galleryFile, `properties/${slug}/gallery`);
+        const upload = await uploadFileToMedia(galleryFile, `properties/${slug}/gallery`);
         galleryUploads.push(upload);
       }
     }
@@ -76,13 +76,13 @@ export async function POST(request: NextRequest){
       if (unitPayload.coverImageField){
         const coverFile = formData.get(unitPayload.coverImageField);
         if (coverFile instanceof File && coverFile.size > 0){
-          uploads.cover = await uploadFileToS3(coverFile, `${unitPrefix}/cover`);
+          uploads.cover = await uploadFileToMedia(coverFile, `${unitPrefix}/cover`);
         }
       }
       for (const galleryField of unitPayload.galleryFields ?? []){
         const unitGalleryFile = formData.get(galleryField);
         if (unitGalleryFile instanceof File && unitGalleryFile.size > 0){
-          const upload = await uploadFileToS3(unitGalleryFile, `${unitPrefix}/gallery`);
+          const upload = await uploadFileToMedia(unitGalleryFile, `${unitPrefix}/gallery`);
           uploads.gallery.push(upload);
         }
       }
