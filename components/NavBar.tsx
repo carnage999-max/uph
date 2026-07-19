@@ -3,7 +3,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { styles } from '@/lib/constants';
-import Image from 'next/image';
+import Image from '@/components/MediaImage';
 import LuxuryCTA from '@/components/LuxuryCTA';
 
 const links = [

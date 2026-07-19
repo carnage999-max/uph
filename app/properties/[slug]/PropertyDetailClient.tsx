@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from '@/components/MediaImage';
 import { useEffect, useMemo, useState } from 'react';
 import { Play, Wrench } from 'lucide-react';
 import { styles } from '@/lib/constants';

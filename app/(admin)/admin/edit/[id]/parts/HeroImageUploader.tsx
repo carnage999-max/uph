@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from '@/components/MediaImage';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { styles } from '@/lib/constants';

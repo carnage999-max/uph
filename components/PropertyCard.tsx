@@ -1,5 +1,5 @@
 import { styles } from '@/lib/constants';
-import Image from 'next/image';
+import Image from '@/components/MediaImage';
 import Link from 'next/link';
 import { Wrench } from 'lucide-react';
 import type { Property } from '@/lib/types';

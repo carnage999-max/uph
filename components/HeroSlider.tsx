@@ -1,5 +1,5 @@
 'use client';
-import Image from 'next/image';
+import Image from '@/components/MediaImage';
 import { useEffect, useMemo, useState } from 'react';
 import { styles } from '@/lib/constants';
 import LuxuryCTA from '@/components/LuxuryCTA';

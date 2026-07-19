@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { Facebook, Instagram } from 'lucide-react';
-import Image from 'next/image';
+import Image from '@/components/MediaImage';
 
 function getCurrentYear() {
   return new Date().getFullYear();

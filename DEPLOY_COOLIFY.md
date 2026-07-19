@@ -47,7 +47,7 @@ If `3007` is already taken on se7en, choose another free `30xx` host port.
 Add one Directory Mount:
 
 ```bash
-Source: /mnt/data/media/atlasproperties/
+Source: /mnt/data/media/ultimate-property-holdings/
 Destination: /app/media
 ```
 
@@ -108,7 +108,7 @@ docker exec -it <app-container> pnpm prisma db push
 Copy existing object-storage files to:
 
 ```bash
-/mnt/data/media/atlasproperties/
+/mnt/data/media/ultimate-property-holdings/
 ```
 
 Preserve the existing object keys as relative paths, for example:
@@ -133,7 +133,7 @@ server {
     server_name atlasproperties.net www.atlasproperties.net;
 
     location /media/ {
-        alias /mnt/data/media/atlasproperties/;
+        alias /mnt/data/media/ultimate-property-holdings/;
         sendfile on;
         tcp_nopush on;
         expires 30d;
