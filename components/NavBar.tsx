@@ -49,8 +49,13 @@ export default function NavBar() {
             <div className="font-cinzel text-sm font-semibold tracking-wide text-[#e8e8e8] sm:text-base">
               Atlas
             </div>
-            <div className="font-montserrat text-[10px] font-medium uppercase tracking-[0.22em] text-[#c9a227] sm:text-xs">
-              Properties
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="font-montserrat text-[10px] font-medium uppercase tracking-[0.22em] text-[#c9a227] sm:text-xs">
+                Properties
+              </span>
+              <span className="text-[10px] font-medium uppercase tracking-[0.2em] text-[#e8e8e8] opacity-80 sm:text-xs">
+                since 1999
+              </span>
             </div>
           </div>
         </Link>
