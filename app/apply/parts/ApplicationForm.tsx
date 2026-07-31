@@ -111,6 +111,93 @@ const INITIAL_FORM_DATA: FormData = {
   additionalNotes: '',
 };
 
+const MAX_APPLICATION_IMAGE_BYTES = 1.5 * 1024 * 1024;
+
+async function compressApplicationImage(file: File): Promise<File> {
+  if (!file.type.startsWith('image/')) return file;
+
+  const dataUrl = await new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onerror = () => reject(new Error('Unable to read image file.'));
+    reader.onload = () => resolve(String(reader.result || ''));
+    reader.readAsDataURL(file);
+  });
+
+  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+    const img = new Image();
+    img.onerror = () => reject(new Error('Unable to process this image. Please choose a JPG or PNG file.'));
+    img.onload = () => resolve(img);
+    img.src = dataUrl;
+  });
+
+  let maxDimension = 1800;
+  const qualities = [0.82, 0.74, 0.66, 0.58];
+
+  for (let pass = 0; pass < 3; pass += 1) {
+    const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
+    const width = Math.max(1, Math.round(image.width * scale));
+    const height = Math.max(1, Math.round(image.height * scale));
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const context = canvas.getContext('2d');
+    if (!context) break;
+
+    context.drawImage(image, 0, 0, width, height);
+
+    for (const quality of qualities) {
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob(resolve, 'image/jpeg', quality);
+      });
+
+      if (!blob) continue;
+
+      const compressed = new File(
+        [blob],
+        file.name.replace(/\.[^.]+$/, '') || 'application-image',
+        { type: 'image/jpeg' }
+      );
+
+      if (compressed.size <= MAX_APPLICATION_IMAGE_BYTES) {
+        return compressed;
+      }
+    }
+
+    maxDimension = Math.round(maxDimension * 0.75);
+  }
+
+  throw new Error('That image is too large to submit. Please upload a smaller photo.');
+}
+
+async function readResponseBody(response: Response): Promise<{ error?: string; ok?: boolean }> {
+  const contentType = response.headers.get('content-type') || '';
+  if (contentType.includes('application/json')) {
+    return response.json().catch(() => ({}));
+  }
+
+  const body = await response.text().catch(() => '');
+  const trimmedBody = body.trim();
+  if (trimmedBody.startsWith('{') || trimmedBody.startsWith('[')) {
+    try {
+      return JSON.parse(trimmedBody);
+    } catch {
+      // Fall through to a status-based message.
+    }
+  }
+
+  if (response.status === 413) {
+    return { error: 'The uploaded images are too large. Please choose smaller photos and try again.' };
+  }
+
+  console.error('Unexpected apply response:', {
+    status: response.status,
+    contentType,
+    body: body.slice(0, 300),
+  });
+
+  return { error: `The application service returned an unexpected response (${response.status}). Please try again.` };
+}
+
 export default function ApplicationForm({ properties }: { properties: Property[] }){
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>(INITIAL_FORM_DATA);
@@ -196,27 +283,45 @@ export default function ApplicationForm({ properties }: { properties: Property[]
     }));
   };
 
-  const handlePetPhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePetPhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      updateFormData('petPhoto', file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPetPhotoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        setErr(null);
+        const compressedFile = await compressApplicationImage(file);
+        updateFormData('petPhoto', compressedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setPetPhotoPreview(reader.result as string);
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error: any) {
+        updateFormData('petPhoto', null);
+        setPetPhotoPreview(null);
+        e.currentTarget.value = '';
+        setErr(error.message || 'Unable to process the pet photo.');
+      }
     }
   };
 
-  const handleLicensePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleLicensePhotoChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      updateFormData('driversLicensePhoto', file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setLicensePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        setErr(null);
+        const compressedFile = await compressApplicationImage(file);
+        updateFormData('driversLicensePhoto', compressedFile);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setLicensePreview(reader.result as string);
+        };
+        reader.readAsDataURL(compressedFile);
+      } catch (error: any) {
+        updateFormData('driversLicensePhoto', null);
+        setLicensePreview(null);
+        e.currentTarget.value = '';
+        setErr(error.message || "Unable to process the driver's license photo.");
+      }
     }
   };
 
@@ -232,47 +337,73 @@ export default function ApplicationForm({ properties }: { properties: Property[]
     }
   };
 
-  const validateStep = (step: number): boolean => {
+  const getStepError = (step: number): string | null => {
     switch(step) {
       case 1:
-        return !!formData.property;
+        if (!formData.property) return 'Please select a property before continuing.';
+        if (availableUnits.length > 0 && !formData.unit) return 'Please select a unit before continuing.';
+        return null;
       case 2:
-        return !!(formData.firstName && formData.lastName && formData.email && formData.phone && formData.dateOfBirth && formData.ssn);
+        if (!formData.firstName.trim()) return 'Please enter your first name.';
+        if (!formData.lastName.trim()) return 'Please enter your last name.';
+        if (!formData.email.trim()) return 'Please enter your email address.';
+        if (!formData.phone.trim()) return 'Please enter your phone number.';
+        if (!formData.dateOfBirth) return 'Please enter your date of birth.';
+        if (!formData.ssn.trim()) return 'Please enter your Social Security number.';
+        if (!/^[0-9]{3}-[0-9]{2}-[0-9]{4}$/.test(formData.ssn)) return 'Please enter your Social Security number in XXX-XX-XXXX format.';
+        return null;
       case 3:
-        return true; // Current address is optional
+        return null; // Current address is optional
       case 4:
-        return true; // Landlord info is optional but recommended
+        return null; // Landlord info is optional but recommended
       case 5:
-        return formData.references.length >= 2 && 
-               formData.references.every(ref => ref.name && ref.relationship && ref.phone);
+        if (formData.references.length < 2) return 'Please provide at least two personal references.';
+        for (let index = 0; index < formData.references.length; index += 1) {
+          const ref = formData.references[index];
+          if (!ref.name.trim()) return `Please enter a name for Reference ${index + 1}.`;
+          if (!ref.relationship.trim()) return `Please enter a relationship for Reference ${index + 1}.`;
+          if (!ref.phone.trim()) return `Please enter a phone number for Reference ${index + 1}.`;
+        }
+        return null;
       case 6:
         if (formData.hasPet) {
-          return !!formData.petType && !!formData.petPhoto;
+          if (!formData.petType.trim()) return 'Please enter your pet type.';
+          if (!formData.petPhoto) return 'Please upload a pet photo.';
         }
-        return true;
+        return null;
       case 7:
-        return !!formData.driversLicensePhoto;
+        if (!formData.driversLicensePhoto) return "Please upload a photo of your driver's license.";
+        return null;
       case 8:
-        return formData.authorizeCriminalCheck && formData.authorizeCreditCheck;
+        if (!formData.authorizeCriminalCheck) return 'Please authorize the criminal background check.';
+        if (!formData.authorizeCreditCheck) return 'Please authorize the credit check.';
+        return null;
       case 9:
-        return !!formData.signature;
+        if (!formData.signature && (!signatureRef.current || signatureRef.current.isEmpty())) {
+          return 'Please provide your signature before continuing.';
+        }
+        return null;
       case 10:
-        return !!(formData.monthlyIncome);
+        if (!formData.monthlyIncome) return 'Please enter your monthly income.';
+        if (!captchaToken) return 'Please complete the CAPTCHA verification.';
+        return null;
       default:
-        return true;
+        return null;
     }
   };
 
   const nextStep = () => {
-    if (validateStep(currentStep)) {
-      if (currentStep === 9) {
-        saveSignature();
-      }
-      setCurrentStep(prev => Math.min(prev + 1, totalSteps));
-    } else {
-      setErr('Please complete all required fields before proceeding.');
-      setTimeout(() => setErr(null), 5000);
+    const stepError = getStepError(currentStep);
+    if (stepError) {
+      setErr(stepError);
+      return;
     }
+
+    if (currentStep === 9) {
+      saveSignature();
+    }
+    setErr(null);
+    setCurrentStep(prev => Math.min(prev + 1, totalSteps));
   };
 
   const prevStep = () => {
@@ -290,18 +421,22 @@ export default function ApplicationForm({ properties }: { properties: Property[]
       saveSignature();
     }
 
-    if (!validateStep(currentStep)) {
-      setErr('Please complete all required fields.');
+    for (let step = 1; step <= totalSteps; step += 1) {
+      const stepError = getStepError(step);
+      if (stepError) {
+        setCurrentStep(step);
+        setErr(stepError);
+        return;
+      }
+    }
+
+    if (!formData.signature) {
+      setErr('Please provide your signature.');
       return;
     }
 
     if (!captchaToken) {
       setErr('Please complete the CAPTCHA verification.');
-      return;
-    }
-
-    if (!formData.signature) {
-      setErr('Please provide your signature.');
       return;
     }
 
@@ -363,7 +498,7 @@ export default function ApplicationForm({ properties }: { properties: Property[]
         body: formDataToSend
       });
       
-      const j = await res.json();
+      const j = await readResponseBody(res);
       if(!res.ok) throw new Error(j.error || 'Failed to submit application');
       
       setOk('Thank you! Your application has been submitted successfully. We will contact you shortly.');
