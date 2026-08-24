@@ -92,7 +92,19 @@ export default function Footer() {
       </div>
 
       <div className="border-t border-[rgba(201,162,39,0.1)] py-4 text-center text-xs text-[#6b7280]">
-        © {getCurrentYear()} Atlas Properties. All Rights Reserved.
+        <p>© {getCurrentYear()} Atlas Properties. All Rights Reserved.</p>
+        <p className="mt-1">
+          Part of the{" "}
+          <a
+            href="https://se7eninc.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline hover:text-[#e5c878] transition-colors"
+          >
+            Se7en
+          </a>{" "}
+          family of companies.
+        </p>
       </div>
     </footer>
   );
