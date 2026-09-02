@@ -111,7 +111,7 @@ const INITIAL_FORM_DATA: FormData = {
   additionalNotes: '',
 };
 
-const MAX_APPLICATION_IMAGE_BYTES = 1.5 * 1024 * 1024;
+const MAX_APPLICATION_IMAGE_BYTES = 10 * 1024 * 1024;
 
 async function compressApplicationImage(file: File): Promise<File> {
   if (!file.type.startsWith('image/')) return file;
