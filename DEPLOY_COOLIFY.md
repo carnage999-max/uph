@@ -131,6 +131,7 @@ Use this host config shape:
 server {
     listen 80;
     server_name atlasproperties.net www.atlasproperties.net;
+    client_max_body_size 25m;
 
     location /media/ {
         alias /mnt/data/media/ultimate-property-holdings/;

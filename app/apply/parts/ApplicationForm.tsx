@@ -114,59 +114,70 @@ const INITIAL_FORM_DATA: FormData = {
 const MAX_APPLICATION_IMAGE_BYTES = 10 * 1024 * 1024;
 
 async function compressApplicationImage(file: File): Promise<File> {
-  if (!file.type.startsWith('image/')) return file;
-
-  const dataUrl = await new Promise<string>((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onerror = () => reject(new Error('Unable to read image file.'));
-    reader.onload = () => resolve(String(reader.result || ''));
-    reader.readAsDataURL(file);
-  });
-
-  const image = await new Promise<HTMLImageElement>((resolve, reject) => {
-    const img = new Image();
-    img.onerror = () => reject(new Error('Unable to process this image. Please choose a JPG or PNG file.'));
-    img.onload = () => resolve(img);
-    img.src = dataUrl;
-  });
-
-  let maxDimension = 1800;
-  const qualities = [0.82, 0.74, 0.66, 0.58];
-
-  for (let pass = 0; pass < 3; pass += 1) {
-    const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
-    const width = Math.max(1, Math.round(image.width * scale));
-    const height = Math.max(1, Math.round(image.height * scale));
-    const canvas = document.createElement('canvas');
-    canvas.width = width;
-    canvas.height = height;
-    const context = canvas.getContext('2d');
-    if (!context) break;
-
-    context.drawImage(image, 0, 0, width, height);
-
-    for (const quality of qualities) {
-      const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob(resolve, 'image/jpeg', quality);
-      });
-
-      if (!blob) continue;
-
-      const compressed = new File(
-        [blob],
-        file.name.replace(/\.[^.]+$/, '') || 'application-image',
-        { type: 'image/jpeg' }
-      );
-
-      if (compressed.size <= MAX_APPLICATION_IMAGE_BYTES) {
-        return compressed;
-      }
-    }
-
-    maxDimension = Math.round(maxDimension * 0.75);
+  if (!file.type.startsWith('image/')) {
+    if (file.size <= MAX_APPLICATION_IMAGE_BYTES) return file;
+    throw new Error('That file is too large to submit. Please upload a smaller file.');
   }
 
-  throw new Error('That image is too large to submit. Please upload a smaller photo.');
+  const objectUrl = URL.createObjectURL(file);
+
+  try {
+    const image = await new Promise<HTMLImageElement>((resolve, reject) => {
+      const img = new Image();
+      img.onerror = () => reject(new Error('Unable to process this image. Please choose a JPG or PNG file.'));
+      img.onload = () => resolve(img);
+      img.src = objectUrl;
+    });
+
+    let bestFile: File | null = null;
+    let maxDimension = 2200;
+    const qualities = [0.86, 0.78, 0.7, 0.62, 0.54, 0.46];
+    const baseName = file.name.replace(/\.[^.]+$/, '') || 'application-image';
+
+    for (let pass = 0; pass < 5; pass += 1) {
+      const scale = Math.min(1, maxDimension / Math.max(image.width, image.height));
+      const width = Math.max(1, Math.round(image.width * scale));
+      const height = Math.max(1, Math.round(image.height * scale));
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext('2d');
+      if (!context) break;
+
+      context.drawImage(image, 0, 0, width, height);
+
+      for (const quality of qualities) {
+        const blob = await new Promise<Blob | null>((resolve) => {
+          canvas.toBlob(resolve, 'image/jpeg', quality);
+        });
+
+        if (!blob) continue;
+
+        const compressed = new File(
+          [blob],
+          `${baseName}.jpg`,
+          { type: 'image/jpeg' }
+        );
+
+        if (!bestFile || compressed.size < bestFile.size) {
+          bestFile = compressed;
+        }
+
+        if (compressed.size <= MAX_APPLICATION_IMAGE_BYTES) {
+          return compressed;
+        }
+      }
+
+      maxDimension = Math.round(maxDimension * 0.7);
+    }
+
+    if (file.size <= MAX_APPLICATION_IMAGE_BYTES) return file;
+    if (bestFile && bestFile.size <= MAX_APPLICATION_IMAGE_BYTES) return bestFile;
+
+    throw new Error('That image is too large to submit. Please upload a smaller photo.');
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
 }
 
 async function readResponseBody(response: Response): Promise<{ error?: string; ok?: boolean }> {
