@@ -7,6 +7,7 @@ import StructuredData from '@/components/StructuredData';
 import { createMetadata, siteConfig } from '@/lib/metadata';
 import type { Metadata } from 'next';
 import { Cinzel, Montserrat, Open_Sans } from 'next/font/google';
+import Script from 'next/script';
 
 const cinzel = Cinzel({
   subsets: ['latin'],
@@ -57,6 +58,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }){
         <main className="">{children}</main>
         <Footer />
         <AdsBySe7enInc />
+        <Script
+          src="https://now-hiring-eta.vercel.app/widget.js"
+          data-icon="Building2"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
