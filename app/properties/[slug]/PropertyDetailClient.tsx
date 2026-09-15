@@ -2,7 +2,7 @@
 
 import Image from '@/components/MediaImage';
 import { useEffect, useMemo, useState } from 'react';
-import { Play, Wrench } from 'lucide-react';
+import { Play, Wrench, Tag, ExternalLink } from 'lucide-react';
 import { styles } from '@/lib/constants';
 import { isVideoUrl } from '@/lib/media';
 import VideoPlayer from '@/components/VideoPlayer';
@@ -110,6 +110,19 @@ export default function PropertyDetailClient({ property }: { property: Property 
               <Wrench className="h-3.5 w-3.5" />
               Under Construction
             </div>
+          </div>
+        )}
+        {property.forSaleUrl && (
+          <div className="absolute top-4 left-4">
+            <a
+              href={property.forSaleUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={styles.badgeForSale}
+            >
+              <Tag className="h-3.5 w-3.5" />
+              For Sale
+            </a>
           </div>
         )}
         {heroImages.length > 1 && (
@@ -285,6 +298,26 @@ export default function PropertyDetailClient({ property }: { property: Property 
         </div>
 
         <aside className={`${styles.card} ${styles.cardPad}`}>
+          {property.forSaleUrl && (
+            <div className="mb-6 rounded-xl border border-sky-500/30 bg-sky-950/30 p-4">
+              <div className="flex items-center gap-2 font-montserrat text-lg font-semibold text-sky-300">
+                <Tag className="h-4 w-4" />
+                This Property Is For Sale
+              </div>
+              <p className="mt-1 text-sm text-[#b0b0b0]">
+                View the full listing for pricing, size, and specifications.
+              </p>
+              <a
+                className={`${styles.btn} ${styles.btnPrimary} mt-3 inline-flex items-center gap-1.5`}
+                href={property.forSaleUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                View Listing
+                <ExternalLink className="h-3.5 w-3.5" />
+              </a>
+            </div>
+          )}
           <div className="font-montserrat text-lg font-semibold">Amenities</div>
           <ul className="mt-2 list-disc pl-6 text-sm text-[#d0d0d0]">
             {property.amenities.map((amenity) => (

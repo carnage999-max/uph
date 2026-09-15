@@ -103,6 +103,8 @@ export default function PropertyCreateWizard(){
   const [customType, setCustomType] = useState('');
   const [hasUnits, setHasUnits] = useState(true);
   const [underConstruction, setUnderConstruction] = useState(false);
+  const [forSale, setForSale] = useState(false);
+  const [forSaleUrl, setForSaleUrl] = useState('');
   const [units, setUnits] = useState<UnitForm[]>([]);
   const [amenitiesText, setAmenitiesText] = useState('');
   const [heroFile, setHeroFile] = useState<File | null>(null);
@@ -203,6 +205,10 @@ export default function PropertyCreateWizard(){
         setError('Select or provide a property type.');
         return false;
       }
+      if (forSale && !forSaleUrl.trim()){
+        setError('Add a listing link, or uncheck "This building is for sale".');
+        return false;
+      }
     }
     if (step === 1){
       if (!heroFile){
@@ -298,6 +304,7 @@ export default function PropertyCreateWizard(){
       amenities: parsedAmenities(),
       hasUnits,
       underConstruction,
+      forSaleUrl: forSale ? forSaleUrl.trim() : '',
       heroImageField: heroKey,
       galleryFields,
       units: unitsPayload,
@@ -392,6 +399,31 @@ export default function PropertyCreateWizard(){
                 />
                 <span className="text-sm font-medium text-gray-900">Mark property as Under Construction</span>
               </label>
+              <div className="space-y-2 rounded-xl border border-gray-200 p-3">
+                <label className="flex items-center gap-2 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={forSale}
+                    onChange={(e) => setForSale(e.target.checked)}
+                    className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                  />
+                  <span className="text-sm font-medium text-gray-900">This building is for sale</span>
+                </label>
+                {forSale && (
+                  <div className="pt-1">
+                    <label className="text-sm font-semibold text-gray-700">Listing link (MLS or your own listing)</label>
+                    <input
+                      className={`${styles.inputBase} mt-2`}
+                      value={forSaleUrl}
+                      onChange={(e) => setForSaleUrl(e.target.value)}
+                      placeholder="https://www.mlslistings.com/listing/..."
+                    />
+                    <p className="mt-1 text-xs text-gray-500">
+                      A &quot;For Sale&quot; tag will appear on the property card and detail page, linking here.
+                    </p>
+                  </div>
+                )}
+              </div>
               <Field
                 label="Street address"
                 required

@@ -25,9 +25,40 @@ async function addUnderConstructionColumn() {
   } catch (error) {
     console.error('[Migration] Error:', error);
     throw error;
+  }
+}
+
+async function addForSaleUrlColumn() {
+  try {
+    console.log('[Migration] Adding forSaleUrl column...');
+
+    await prisma.$executeRawUnsafe(`
+      DO $$
+      BEGIN
+          IF NOT EXISTS (
+              SELECT 1 FROM information_schema.columns
+              WHERE table_name='Property' AND column_name='forSaleUrl'
+          ) THEN
+              ALTER TABLE "Property" ADD COLUMN "forSaleUrl" TEXT;
+              RAISE NOTICE 'Column forSaleUrl added successfully';
+          ELSE
+              RAISE NOTICE 'Column forSaleUrl already exists';
+          END IF;
+      END $$;
+    `);
+
+    console.log('[Migration] Migration completed successfully');
+  } catch (error) {
+    console.error('[Migration] Error:', error);
+    throw error;
   } finally {
     await prisma.$disconnect();
   }
 }
 
-addUnderConstructionColumn();
+async function runMigrations() {
+  await addUnderConstructionColumn();
+  await addForSaleUrlColumn();
+}
+
+runMigrations();

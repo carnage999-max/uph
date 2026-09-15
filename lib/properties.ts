@@ -43,6 +43,7 @@ function mapProperty(property: any): Property{
     rentTo: property.rentTo ?? null,
     hasUnits: property.hasUnits,
     underConstruction: property.underConstruction ?? false,
+    forSaleUrl: property.forSaleUrl ?? null,
     latitude: property.latitude,
     longitude: property.longitude,
     units: (property.units ?? []).map(mapUnit),
@@ -104,6 +105,7 @@ export async function listProperties(){
         amenities: true,
         hasUnits: true,
         underConstruction: true,
+        forSaleUrl: true,
         createdAt: true,
         updatedAt: true,
         images: {
@@ -182,6 +184,7 @@ export async function getPropertyBySlug(slug: string){
         amenities: true,
         hasUnits: true,
         underConstruction: true,
+        forSaleUrl: true,
         createdAt: true,
         updatedAt: true,
         images: {
@@ -255,6 +258,7 @@ export async function getPropertyById(id: string){
         amenities: true,
         hasUnits: true,
         underConstruction: true,
+        forSaleUrl: true,
         createdAt: true,
         updatedAt: true,
         images: {

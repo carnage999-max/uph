@@ -112,6 +112,11 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
     Object.assign(data, { underConstruction: Boolean(body.underConstruction) });
   }
 
+  if ('forSaleUrl' in body){
+    const value = body.forSaleUrl;
+    data.forSaleUrl = typeof value === 'string' && value.trim() ? value.trim() : null;
+  }
+
   const property = await prisma.property.update({
     where: { id },
     data,
@@ -138,6 +143,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
       amenities: true,
       hasUnits: true,
       underConstruction: true,
+      forSaleUrl: true,
       createdAt: true,
       updatedAt: true,
       images: {

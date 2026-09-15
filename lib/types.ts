@@ -40,6 +40,7 @@ export type Property = {
   rentTo: number | null;
   hasUnits: boolean;
   underConstruction?: boolean;
+  forSaleUrl?: string | null;
   latitude?: number | null;
   longitude?: number | null;
   units: Unit[];
