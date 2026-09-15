@@ -90,4 +90,6 @@ export const styles = {
   // Status Badges
   badgeUnderConstruction:
     'inline-flex items-center gap-1.5 rounded-lg border border-orange-500/30 bg-orange-950/50 px-3 py-1 text-xs font-semibold text-orange-300',
+  badgeForSale:
+    'inline-flex items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-950/50 px-3 py-1 text-xs font-semibold text-sky-300 transition hover:border-sky-400/50 hover:bg-sky-950/70',
 };

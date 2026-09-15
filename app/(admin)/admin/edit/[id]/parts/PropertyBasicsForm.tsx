@@ -58,6 +58,8 @@ export default function PropertyBasicsForm({ property }: Props){
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [underConstruction, setUnderConstruction] = useState(property.underConstruction ?? false);
+  const [forSale, setForSale] = useState(Boolean(property.forSaleUrl));
+  const [forSaleUrl, setForSaleUrl] = useState(property.forSaleUrl ?? '');
 
   const typeSelection = propertyTypeOptions.includes(property.type) ? property.type : 'Custom';
   const [typeOption, setTypeOption] = useState(typeSelection);
@@ -87,6 +89,7 @@ export default function PropertyBasicsForm({ property }: Props){
       rentFrom: form.rentFrom,
       rentTo: form.rentTo,
       underConstruction,
+      forSaleUrl: forSale ? forSaleUrl.trim() : '',
       amenities: form.amenities
         .split(/[,\n]/)
         .map((item)=> item.trim())
@@ -150,6 +153,32 @@ export default function PropertyBasicsForm({ property }: Props){
           />
           <span className="text-sm font-medium text-gray-900">Mark property as Under Construction</span>
         </label>
+
+        <div className="space-y-2 rounded-xl border border-gray-200 p-3">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={forSale}
+              onChange={(e) => setForSale(e.target.checked)}
+              className="w-4 h-4 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+            />
+            <span className="text-sm font-medium text-gray-900">This building is for sale</span>
+          </label>
+          {forSale && (
+            <div className="pt-1">
+              <label className="text-sm font-semibold text-gray-700">Listing link (MLS or your own listing)</label>
+              <input
+                className={`${styles.inputBase} mt-2`}
+                value={forSaleUrl}
+                onChange={(e) => setForSaleUrl(e.target.value)}
+                placeholder="https://www.mlslistings.com/listing/..."
+              />
+              <p className="mt-1 text-xs text-gray-500">
+                A &quot;For Sale&quot; tag will appear on the property card and detail page, linking here.
+              </p>
+            </div>
+          )}
+        </div>
 
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Address" value={form.address} onChange={(value)=> handleChange('address', value)} />

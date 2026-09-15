@@ -1,7 +1,9 @@
+'use client';
+
 import { styles } from '@/lib/constants';
 import Image from '@/components/MediaImage';
 import Link from 'next/link';
-import { Wrench } from 'lucide-react';
+import { Wrench, Tag } from 'lucide-react';
 import type { Property } from '@/lib/types';
 import LuxuryCTA from '@/components/LuxuryCTA';
 
@@ -33,6 +35,22 @@ export default function PropertyCard({ p }: { p: Property }) {
               <Wrench className="h-3.5 w-3.5" />
               Under Construction
             </div>
+          </div>
+        )}
+        {p.forSaleUrl && (
+          <div className="absolute top-3 left-3">
+            <button
+              type="button"
+              onClick={(event) => {
+                event.preventDefault();
+                event.stopPropagation();
+                window.open(p.forSaleUrl!, '_blank', 'noopener,noreferrer');
+              }}
+              className={styles.badgeForSale}
+            >
+              <Tag className="h-3.5 w-3.5" />
+              For Sale
+            </button>
           </div>
         )}
       </div>

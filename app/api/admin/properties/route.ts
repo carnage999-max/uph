@@ -120,6 +120,7 @@ export async function POST(request: NextRequest){
         amenities: Array.isArray(payload.amenities) ? payload.amenities : [],
         hasUnits: Boolean(payload.hasUnits),
         ...(payload.underConstruction !== undefined && { underConstruction: Boolean(payload.underConstruction) }),
+        forSaleUrl: payload.forSaleUrl ? String(payload.forSaleUrl).trim() : null,
         latitude,
         longitude,
         images: {
@@ -188,6 +189,7 @@ export async function POST(request: NextRequest){
         amenities: true,
         hasUnits: true,
         underConstruction: true,
+        forSaleUrl: true,
         createdAt: true,
         updatedAt: true,
         images: {
