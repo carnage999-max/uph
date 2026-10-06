@@ -28,16 +28,19 @@
 - `pnpm build` succeeds. The only database error is the expected local inability to resolve the Coolify PostgreSQL host.
 - The embedded browser was unavailable, so visual browser verification could not be completed in this session.
 
-## Single-family homes
+## Single-family homes and availability
 
-- The schema already supports properties without units through `Property.hasUnits Boolean @default(false)` and an empty `units` relation.
-- The create wizard already has an `Enable units` toggle and sends no units when disabled, but it defaults to enabled.
-- The edit form/API can persist `hasUnits`, but the edit UI does not expose a toggle and always renders `UnitsManager`.
-- The admin overview always displays unit counts, so a no-unit property appears as `0/0 available`.
-- Public property details only render visible units when present, and the application form only requires a unit when visible units exist.
-- The next functional change should expose property-level availability for single-family listings, add an edit toggle, conditionally hide unit management, and replace unit-count language for no-unit properties. This should not require a disruptive Prisma redesign; decide whether property-level availability is represented by status or a dedicated boolean before implementation.
+- Added `Property.available Boolean @default(false)` with migration `20261006000000_add_property_availability`.
+- `pnpm start` now runs `prisma migrate deploy` before starting Next.js so Coolify applies the additive column automatically.
+- Creation automatically disables units when `Single-Family Home` is selected and exposes an `Available for rent` switch when units are off.
+- Editing exposes both `Individual units` and property-level availability. Existing unit records are retained but hidden publicly when units are disabled.
+- Admin summaries show property-level availability for single residences and unit counts for multi-unit properties.
+- Public cards and details show `Available Now` for available single residences and only show `Join Waitlist` when unavailable.
+- Multi-unit rent labels derive a range from priced available units, falling back to all visible units, when property-level rent summary fields are empty.
+- Available property detail pages link to the application with the property preselected. The application unit selector now lists only visible, available units.
+- `pnpm exec prisma validate` and `pnpm build` pass. Local builds still log the expected Coolify-only database hostname warning.
 
 ## Working tree at handoff
 
-- The current uncommitted changes are the admin styling/navigation work plus this handoff file.
+- The current uncommitted changes implement property-level availability, unit-derived rent labels, the admin controls, public display behavior, and the Prisma migration.
 - Do not revert unrelated user changes if any appear later.

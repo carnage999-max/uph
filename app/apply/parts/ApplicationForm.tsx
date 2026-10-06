@@ -253,7 +253,9 @@ export default function ApplicationForm({ properties }: { properties: Property[]
   }, []);
 
   const selectedPropertyData = properties.find(p => p.slug === formData.property || p.name === formData.property);
-  const availableUnits = selectedPropertyData?.units.filter(u => !u.isHidden) || [];
+  const availableUnits = selectedPropertyData?.hasUnits
+    ? selectedPropertyData.units.filter((unit)=> !unit.isHidden && unit.available)
+    : [];
 
   const formatSSN = (value: string) => {
     const cleaned = value.replace(/\D/g, '');

@@ -106,6 +106,10 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
     data.hasUnits = Boolean(body.hasUnits);
   }
 
+  if ('available' in body){
+    data.available = Boolean(body.available);
+  }
+
   // Only add underConstruction to data if it's in the request body
   // Use conditional spread to avoid errors if column doesn't exist in DB yet
   if ('underConstruction' in body){
@@ -137,6 +141,7 @@ export async function PATCH(request: NextRequest, context: { params: Promise<{ i
       longitude: true,
       amenities: true,
       hasUnits: true,
+      available: true,
       underConstruction: true,
       createdAt: true,
       updatedAt: true,

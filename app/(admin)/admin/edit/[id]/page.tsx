@@ -20,7 +20,7 @@ export default async function AdminEditPropertyPage({ params }: { params: Params
           Edit: {property.name}
         </h1>
         <p className="text-sm text-gray-600">
-          Update listing content, manage imagery, and control unit availability.
+          Update listing content, manage imagery, and control availability.
         </p>
       </header>
 
@@ -30,7 +30,9 @@ export default async function AdminEditPropertyPage({ params }: { params: Params
 
       <PropertyBasicsForm property={property} />
 
-      <UnitsManager propertyId={property.id} propertySlug={property.slug} units={property.units} />
+      {property.hasUnits && (
+        <UnitsManager propertyId={property.id} propertySlug={property.slug} units={property.units} />
+      )}
     </div>
   );
 }

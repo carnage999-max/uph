@@ -10,32 +10,33 @@ datasource db {
 }
 
 model Property {
-  id              String          @id @default(uuid())
-  createdAt       DateTime        @default(now())
-  updatedAt       DateTime        @updatedAt
-  name            String
-  slug            String          @unique
-  address         String
-  city            String
-  state           String
-  zip             String
-  status          String?
-  type            String
-  description     String
-  bedroomsSummary String?
-  bathsSummary    String?
-  sqftApprox      String?
-  heroImageUrl    String
-  heroImageKey    String?
-  rentFrom        Int?
-  rentTo          Int?
-  latitude        Float?
-  longitude       Float?
-  amenities       String[]
-  hasUnits        Boolean         @default(false)
+  id                String          @id @default(uuid())
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  name              String
+  slug              String          @unique
+  address           String
+  city              String
+  state             String
+  zip               String
+  status            String?
+  type              String
+  description       String
+  bedroomsSummary   String?
+  bathsSummary      String?
+  sqftApprox        String?
+  heroImageUrl      String
+  heroImageKey      String?
+  rentFrom          Int?
+  rentTo            Int?
+  latitude          Float?
+  longitude         Float?
+  amenities         String[]
+  hasUnits          Boolean         @default(false)
+  available         Boolean         @default(false)
   underConstruction Boolean?
-  images          PropertyImage[]
-  units           Unit[]
+  images            PropertyImage[]
+  units             Unit[]
 }
 
 model PropertyImage {
@@ -79,20 +80,20 @@ model UnitImage {
 }
 
 model MaintenanceRequest {
-  id              String   @id @default(uuid())
-  createdAt       DateTime @default(now())
-  name            String
-  email           String?
-  phone           String
-  address         String
-  issueType       String
-  entryPermission String
-  description     String
-  attachmentUrl   String?
-  attachmentKey   String?
-  status          String   @default("new")
-  statusUpdatedAt DateTime?
-  adminComment    String?
+  id                   String    @id @default(uuid())
+  createdAt            DateTime  @default(now())
+  name                 String
+  email                String?
+  phone                String
+  address              String
+  issueType            String
+  entryPermission      String
+  description          String
+  attachmentUrl        String?
+  attachmentKey        String?
+  status               String    @default("new")
+  statusUpdatedAt      DateTime?
+  adminComment         String?
   commentAttachmentUrl String?
   commentAttachmentKey String?
 }

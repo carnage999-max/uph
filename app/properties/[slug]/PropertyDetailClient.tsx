@@ -8,6 +8,12 @@ import { isVideoUrl } from '@/lib/media';
 import VideoPlayer from '@/components/VideoPlayer';
 import ShareButton from '@/components/ShareButton';
 import type { Property, Unit } from '@/lib/types';
+import {
+  getAvailableUnits,
+  getPropertyRentLabel,
+  getVisibleUnits,
+  isPropertyAvailable,
+} from '@/lib/property-display';
 
 type GalleryUnit = { unit: Unit; index: number };
 
@@ -17,9 +23,17 @@ export default function PropertyDetailClient({ property }: { property: Property 
   const [autoPlay, setAutoPlay] = useState(true);
 
   const visibleUnits = useMemo(
-    () => property.units.filter((unit) => !unit.isHidden),
-    [property.units],
+    () => getVisibleUnits(property),
+    [property],
   );
+  const availableUnitCount = getAvailableUnits(property).length;
+  const propertyAvailable = isPropertyAvailable(property);
+  const rentLabel = getPropertyRentLabel(property);
+  const availabilityLabel = property.hasUnits && propertyAvailable
+    ? `${availableUnitCount} unit${availableUnitCount === 1 ? '' : 's'} available`
+    : propertyAvailable
+      ? 'Available Now'
+      : 'Join Waitlist';
 
   const heroImages = useMemo(() => {
     const gallery = property.gallery.length ? property.gallery : [];
@@ -285,7 +299,11 @@ export default function PropertyDetailClient({ property }: { property: Property 
         </div>
 
         <aside className={`${styles.card} ${styles.cardPad}`}>
-          <div className="font-montserrat text-lg font-semibold">Amenities</div>
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-5">
+            <span className={styles.badgeDark}>{availabilityLabel}</span>
+            <span className="text-sm font-semibold text-[#e8e8e8]">{rentLabel}</span>
+          </div>
+          <div className="mt-5 font-montserrat text-lg font-semibold">Amenities</div>
           <ul className="mt-2 list-disc pl-6 text-sm text-[#d0d0d0]">
             {property.amenities.map((amenity) => (
               <li key={amenity}>{amenity}</li>
@@ -294,9 +312,11 @@ export default function PropertyDetailClient({ property }: { property: Property 
           <div className="mt-6 font-montserrat text-lg font-semibold">Interested?</div>
           <a
             className={`${styles.btn} ${styles.btnPrimary} mt-2 inline-flex`}
-            href={`/contact?property=${encodeURIComponent(property.slug)}`}
+            href={propertyAvailable
+              ? `/apply?property=${encodeURIComponent(property.slug)}`
+              : `/contact?property=${encodeURIComponent(property.slug)}`}
           >
-            Send a Message
+            {propertyAvailable ? 'Apply Now' : 'Join Waitlist'}
           </a>
           <div className="mt-6 text-sm text-[#b0b0b0]">
             Office: PO Box 52, Detroit, ME 04929

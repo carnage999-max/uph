@@ -9,7 +9,7 @@ export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = createMetadata({
   title: 'Apply Now',
-  description: 'Apply for your next apartment at Atlas Properties. Complete our online rental application to get started.',
+  description: 'Apply for your next rental home or apartment at Atlas Properties. Complete our online rental application to get started.',
   url: '/apply',
 });
 

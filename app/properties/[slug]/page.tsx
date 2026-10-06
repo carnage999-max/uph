@@ -4,6 +4,7 @@ import PropertyDetailClient from './PropertyDetailClient';
 import StructuredData from '@/components/StructuredData';
 import { createMetadata } from '@/lib/metadata';
 import type { Metadata } from 'next';
+import { getPropertyRentLabel } from '@/lib/property-display';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,11 +19,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
     });
   }
 
-  const rentRange = property.rentFrom && property.rentTo 
-    ? `$${property.rentFrom}-$${property.rentTo}/mo`
-    : property.rentFrom 
-    ? `From $${property.rentFrom}/mo`
-    : '';
+  const rentLabel = getPropertyRentLabel(property);
+  const rentRange = rentLabel === 'Contact for pricing' ? '' : rentLabel;
 
   const description = `${property.name} in ${property.city}, Maine. ${property.description.slice(0, 150)}... ${rentRange}`;
 

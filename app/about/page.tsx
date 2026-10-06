@@ -26,7 +26,9 @@ const leadership = [
 export default async function AboutPage(){
   const properties = await listProperties();
   const totalUnits = properties.reduce((sum, property)=>
-    sum + property.units.filter(unit => !unit.isHidden).length, 0);
+    sum + (property.hasUnits
+      ? property.units.filter((unit)=> !unit.isHidden).length
+      : 1), 0);
   const cities = Array.from(new Set(properties.map((property)=> property.city)));
   const propertyTypes = Array.from(new Set(properties.map((property)=> property.type)));
 
@@ -80,7 +82,7 @@ export default async function AboutPage(){
           <dl className="space-y-3 text-sm text-[#d0d0d0]">
             <div className="flex items-center justify-between">
               <dt>Total Residences</dt>
-              <dd className="font-semibold text-[#e8e8e8]">{totalUnits}+ units</dd>
+              <dd className="font-semibold text-[#e8e8e8]">{totalUnits}+ residences</dd>
             </div>
             <div className="flex items-center justify-between">
               <dt>Communities Served</dt>
@@ -163,7 +165,9 @@ export default async function AboutPage(){
                     <div className="text-xs uppercase tracking-wide text-[#8f8f8f]">{property.city}, {property.state}</div>
                   </div>
                   <div className="text-xs text-[#8f8f8f]">
-                    {visibleUnits.length} units • {property.type}
+                    {property.hasUnits
+                      ? `${visibleUnits.length} unit${visibleUnits.length === 1 ? '' : 's'}`
+                      : 'Single residence'} • {property.type}
                   </div>
                 </li>
               );})}

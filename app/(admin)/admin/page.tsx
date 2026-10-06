@@ -12,7 +12,7 @@ export default async function AdminDashboardPage(){
         <div>
           <h1 className="font-montserrat text-2xl font-semibold text-gray-900">Properties</h1>
           <p className="text-sm text-gray-600">
-            Manage property listings, control visibility, and oversee unit availability.
+            Manage property listings, control visibility, and oversee availability.
           </p>
         </div>
         <Link href="/admin/create" className={`${styles.adminButton} ${styles.adminButtonPrimary}`}>
@@ -43,7 +43,11 @@ export default async function AdminDashboardPage(){
                   </div>
                   <div className="flex items-center gap-2">
                     <span className={styles.badgeDark}>
-                      {availableUnits.length}/{visibleUnits.length} available
+                      {property.hasUnits
+                        ? `${availableUnits.length}/${visibleUnits.length} units available`
+                        : property.available
+                          ? 'Available'
+                          : 'Waitlist'}
                     </span>
                     <span className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-700">
                       {property.type}

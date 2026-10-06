@@ -1,5 +1,6 @@
 import type { Property } from '@/lib/types';
 import { siteConfig } from '@/lib/metadata';
+import { getPropertyRentRange, isPropertyAvailable } from '@/lib/property-display';
 
 interface OrganizationSchemaProps {
   type: 'organization';
@@ -43,8 +44,7 @@ export default function StructuredData(props: StructuredDataProps) {
     };
   } else {
     const { property } = props;
-    const rentMin = property.rentFrom || property.units[0]?.rent;
-    const rentMax = property.rentTo || property.units[property.units.length - 1]?.rent;
+    const { min: rentMin, max: rentMax } = getPropertyRentRange(property);
 
     schema = {
       '@context': 'https://schema.org',
@@ -78,6 +78,9 @@ export default function StructuredData(props: StructuredDataProps) {
           '@type': 'Offer',
           priceCurrency: 'USD',
           price: rentMin,
+          availability: isPropertyAvailable(property)
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/OutOfStock',
           ...(rentMax && rentMax !== rentMin && { priceSpecification: {
             '@type': 'UnitPriceSpecification',
             minPrice: rentMin,

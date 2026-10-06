@@ -1,6 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { styles } from '@/lib/constants';
 import type { Property } from '@/lib/types';
 import { PROPERTY_STATUS_OPTIONS } from '@/lib/options';
@@ -23,6 +24,7 @@ type Props = {
 };
 
 export default function PropertyBasicsForm({ property }: Props){
+  const router = useRouter();
   const initialState = useMemo(() => (
     US_STATES.some((state)=> state.value === property.state) ? property.state : DEFAULT_STATE
   ), [property.state]);
@@ -58,6 +60,8 @@ export default function PropertyBasicsForm({ property }: Props){
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
   const [underConstruction, setUnderConstruction] = useState(property.underConstruction ?? false);
+  const [hasUnits, setHasUnits] = useState(property.hasUnits);
+  const [propertyAvailable, setPropertyAvailable] = useState(property.available);
 
   const typeSelection = propertyTypeOptions.includes(property.type) ? property.type : 'Custom';
   const [typeOption, setTypeOption] = useState(typeSelection);
@@ -86,6 +90,8 @@ export default function PropertyBasicsForm({ property }: Props){
       type: typeOption === 'Custom' ? customType || property.type : typeOption,
       rentFrom: form.rentFrom,
       rentTo: form.rentTo,
+      hasUnits,
+      available: hasUnits ? false : propertyAvailable,
       underConstruction,
       amenities: form.amenities
         .split(/[,\n]/)
@@ -104,6 +110,7 @@ export default function PropertyBasicsForm({ property }: Props){
         throw new Error(data?.message || 'Failed to update property.');
       }
       setMessage('Saved changes.');
+      router.refresh();
     } catch (error: any) {
       setMessage(error.message || 'Unable to save changes.');
     } finally {
@@ -150,6 +157,46 @@ export default function PropertyBasicsForm({ property }: Props){
           />
           <span className="text-sm font-medium text-gray-900">Mark property as Under Construction</span>
         </label>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <label className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-gray-200 p-4 hover:bg-gray-50">
+            <div>
+              <div className="text-sm font-semibold text-gray-900">Individual units</div>
+              <div className="text-xs text-gray-500">
+                Enable for apartments or properties with separately managed units.
+              </div>
+            </div>
+            <input
+              type="checkbox"
+              checked={hasUnits}
+              onChange={(event)=> setHasUnits(event.target.checked)}
+              className="h-4 w-4 shrink-0 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+            />
+          </label>
+
+          {!hasUnits && (
+            <label className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-gray-200 p-4 hover:bg-gray-50">
+              <div>
+                <div className="text-sm font-semibold text-gray-900">Available for rent</div>
+                <div className="text-xs text-gray-500">
+                  Show Available Now instead of Join Waitlist publicly.
+                </div>
+              </div>
+              <input
+                type="checkbox"
+                checked={propertyAvailable}
+                onChange={(event)=> setPropertyAvailable(event.target.checked)}
+                className="h-4 w-4 shrink-0 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+              />
+            </label>
+          )}
+        </div>
+
+        {!hasUnits && property.units.length > 0 && (
+          <p className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            Existing unit records will be retained, but they will not appear on the public listing while individual units are disabled.
+          </p>
+        )}
 
         <div className="grid gap-4 sm:grid-cols-3">
           <Field label="Address" value={form.address} onChange={(value)=> handleChange('address', value)} />

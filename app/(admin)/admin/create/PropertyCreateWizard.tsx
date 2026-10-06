@@ -47,7 +47,7 @@ const INITIAL_UNIT: UnitForm = {
 const steps = [
   { id: 'basics', title: 'Basics', description: 'Core property details and location.' },
   { id: 'media', title: 'Media', description: 'Property image, other images, and amenities.' },
-  { id: 'units', title: 'Units', description: 'Configure unit availability and pricing.' },
+  { id: 'availability', title: 'Availability', description: 'Configure residence or unit availability and pricing.' },
 ];
 
 function generateId(){
@@ -102,6 +102,7 @@ export default function PropertyCreateWizard(){
   const [typeSelection, setTypeSelection] = useState(propertyTypeOptions[0]);
   const [customType, setCustomType] = useState('');
   const [hasUnits, setHasUnits] = useState(true);
+  const [propertyAvailable, setPropertyAvailable] = useState(true);
   const [underConstruction, setUnderConstruction] = useState(false);
   const [units, setUnits] = useState<UnitForm[]>([]);
   const [amenitiesText, setAmenitiesText] = useState('');
@@ -297,6 +298,7 @@ export default function PropertyCreateWizard(){
       rentTo: form.rentTo,
       amenities: parsedAmenities(),
       hasUnits,
+      available: hasUnits ? false : propertyAvailable,
       underConstruction,
       heroImageField: heroKey,
       galleryFields,
@@ -434,7 +436,11 @@ export default function PropertyCreateWizard(){
                   <select
                     className={styles.adminInput}
                     value={typeSelection}
-                    onChange={(event)=> setTypeSelection(event.target.value)}
+                    onChange={(event)=> {
+                      const nextType = event.target.value;
+                      setTypeSelection(nextType);
+                      if (nextType === 'Single-Family Home') setHasUnits(false);
+                    }}
                   >
                     {propertyTypeOptions.map((option)=> (
                       <option key={option} value={option}>
@@ -590,6 +596,23 @@ export default function PropertyCreateWizard(){
                   Enable units
                 </label>
               </div>
+
+              {!hasUnits && (
+                <label className="flex cursor-pointer items-center justify-between gap-4 rounded-xl border border-gray-200 bg-white p-4 hover:bg-gray-50">
+                  <div>
+                    <div className="font-semibold text-gray-900">Available for rent</div>
+                    <div className="text-xs text-gray-500">
+                      Show this single residence as available instead of waitlisted.
+                    </div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={propertyAvailable}
+                    onChange={(event)=> setPropertyAvailable(event.target.checked)}
+                    className="h-4 w-4 shrink-0 rounded border-gray-300 text-gray-900 focus:ring-gray-900"
+                  />
+                </label>
+              )}
 
               {hasUnits && (
                 <div className="space-y-4">

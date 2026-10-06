@@ -4,13 +4,18 @@ import Link from 'next/link';
 import { Wrench } from 'lucide-react';
 import type { Property } from '@/lib/types';
 import LuxuryCTA from '@/components/LuxuryCTA';
+import { getAvailableUnits, getPropertyRentLabel, getVisibleUnits } from '@/lib/property-display';
 
 export default function PropertyCard({ p }: { p: Property }) {
-  const visibleUnits = p.units.filter((u) => !u.isHidden);
-  const availableCount = visibleUnits.filter((u) => u.available).length;
-  const rentLabel = p.rentFrom
-    ? `From $${p.rentFrom.toLocaleString()}`
-    : 'Contact for pricing';
+  const visibleUnits = getVisibleUnits(p);
+  const availableCount = getAvailableUnits(p).length;
+  const isAvailable = p.hasUnits ? availableCount > 0 : p.available;
+  const availabilityLabel = p.hasUnits && isAvailable
+    ? `${availableCount} Available`
+    : isAvailable
+      ? 'Available Now'
+      : 'Join Waitlist';
+  const rentLabel = getPropertyRentLabel(p);
   return (
     <Link
       className={`${styles.card} group block overflow-hidden`}
@@ -48,8 +53,13 @@ export default function PropertyCard({ p }: { p: Property }) {
         <div className={`mt-1 text-sm ${styles.muted}`}>{p.address}</div>
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <span className={styles.badgeDark}>
-            {availableCount > 0 ? `${availableCount} Available` : 'Join Waitlist'}
+            {availabilityLabel}
           </span>
+          {p.hasUnits && (
+            <span className={`text-xs ${styles.muted}`}>
+              {visibleUnits.length} unit{visibleUnits.length === 1 ? '' : 's'}
+            </span>
+          )}
           <span className={`text-xs ${styles.muted}`}>{rentLabel}</span>
         </div>
         <div className="mt-5 flex justify-center sm:justify-start">
