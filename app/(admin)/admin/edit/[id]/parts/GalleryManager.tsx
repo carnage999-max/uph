@@ -94,7 +94,7 @@ export default function GalleryManager({ propertyId, images }: Props){
           type="file"
           accept="image/*"
           multiple
-          className={`${styles.inputBase} sm:max-w-xs`}
+          className={`${styles.adminInput} sm:max-w-xs`}
           onChange={(event)=> setFiles(event.target.files ? Array.from(event.target.files) : [])}
         />
         {!!files.length && (
@@ -103,7 +103,7 @@ export default function GalleryManager({ propertyId, images }: Props){
         <button
           type="button"
           onClick={handleUpload}
-          className={`${styles.btn} ${styles.btnPrimary}`}
+          className={`${styles.adminButton} ${styles.adminButtonPrimary}`}
           disabled={!files.length || pending}
         >
           {pending ? 'Uploading…' : 'Add images'}

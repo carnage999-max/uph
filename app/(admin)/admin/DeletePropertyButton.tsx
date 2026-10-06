@@ -33,7 +33,7 @@ export default function DeletePropertyButton({ propertyId, propertyName }: Props
   return (
     <button
       type="button"
-      className={`${styles.btn} ${styles.btnGhost}`}
+      className={`${styles.adminButton} ${styles.adminButtonSecondary}`}
       onClick={handleDelete}
       disabled={loading}
     >

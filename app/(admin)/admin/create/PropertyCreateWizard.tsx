@@ -371,7 +371,7 @@ export default function PropertyCreateWizard(){
                     <Tooltip text="Select the marketing status you want to surface on property cards." />
                   </label>
                   <select
-                    className={`${styles.inputBase} bg-white`}
+                    className={styles.adminInput}
                     value={form.status}
                     onChange={(event)=> updateForm('status', event.target.value)}
                   >
@@ -402,7 +402,7 @@ export default function PropertyCreateWizard(){
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-gray-700">State</label>
                   <select
-                    className={`${styles.inputBase} bg-white`}
+                    className={styles.adminInput}
                     value={form.state}
                     onChange={(event)=> updateState(event.target.value)}
                   >
@@ -414,7 +414,7 @@ export default function PropertyCreateWizard(){
                 <div className="space-y-2">
                   <label className="text-sm font-semibold text-gray-700">City</label>
                   <select
-                    className={`${styles.inputBase} bg-white`}
+                    className={styles.adminInput}
                     value={form.city}
                     onChange={(event)=> updateForm('city', event.target.value)}
                   >
@@ -432,7 +432,7 @@ export default function PropertyCreateWizard(){
                     <Tooltip text="Choose the closest match; select Custom for bespoke categories." />
                   </label>
                   <select
-                    className={`${styles.inputBase} bg-white`}
+                    className={styles.adminInput}
                     value={typeSelection}
                     onChange={(event)=> setTypeSelection(event.target.value)}
                   >
@@ -459,7 +459,7 @@ export default function PropertyCreateWizard(){
                   <Tooltip text="Highlight neighborhood perks, renovations, or service differentiators." />
                 </label>
                 <textarea
-                  className={styles.textarea}
+                  className={styles.adminTextarea}
                   rows={4}
                   value={form.description}
                   onChange={(event)=> updateForm('description', event.target.value)}
@@ -525,7 +525,7 @@ export default function PropertyCreateWizard(){
                   <Tooltip text="Separate amenities with commas or line breaks for the resident-facing list." />
                 </label>
                 <textarea
-                  className={styles.textarea}
+                  className={styles.adminTextarea}
                   rows={3}
                   value={amenitiesText}
                   onChange={(event)=> setAmenitiesText(event.target.value)}
@@ -542,7 +542,7 @@ export default function PropertyCreateWizard(){
                     type="file"
                     accept="image/*"
                     onChange={handleHeroChange}
-                    className={styles.inputBase}
+                    className={styles.adminInput}
                     required
                   />
                   {heroFile && (
@@ -559,7 +559,7 @@ export default function PropertyCreateWizard(){
                     accept="image/*"
                     multiple
                     onChange={handleGalleryChange}
-                    className={styles.inputBase}
+                    className={styles.adminInput}
                   />
                   {!!galleryFiles.length && (
                     <div className="text-xs text-gray-500">
@@ -671,7 +671,7 @@ export default function PropertyCreateWizard(){
                             type="file"
                             accept="image/*"
                             onChange={(event)=> handleUnitCoverChange(unit.id, event)}
-                            className={styles.inputBase}
+                            className={styles.adminInput}
                           />
                           {unit.coverFile && (
                             <div className="text-xs text-gray-500">{unit.coverFile.name}</div>
@@ -687,7 +687,7 @@ export default function PropertyCreateWizard(){
                             accept="image/*"
                             multiple
                             onChange={(event)=> handleUnitGalleryChange(unit.id, event)}
-                            className={styles.inputBase}
+                            className={styles.adminInput}
                           />
                           {!!unit.galleryFiles.length && (
                             <div className="text-xs text-gray-500">
@@ -699,7 +699,7 @@ export default function PropertyCreateWizard(){
                     </div>
                   ))}
 
-                  <button type="button" className={`${styles.btn} ${styles.btnGhost}`} onClick={addUnit}>
+                  <button type="button" className={`${styles.adminButton} ${styles.adminButtonSecondary}`} onClick={addUnit}>
                     Add unit
                   </button>
                 </div>
@@ -714,16 +714,16 @@ export default function PropertyCreateWizard(){
           type="button"
           onClick={handleBack}
           disabled={step === 0 || pending}
-          className={`${styles.btn} ${styles.btnGhost}`}
+          className={`${styles.adminButton} ${styles.adminButtonSecondary}`}
         >
           Back
         </button>
         {step < steps.length - 1 ? (
-          <button type="button" onClick={handleNext} className={`${styles.btn} ${styles.btnPrimary}`} disabled={pending}>
+          <button type="button" onClick={handleNext} className={`${styles.adminButton} ${styles.adminButtonPrimary}`} disabled={pending}>
             Next
           </button>
         ) : (
-          <button type="button" onClick={handleSubmit} className={`${styles.btn} ${styles.btnPrimary}`} disabled={pending}>
+          <button type="button" onClick={handleSubmit} className={`${styles.adminButton} ${styles.adminButtonPrimary}`} disabled={pending}>
             {pending ? 'Saving…' : 'Create property'}
           </button>
         )}
@@ -750,7 +750,7 @@ function Field({ label, value, onChange, placeholder, required, tooltip }: Field
         {tooltip && <Tooltip text={tooltip} />}
       </label>
       <input
-        className={styles.inputBase}
+        className={styles.adminInput}
         value={value}
         onChange={(event)=> onChange(event.target.value)}
         placeholder={placeholder}

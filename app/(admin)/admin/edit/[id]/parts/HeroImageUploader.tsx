@@ -71,7 +71,7 @@ export default function HeroImageUploader({ propertyId, heroImageUrl }: Props){
           <input
             type="file"
             accept="image/*"
-            className={styles.inputBase}
+            className={styles.adminInput}
             onChange={(event)=> setFile(event.target.files?.[0] ?? null)}
           />
           {file && (
@@ -80,7 +80,7 @@ export default function HeroImageUploader({ propertyId, heroImageUrl }: Props){
           <button
             type="button"
             onClick={handleUpload}
-            className={`${styles.btn} ${styles.btnPrimary}`}
+            className={`${styles.adminButton} ${styles.adminButtonPrimary}`}
             disabled={!file || pending}
           >
             {pending ? 'Uploading…' : 'Update property image'}

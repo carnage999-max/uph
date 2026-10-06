@@ -130,7 +130,7 @@ export default function PropertyBasicsForm({ property }: Props){
           <div className="space-y-2">
             <label className="text-sm font-semibold text-gray-700">Status</label>
             <select
-              className={`${styles.inputBase} bg-white`}
+              className={styles.adminInput}
               value={form.status}
               onChange={(event)=> handleChange('status', event.target.value)}
             >
@@ -156,7 +156,7 @@ export default function PropertyBasicsForm({ property }: Props){
           <div className="space-y-2">
             <label className="text-sm font-semibold text-gray-700">State</label>
             <select
-              className={`${styles.inputBase} bg-white`}
+              className={styles.adminInput}
               value={form.state}
               onChange={(event)=> handleStateChange(event.target.value)}
             >
@@ -168,7 +168,7 @@ export default function PropertyBasicsForm({ property }: Props){
           <div className="space-y-2">
             <label className="text-sm font-semibold text-gray-700">City</label>
             <select
-              className={`${styles.inputBase} bg-white`}
+              className={styles.adminInput}
               value={form.city}
               onChange={(event)=> handleChange('city', event.target.value)}
             >
@@ -195,7 +195,7 @@ export default function PropertyBasicsForm({ property }: Props){
           <div className="space-y-2">
             <label className="text-sm font-semibold text-gray-700">Property type</label>
             <select
-              className={`${styles.inputBase} bg-white`}
+              className={styles.adminInput}
               value={typeOption}
               onChange={(event)=> setTypeOption(event.target.value)}
             >
@@ -217,7 +217,7 @@ export default function PropertyBasicsForm({ property }: Props){
         <div className="space-y-2">
           <label className="text-sm font-semibold text-gray-700">Amenities</label>
           <textarea
-            className={styles.textarea}
+            className={styles.adminTextarea}
             rows={2}
             value={form.amenities}
             onChange={(event)=> handleChange('amenities', event.target.value)}
@@ -227,7 +227,7 @@ export default function PropertyBasicsForm({ property }: Props){
         <div className="space-y-2">
           <label className="text-sm font-semibold text-gray-700">Description</label>
           <textarea
-            className={styles.textarea}
+            className={styles.adminTextarea}
             rows={4}
             value={form.description}
             onChange={(event)=> handleChange('description', event.target.value)}
@@ -235,7 +235,7 @@ export default function PropertyBasicsForm({ property }: Props){
         </div>
 
         <div className="flex justify-end">
-          <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={pending}>
+          <button type="submit" className={`${styles.adminButton} ${styles.adminButtonPrimary}`} disabled={pending}>
             {pending ? 'Saving…' : 'Save changes'}
           </button>
         </div>
@@ -256,7 +256,7 @@ function Field({ label, value, onChange, placeholder }: FieldProps){
     <div className="space-y-2">
       <label className="text-sm font-semibold text-gray-700">{label}</label>
       <input
-        className={styles.inputBase}
+        className={styles.adminInput}
         value={value}
         onChange={(event)=> onChange(event.target.value)}
         placeholder={placeholder}

@@ -1,7 +1,7 @@
-import Link from 'next/link';
 import { styles } from '@/lib/constants';
 import { requireAdminSession } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import AdminNav from './AdminNav';
 import SignOutButton from './SignOutButton';
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }){
@@ -10,8 +10,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="min-h-screen bg-gray-100">
-      <header className="border-b border-gray-200 bg-white">
-        <div className={`${styles.container} flex flex-col gap-4 py-4`}>
+      <header className="sticky top-16 z-40 border-b border-gray-200 bg-white/95 shadow-sm backdrop-blur-md">
+        <div className={`${styles.container} flex flex-col gap-3 py-3`}>
           <div className="flex items-center justify-between">
             <div className="flex flex-col">
               <span className="font-montserrat text-lg font-semibold text-gray-900">Admin Dashboard</span>
@@ -19,17 +19,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
             </div>
             <SignOutButton />
           </div>
-          <nav className="flex flex-wrap items-center gap-3">
-            <Link href="/admin" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
-              Overview
-            </Link>
-            <Link href="/admin/maintenance" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
-              Maintenance
-            </Link>
-            <Link href="/admin/create" className="text-sm font-semibold text-gray-700 hover:text-gray-900">
-              New Property
-            </Link>
-          </nav>
+          <AdminNav />
         </div>
       </header>
       <main className="py-10">

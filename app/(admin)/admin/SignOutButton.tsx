@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { styles } from '@/lib/constants';
+import { LogOut } from 'lucide-react';
 import { useState } from 'react';
 
 export default function SignOutButton(){
@@ -18,10 +19,11 @@ export default function SignOutButton(){
   return (
     <button
       type="button"
-      className={`${styles.btn} ${styles.btnGhost}`}
+      className={`${styles.adminButton} ${styles.adminButtonSecondary}`}
       onClick={handleSignOut}
       disabled={pending}
     >
+      <LogOut aria-hidden="true" className="h-4 w-4" />
       {pending ? 'Signing out…' : 'Sign out'}
     </button>
   );

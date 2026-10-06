@@ -141,7 +141,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
             setSearch(e.target.value);
             fetchRequests(1, filter, e.target.value);
           }}
-          className={`${styles.inputBase} flex-1 rounded-lg`}
+          className={`${styles.adminInput} flex-1`}
         />
       </div>
 
@@ -219,7 +219,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
                       e.stopPropagation();
                       handleUpdateStatus(request.id);
                     }}
-                    className={`${styles.btn} ${styles.btnPrimary} whitespace-nowrap`}
+                    className={`${styles.adminButton} ${styles.adminButtonPrimary} whitespace-nowrap`}
                   >
                     Update Status
                   </button>
@@ -326,7 +326,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  className={`${styles.inputBase} w-full rounded-lg`}
+                  className={`${styles.adminInput} w-full`}
                 >
                   {STATUS_OPTIONS.map((status) => (
                     <option key={status} value={status} className="capitalize">
@@ -345,7 +345,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
                   onChange={(e) => setComment(e.target.value)}
                   rows={4}
                   placeholder="Add any additional information or comments..."
-                  className={`${styles.textarea} w-full rounded-lg`}
+                  className={`${styles.adminTextarea} w-full`}
                 />
               </div>
 
@@ -356,7 +356,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
                 <input
                   type="file"
                   onChange={(e) => setMediaFile(e.target.files?.[0] || null)}
-                  className={`${styles.inputBase} w-full rounded-lg cursor-pointer`}
+                  className={`${styles.adminInput} w-full cursor-pointer`}
                 />
                 {mediaFile && (
                   <p className="text-xs text-gray-600 mt-1">{mediaFile.name}</p>
@@ -371,7 +371,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
                     setComment('');
                     setMediaFile(null);
                   }}
-                  className={`${styles.btn} ${styles.btnGhost}`}
+                  className={`${styles.adminButton} ${styles.adminButtonSecondary}`}
                 >
                   Cancel
                 </button>
@@ -382,7 +382,7 @@ export default function MaintenanceRequestList({ requests: initialRequests, pagi
                     }
                   }}
                   disabled={updating === updateingModal || !selectedStatus}
-                  className={`${styles.btn} ${styles.btnPrimary}`}
+                  className={`${styles.adminButton} ${styles.adminButtonPrimary}`}
                 >
                   {updating === updateingModal ? 'Updating...' : 'Update'}
                 </button>

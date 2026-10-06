@@ -287,7 +287,7 @@ export default function UnitsManager({ propertyId, units }: Props){
         </div>
         <button
           type="button"
-          className={`${styles.btn} ${styles.btnPrimary}`}
+          className={`${styles.adminButton} ${styles.adminButtonPrimary}`}
           onClick={()=> setNewUnitVisible((current)=> !current)}
         >
           {newUnitVisible ? 'Close new unit' : 'Add unit'}
@@ -323,7 +323,7 @@ export default function UnitsManager({ propertyId, units }: Props){
               <input
                 type="file"
                 accept="image/*"
-                className={styles.inputBase}
+                className={styles.adminInput}
                 onChange={(event)=> setNewUnit((current)=> ({ ...current, cover: event.target.files?.[0] ?? null }))}
               />
             </div>
@@ -335,13 +335,13 @@ export default function UnitsManager({ propertyId, units }: Props){
                 type="file"
                 accept="image/*"
                 multiple
-                className={styles.inputBase}
+                className={styles.adminInput}
                 onChange={(event)=> setNewUnit((current)=> ({ ...current, gallery: event.target.files ? Array.from(event.target.files) : [] }))}
               />
             </div>
           </div>
           <div className="flex justify-end">
-            <button type="submit" className={`${styles.btn} ${styles.btnPrimary}`} disabled={isCreating}>
+            <button type="submit" className={`${styles.adminButton} ${styles.adminButtonPrimary}`} disabled={isCreating}>
               {isCreating ? 'Creating…' : 'Create unit'}
             </button>
           </div>
@@ -402,7 +402,7 @@ export default function UnitsManager({ propertyId, units }: Props){
                       <input
                         type="file"
                         accept="image/*"
-                        className={styles.inputBase}
+                        className={styles.adminInput}
                         onChange={(event)=> {
                           void uploadCover(unit.id, event.target.files?.[0] ?? null);
                         }}
@@ -414,7 +414,7 @@ export default function UnitsManager({ propertyId, units }: Props){
                         type="file"
                         accept="image/*"
                         multiple
-                        className={styles.inputBase}
+                        className={styles.adminInput}
                         onChange={(event)=> {
                           void uploadGallery(unit.id, event.target.files ? Array.from(event.target.files) : []);
                         }}
@@ -438,7 +438,7 @@ export default function UnitsManager({ propertyId, units }: Props){
                 <div className="flex justify-end gap-3">
                   <button
                     type="button"
-                    className={`${styles.btn} ${styles.btnGhost}`}
+                    className={`${styles.adminButton} ${styles.adminButtonSecondary}`}
                     onClick={()=> deleteUnit(unit.id)}
                     disabled={deletingUnitId === unit.id}
                   >
@@ -446,7 +446,7 @@ export default function UnitsManager({ propertyId, units }: Props){
                   </button>
                   <button
                     type="button"
-                    className={`${styles.btn} ${styles.btnPrimary}`}
+                    className={`${styles.adminButton} ${styles.adminButtonPrimary}`}
                     onClick={()=> saveUnit(unit.id)}
                     disabled={pendingUnitId === unit.id}
                   >
@@ -480,7 +480,7 @@ function Field({ label, value, onChange, placeholder }: FieldProps){
     <div className="space-y-2">
       <label className="text-sm font-semibold text-gray-700">{label}</label>
       <input
-        className={styles.inputBase}
+        className={styles.adminInput}
         value={value}
         onChange={(event)=> onChange(event.target.value)}
         placeholder={placeholder}

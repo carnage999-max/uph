@@ -15,7 +15,7 @@ export default async function AdminDashboardPage(){
             Manage property listings, control visibility, and oversee unit availability.
           </p>
         </div>
-        <Link href="/admin/create" className={`${styles.btn} ${styles.btnPrimary}`}>
+        <Link href="/admin/create" className={`${styles.adminButton} ${styles.adminButtonPrimary}`}>
           Add Property
         </Link>
       </div>
@@ -58,14 +58,14 @@ export default async function AdminDashboardPage(){
                   <div className="flex flex-wrap items-center gap-2">
                     <Link
                       href={`/properties/${property.slug}`}
-                      className={`${styles.btn} ${styles.btnGhost}`}
+                      className={`${styles.adminButton} ${styles.adminButtonSecondary}`}
                       target="_blank"
                     >
                       View public page
                     </Link>
                     <Link
                       href={`/admin/edit/${property.id}`}
-                      className={`${styles.btn} ${styles.btnPrimary}`}
+                      className={`${styles.adminButton} ${styles.adminButtonPrimary}`}
                     >
                       Edit
                     </Link>

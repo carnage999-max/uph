@@ -78,6 +78,18 @@ export const styles = {
   textarea:
     'w-full rounded-xl border border-white/10 bg-[#1a1a1a]/90 px-3 py-2 text-sm text-[#e8e8e8] placeholder-[#6b7280] transition-all resize-none focus:outline-none focus:border-[rgba(201,162,39,0.5)] focus:shadow-[0_0_0_3px_rgba(201,162,39,0.2)]',
 
+  // Admin controls live on light surfaces and must not inherit public-site colors.
+  adminInput:
+    'w-full rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 shadow-sm [color-scheme:light] placeholder:text-gray-400 transition focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500',
+  adminTextarea:
+    'w-full resize-none rounded-lg border border-gray-300 bg-white px-3 py-2.5 text-sm text-gray-900 shadow-sm [color-scheme:light] placeholder:text-gray-400 transition focus:border-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-900/10 disabled:cursor-not-allowed disabled:bg-gray-100 disabled:text-gray-500',
+  adminButton:
+    'inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-semibold transition focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+  adminButtonPrimary:
+    'border-gray-900 bg-gray-900 text-white shadow-sm hover:border-gray-800 hover:bg-gray-800',
+  adminButtonSecondary:
+    'border-gray-300 bg-white text-gray-700 shadow-sm hover:border-gray-400 hover:bg-gray-50 hover:text-gray-900',
+
   // Hero
   hero:
     'relative isolate w-full overflow-hidden bg-[#0a0a0a] min-h-[70vh] md:min-h-[85vh]',
