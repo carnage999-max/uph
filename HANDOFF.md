@@ -25,6 +25,7 @@
 - Replaced dark public-site controls throughout `app/(admin)` so selects, inputs, textareas, file controls, and secondary buttons are readable on white cards.
 - Added `app/(admin)/admin/AdminNav.tsx` with icons, active states, consistent button sizing, spacing, keyboard focus, and mobile horizontal overflow.
 - Made the admin header sticky at `top-16`, directly below the 64px main navbar.
+- Replaced the fixed `html/body` height with minimum heights so the main sticky navbar remains visible across long admin pages instead of being constrained to the first viewport.
 - `pnpm build` succeeds. The only database error is the expected local inability to resolve the Coolify PostgreSQL host.
 - The embedded browser was unavailable, so visual browser verification could not be completed in this session.
 

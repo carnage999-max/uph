@@ -14,12 +14,12 @@
     --foreground: var(--atlas-silver);
   }
 
-  html,
-  body {
-    height: 100%;
+  html {
+    min-height: 100%;
   }
 
   body {
+    min-height: 100vh;
     background-color: var(--background);
     color: var(--foreground);
     font-family: var(--font-open-sans), 'Open Sans', Arial, Helvetica, sans-serif;
