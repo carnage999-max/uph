@@ -30,8 +30,8 @@
 
 ## Single-family homes and availability
 
-- Added `Property.available Boolean @default(false)` with migration `20261006000000_add_property_availability`.
-- `pnpm start` now runs `prisma migrate deploy` before starting Next.js so Coolify applies the additive column automatically.
+- Added `Property.available Boolean @default(false)`.
+- This database predates Prisma Migrate and has no migration baseline. `pnpm start` runs `prisma db push --skip-generate` before Next.js so Coolify applies the additive column without triggering Prisma P3005. Do not replace this with `migrate deploy` until the production database is formally baselined.
 - Creation automatically disables units when `Single-Family Home` is selected and exposes an `Available for rent` switch when units are off.
 - Editing exposes both `Individual units` and property-level availability. Existing unit records are retained but hidden publicly when units are disabled.
 - Admin summaries show property-level availability for single residences and unit counts for multi-unit properties.
