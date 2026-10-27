@@ -118,6 +118,10 @@ export async function POST(req: NextRequest) {
     const internalRecipient = process.env.CONTACT_TO || company.email;
     const siteOrigin = siteConfig.url;
     const logoUrl = new URL('/logo/atlas.png', siteOrigin).toString();
+    const petPhotoHref = petPhotoUrl ? new URL(petPhotoUrl, siteOrigin).toString() : null;
+    const driversLicenseHref = driversLicenseUrl
+      ? new URL(driversLicenseUrl, siteOrigin).toString()
+      : null;
 
     const fullName = `${firstName} ${lastName}`;
     const subject = `New Rental Application — ${fullName} — ${property}${unit ? ` — ${unit}` : ''}`;
@@ -166,7 +170,7 @@ Reference ${i + 1}:
 Pet Information:
 • Has Pet: ${hasPet ? 'Yes' : 'No'}
 ${hasPet ? `• Pet Type: ${petType || 'N/A'}` : ''}
-${petPhotoUrl ? `• Pet Photo: ${petPhotoUrl}` : ''}
+${petPhotoHref ? `• Pet Photo: ${petPhotoHref}` : ''}
 
 Employment:
 • Job Title: ${jobTitle || 'N/A'}
@@ -181,7 +185,7 @@ Authorizations:
 • Criminal Background Check: ${authorizeCriminalCheck ? 'Authorized' : 'Not Authorized'}
 • Credit Check: ${authorizeCreditCheck ? 'Authorized' : 'Not Authorized'}
 
-${driversLicenseUrl ? `Driver's License: ${driversLicenseUrl}` : ''}
+${driversLicenseHref ? `Driver's License: ${driversLicenseHref}` : ''}
 ${signature ? 'Signature: Provided' : ''}
 
 ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
@@ -270,7 +274,7 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
                     <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Pet Information</h3>
                     <p style="margin:4px 0;"><strong>Has Pet:</strong> ${hasPet ? 'Yes' : 'No'}</p>
                     ${hasPet ? `<p style="margin:4px 0;"><strong>Pet Type:</strong> ${escapeHtml(petType || 'N/A')}</p>` : ''}
-                    ${petPhotoUrl ? `<p style="margin:4px 0;"><strong>Pet Photo:</strong> <a href="${petPhotoUrl}" style="color:#111827;">View Photo</a></p>` : ''}
+                    ${petPhotoHref ? `<p style="margin:4px 0;"><strong>Pet Photo:</strong> <a href="${escapeHtml(petPhotoHref)}" style="color:#111827;">View Photo</a></p>` : ''}
                   </div>
 
                   <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
@@ -292,10 +296,10 @@ ${additionalNotes ? `Additional Notes:\n${additionalNotes}` : ''}
                     <p style="margin:4px 0;"><strong>Credit Check:</strong> ${authorizeCreditCheck ? '✓ Authorized' : '✗ Not Authorized'}</p>
                   </div>
 
-                  ${driversLicenseUrl ? `
+                  ${driversLicenseHref ? `
                   <div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:12px;padding:20px;margin-bottom:20px;">
                     <h3 style="margin:0 0 12px;font-size:16px;font-weight:600;color:#111827;">Driver's License</h3>
-                    <p style="margin:4px 0;"><a href="${driversLicenseUrl}" style="color:#111827;text-decoration:underline;">View Driver's License Photo</a></p>
+                    <p style="margin:4px 0;"><a href="${escapeHtml(driversLicenseHref)}" style="color:#111827;text-decoration:underline;">View Driver's License Photo</a></p>
                   </div>
                   ` : ''}
 
