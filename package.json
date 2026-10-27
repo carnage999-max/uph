@@ -9,6 +9,7 @@
     "db:push": "prisma db push",
     "prisma:generate": "prisma generate",
     "storage:rewrite-urls": "node scripts/rewrite-storage-urls.mjs",
+    "email:resend-application": "node scripts/resend-application-email.mjs",
     "postinstall": "prisma generate"
   },
   "dependencies": {
